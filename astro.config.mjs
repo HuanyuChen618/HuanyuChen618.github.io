@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 //  • User site  (repo named  <username>.github.io):  site: 'https://<username>.github.io'   (leave base unset)
 //  • Project site (any other repo name):             also add  base: '/<repo-name>'
 export default defineConfig({
-  site: 'https://huanyuusc.github.io',
+  site: 'https://huanyuchen618.github.io',
   // Local Windows builds: keep Vite's cache out of Dropbox (Dropbox locks files mid-rename). CI uses the default.
   vite: process.env.LOCALAPPDATA ? { cacheDir: process.env.LOCALAPPDATA + '/huanyu-site-vite' } : {},
 });
