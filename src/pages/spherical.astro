@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const I = (f: string) => `/spherical/img/${f}`;
+const thesis = [
+  ['thesis_skull.jpg', 'Skull'], ['thesis_buddha.jpg', 'Buddha'], ['thesis_maxplanck.jpg', 'Max Planck'],
+  ['thesis_bunny.jpg', 'Bunny'], ['thesis_gargoyle.jpg', 'Gargoyle'], ['thesis_sharpsphere.jpg', 'Sharp sphere'],
+  ['thesis_lucy.jpg', 'Lucy'], ['thesis_armadillo.jpg', 'Armadillo'], ['thesis_cow.jpg', 'Cow'],
+];
+---
+<BaseLayout title="Efficient Bijective Spherical Parameterizations — Huanyu Chen"
+  description="Flip-free, low-distortion maps from closed genus-0 surfaces to the sphere. B.Sc. thesis (USTC 2021), English translation, and new results.">
+  <p class="muted kicker">Bachelor thesis · University of Science and Technology of China · 2021</p>
+  <h1>Efficient Bijective Spherical Parameterizations</h1>
+  <p class="subtitle">高效无翻转球面参数化</p>
+  <p><strong>Huanyu Chen</strong> · advisor: Prof. <a href="http://staff.ustc.edu.cn/~lgliu/">Ligang Liu</a></p>
+  <p class="links">
+    <a href="/spherical/Chen2021_thesis_en.pdf">Thesis (English translation, PDF)</a> ·
+    <a href="/spherical/Chen2021_thesis_zh.pdf">原文 (Chinese original, PDF)</a> ·
+    <a href="https://huanyuusc.github.io/isotropic-energies-tutorial/">2026 lecture slides &amp; code</a>
+  </p>
+
+  <figure class="wide">
+    <img src={I('gallery108.jpg')} alt="108 meshes textured with a checkerboard through their spherical maps" />
+    <figcaption>108 closed surfaces, each mapped one-to-one onto the sphere and textured through that map with the
+      same checkerboard. Results from the 2026 re-implementation (below).</figcaption>
+  </figure>
+
+  <h2>The problem</h2>
+  <div class="row2">
+    <div>
+      <p>
+        A closed surface of genus 0 (a bunny, a skull, a hand) can be mapped onto the unit sphere without cutting.
+        Such a <em>spherical parameterization</em> gives a seamless texture domain and a common domain for comparing,
+        morphing and remeshing shapes. Flat parameterizations must cut a closed surface into patches, and every cut
+        becomes a seam.
+      </p>
+      <p>
+        The map must be <strong>bijective</strong> (no triangle flips over) and have <strong>low distortion</strong>.
+        For planar maps there is a standard, robust pipeline for this: start from a flip-free initial map, then
+        minimize a distortion energy that blows up as a triangle degenerates, so the map can never flip. Applied
+        naively to the sphere, that pipeline breaks: the sphere is curved, the vertices must stay on it, and planar
+        triangles do not measure spherical flips.
+      </p>
+    </div>
+    <div class="pair">
+      <img src={I('setup_bunny.jpg')} alt="A closed genus-0 surface (bunny)" />
+      <img src={I('setup_sphere.jpg')} alt="The unit sphere" />
+    </div>
+  </div>
+
+  <h2>The method</h2>
+  <div class="row2">
+    <div>
+      <ul>
+        <li><strong>Triangles become tetrahedra.</strong> Each triangle together with the sphere's center forms a
+          tetrahedron, so every face gets a 3×3 Jacobian whose determinant is proportional to the tetrahedron's signed
+          volume. A spherical triangle flips exactly when its tetrahedron inverts.</li>
+        <li><strong>A flip-free barrier.</strong> The symmetric Dirichlet energy of these 3×3 Jacobians goes to
+          infinity as a tetrahedron collapses, so a locally flip-free map stays flip-free during optimization. On a
+          closed sphere, locally flip-free means globally one-to-one.</li>
+        <li><strong>Staying on the sphere by geometry.</strong> The gradient is projected onto each vertex's tangent
+          plane, and every step is retracted radially back onto the sphere.</li>
+        <li><strong>A safe step size in closed form.</strong> The largest step before any tetrahedron would collapse is
+          the first positive root of a cubic, so a line search never leaves the flip-free region.</li>
+        <li><strong>Fast solvers.</strong> Initialization from a gnomonic (central) projection of a Tutte embedding,
+          then preconditioned first-order or second-order solvers; analytic projected Newton was the fastest.</li>
+      </ul>
+    </div>
+    <figure>
+      <img src={I('sphere_step.jpg')} alt="A step on the sphere: tangent-plane step followed by radial projection" />
+      <figcaption>Minimize E(P(x)), where P is the radial projection onto the sphere; the maximal step solves a
+        cubic.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Thesis results (2021)</h2>
+  <p>
+    The original C++ implementation (now lost) produced flip-free maps on a wide range of models. Analytic projected
+    Newton converged in tens of iterations, where SLIM and AKVF needed hundreds and gradient descent over a thousand.
+    Each figure shows the model and views of its spherical map.
+  </p>
+  <div class="grid1">
+    {thesis.map(([f, name]) => (
+      <figure><img src={I(f)} alt={`${name}: model and spherical map`} loading="lazy" /><figcaption>{name}</figcaption></figure>
+    ))}
+  </div>
+  <figure>
+    <img src={I('thesis_conv_horse.jpg')} alt="Convergence of SGD, SLIM, AKVF and analytic projected Newton on the horse" loading="lazy" />
+    <figcaption>Convergence (log energy vs. iteration) on the horse: SGD, SLIM, AKVF and analytic projected Newton
+      (APN).</figcaption>
+  </figure>
+
+  <h2>New results (2026)</h2>
+  <p>
+    For my <a href="https://huanyuusc.github.io/isotropic-energies-tutorial/">2026 UCLA lecture on isotropic distortion
+    energies</a> I re-implemented the method in Python on top of a shared solver core (batched SVD, closed-form
+    Hessian eigensystems, projected Newton with safe steps).
+  </p>
+
+  <h3>Robust on a 100-mesh benchmark</h3>
+  <p>
+    On the 100-mesh spherical-parameterization benchmark of Hu, Fu and Liu (2018), every map is flip-free. Starting
+    from the spherical maps distributed with the benchmark, our symmetric Dirichlet maps lower the area-weighted
+    isometric distortion, max(σ<sub>1</sub>, 1/σ<sub>2</sub>), on all 100 meshes: the median falls from 3.28 to 2.44.
+    The gallery at the top adds the thesis models and Keenan Crane's Spot.
+  </p>
+
+  <h3>The Earth on a skull</h3>
+  <div class="row3">
+    <figure><img src={I('globe.jpg')} alt="Earth texture on the sphere" loading="lazy" /><figcaption>the Earth on the sphere</figcaption></figure>
+    <figure><img src={I('skull_plain.jpg')} alt="Skull mesh" loading="lazy" /><figcaption>a skull</figcaption></figure>
+    <figure><video src="/spherical/vid/vid_skull.mp4" poster="/spherical/vid/vid_skull_poster.jpg" autoplay loop muted playsinline></video>
+      <figcaption>one seamless map: every continent keeps its shape</figcaption></figure>
+  </div>
+  <div class="row3">
+    <figure><img src={I('skull_conformal_tissot.jpg')} alt="Conformal map with Tissot ellipses" loading="lazy" /><figcaption>conformal map</figcaption></figure>
+    <figure><img src={I('skull_symdir_tissot.jpg')} alt="Symmetric Dirichlet map with Tissot ellipses" loading="lazy" /><figcaption>symmetric Dirichlet</figcaption></figure>
+    <figure><img src={I('skull_sigma_cloud.jpg')} alt="Singular values of every triangle for both maps" loading="lazy" /><figcaption>every triangle's stretches (σ<sub>1</sub>, σ<sub>2</sub>)</figcaption></figure>
+  </div>
+  <p>
+    Tissot ellipses show where each map distorts. On a round shape both maps look similar, but in stretch space the
+    conformal map spreads along the diagonal (round but resized), while symmetric Dirichlet stays near (1, 1).
+  </p>
+
+  <h3>Conformal vs. symmetric Dirichlet on a hand</h3>
+  <div class="row3">
+    <figure><img src={I('hex_sphere.jpg')} alt="Hexagon tiling on the sphere" loading="lazy" /><figcaption>hexagons on the sphere</figcaption></figure>
+    <figure><img src={I('hand_conformal_hex.jpg')} alt="Hexagons on the hand through the conformal map" loading="lazy" /><figcaption>conformal: angles kept, fingers shrink exponentially</figcaption></figure>
+    <figure><img src={I('hand_symdir_hex.jpg')} alt="Hexagons on the hand through the symmetric Dirichlet map" loading="lazy" /><figcaption>symmetric Dirichlet: fingers keep their size</figcaption></figure>
+  </div>
+  <figure>
+    <video src="/spherical/vid/sphere_wire_hand_slide.mp4" poster="/spherical/vid/sphere_wire_hand_slide.jpg" autoplay loop muted playsinline preload="none"></video>
+    <figcaption>Seen from the sphere. The fingers are about a third of the hand's area: the conformal map gives them
+      less than 1% of the sphere, symmetric Dirichlet about a fifth.</figcaption>
+  </figure>
+
+  <h2>Cite</h2>
+  <pre class="bib">@thesis&#123;chen2021spherical,
+  author = &#123;Huanyu Chen&#125;,
+  title  = &#123;Efficient Bijective Spherical Parameterizations&#125;,
+  type   = &#123;B.Sc. thesis&#125;,
+  school = &#123;University of Science and Technology of China&#125;,
+  year   = &#123;2021&#125;,
+  note   = &#123;In Chinese; English translation at https://huanyuusc.github.io/spherical/&#125;
+&#125;</pre>
+</BaseLayout>
