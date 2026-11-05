@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pubs = [
+  {
+    title: 'Beyond Kirchhoff–Love: A Volumetric Approach to Thin-Shell Mechanics',
+    authors: '<strong>Huanyu Chen</strong>, Yumeng He, Jernej Barbič',
+    venue: 'ACM Transactions on Graphics 45(6) (SIGGRAPH Asia 2026)',
+    img: '/img/gshells.jpg',
+    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/gshells/']],
+  },
+  {
+    title: 'Weak Nonlinearity and Linear Equalization for Isotropic Hyperelastic Materials',
+    authors: '<strong>Huanyu Chen</strong>, Jernej Barbič',
+    venue: 'Computer Graphics Forum (Symposium on Computer Animation 2026)',
+    award: 'Best Presentation Award',
+    img: '/img/solids.jpg',
+    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/materialFiltering/']],
+  },
+  {
+    title: 'ANIME-Rod: Adjustable Nonlinear Isotropic Materials for Elastic Rods',
+    authors: '<strong>Huanyu Chen</strong>, Jiahao Wen, Jernej Barbič',
+    venue: 'ACM Transactions on Graphics 44(4) (SIGGRAPH 2025)',
+    img: '/img/animerod.jpg',
+    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/fcurves/']],
+  },
+  {
+    title: 'Capturing Animation-Ready Isotropic Materials Using Systematic Poking',
+    authors: '<strong>Huanyu Chen</strong>, Danyong Zhao, Jernej Barbič',
+    venue: 'ACM Transactions on Graphics 42(6) (SIGGRAPH Asia 2023)',
+    img: '/img/poking.jpg',
+    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/materialFitting/']],
+  },
+  {
+    title: 'ArticulateArena: A Metric for Articulated Kinematics',
+    authors: 'Yumeng He, Yongfei She, <strong>Huanyu Chen</strong>, Chun Yuan, Peihao Li, Joseph Masterjohn, Yin Yang, Ying Jiang, Chenfanfu Jiang',
+    venue: 'arXiv preprint 2609.33931, 2026 (under review)',
+    links: [['arXiv', 'https://arxiv.org/abs/2609.33931']],
+  },
+];
+---
+<BaseLayout title="Publications — Huanyu Chen">
+  <h1>Publications</h1>
+  {pubs.map((p) => (
+    <article class="pub">
+      {p.img && <img src={p.img} alt="" loading="lazy" />}
+      <div>
+        <h3>{p.title}</h3>
+        <p class="authors" set:html={p.authors} />
+        <p class="venue">{p.venue}</p>
+        {p.award && <p class="award">{p.award}</p>}
+        <p>{p.links.map(([label, href], i) => (<>{i > 0 && ' · '}<a href={href}>{label}</a></>))}</p>
+      </div>
+    </article>
+  ))}
+
+  <h2>Talks</h2>
+  <ul>
+    <li>
+      <em>Isotropic Distortion Energies: One Machine for Parameterization, Deformation, and Dynamics.</em>
+      Guest lecture, MATH 285J, UCLA, Oct. 2026.
+      <a href="https://huanyuusc.github.io/isotropic-energies-tutorial/">Slides &amp; code</a>
+    </li>
+  </ul>
+
+  <h2>Service and teaching</h2>
+  <p><strong>Reviewer:</strong> SIGGRAPH, SIGGRAPH Asia, Computer Graphics Forum, Pacific Graphics, Extreme Mechanics
+    Letters, Visual Informatics.</p>
+  <p><strong>Teaching assistant, USC:</strong> CSCI 520 Computer Animation and Simulation (Spring 2023, 2025, 2026),
+    CSCI 570 Analysis of Algorithms (Fall 2025), CSCI 350 Operating Systems (Fall 2024), CSCI 677 Advanced Computer
+    Vision (Fall 2023).</p>
+</BaseLayout>

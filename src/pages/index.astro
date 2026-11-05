@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const news = [
+  { date: 'Dec 2026', text: 'Presenting “Beyond Kirchhoff–Love: A Volumetric Approach to Thin-Shell Mechanics” at SIGGRAPH Asia 2026.' },
+  { date: 'Oct 2026', text: 'Guest lecture at UCLA (MATH 285J): <a href="https://huanyuusc.github.io/isotropic-energies-tutorial/">Isotropic Distortion Energies — slides &amp; code</a>.' },
+  { date: 'Oct 2026', text: 'Ph.D. thesis proposal: “Stretch-Based Elasticity: Simulation of Solids, Shells, and Rods and Inverse Material Modeling.”' },
+  { date: 'Jul 2026', text: '<strong>Best Presentation Award</strong> at the Symposium on Computer Animation (SCA 2026).' },
+  { date: 'Summer 2026', text: 'Robotics intern at Tesla Optimus, working on contact computation in the humanoid physics engine.' },
+];
+---
+<BaseLayout title="Huanyu Chen">
+  <section class="hero">
+    <img class="avatar" src="/profile.jpg" alt="Huanyu Chen" />
+    <div>
+      <h1>Huanyu Chen <span class="cn">陈焕宇</span></h1>
+      <p class="tagline">Ph.D. candidate in Computer Science, University of Southern California</p>
+      <p class="links">
+        <a href="/Huanyu_Chen_CV.pdf">CV</a> ·
+        <a href="mailto:huanyuc@usc.edu">Email</a> ·
+        <a href="https://github.com/HuanyuUSC">GitHub</a>
+      </p>
+    </div>
+  </section>
+
+  <p class="callout">I am on the 2026–27 academic and industry job market.</p>
+
+  <section>
+    <h2>About</h2>
+    <p>
+      I am a final-year Ph.D. candidate in the
+      <a href="https://www.cs.usc.edu/">Department of Computer Science</a> at the
+      <a href="https://www.usc.edu/">University of Southern California</a>, advised by Professor
+      <a href="https://viterbi-web.usc.edu/~jbarbic/">Jernej Barbič</a>. Before USC, I earned my B.Sc. in Mathematics
+      from the <a href="http://en.scgy.ustc.edu.cn/">School of the Gifted Young</a> at the
+      <a href="http://en.ustc.edu.cn/">University of Science and Technology of China</a>, graduating with honors from
+      the Loo-Keung Hua Mathematics Talents Class.
+    </p>
+    <p>
+      My research is <strong>interpretable physical AI</strong>: models of the physical world whose parts are written in
+      the language of physics, so we can read, check and improve what they learn. I work on computational mechanics for
+      soft and thin objects (elastic solids, shells and rods, nonlinear materials, frictional contact, differentiable
+      simulation) and on measuring material laws from real specimens. My work has appeared in ACM Transactions on
+      Graphics (SIGGRAPH / SIGGRAPH Asia) and Computer Graphics Forum (SCA).
+    </p>
+    <p>
+      In industry, I have worked on humanoid-robot simulation at Tesla Optimus, haptics and grasping at Meta Reality
+      Labs, and real-time physics at Tencent.
+    </p>
+  </section>
+
+  <section>
+    <h2>News</h2>
+    <ul class="news">
+      {news.map((n) => (
+        <li><span class="date">{n.date}</span><span set:html={n.text} /></li>
+      ))}
+    </ul>
+  </section>
+
+  <section>
+    <h2>Research at a glance</h2>
+    <figure>
+      <img src="/img/overview.jpg" alt="One isotropic energy in principal-stretch space, measured by poking or CT and used to simulate solids, shells and rods" />
+      <figcaption>One material law in principal-stretch space connects measurement (poking, CT) and simulation (solids,
+        shells, rods). <a href="/research">More on my research →</a></figcaption>
+    </figure>
+  </section>
+</BaseLayout>

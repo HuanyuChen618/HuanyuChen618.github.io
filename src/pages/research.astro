@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const topics = [
+  {
+    title: 'Thin shells that keep their thickness',
+    img: '/img/gshells.jpg',
+    text: `Classical Kirchhoff–Love shells fix the thickness, so a thin silicone sheet pressed over a bolt hides the bolt,
+      while the real sheet thins and reveals it. Treating the thickness as the third principal stretch gives a shell
+      model that supports any isotropic material and matches volumetric FEM at a fraction of the cost.`,
+    ref: 'SIGGRAPH Asia 2026',
+  },
+  {
+    title: 'Elastic rods with any nonlinear material',
+    img: '/img/animerod.jpg',
+    text: `Classical rod models know only three stiffnesses (stretching, bending, twisting). At the centerline of a rod
+      the deformation gradient is already in singular-value form, so any nonlinear isotropic material survives the
+      reduction from 3D to 1D: different materials give visibly different coiling, buckling and plectonemes.`,
+    ref: 'SIGGRAPH 2025',
+  },
+  {
+    title: 'Reading and equalizing nonlinear materials',
+    img: '/img/solids.jpg',
+    text: `Two materials with the same Young's modulus and Poisson's ratio can behave very differently under large
+      deformation. Any isotropic material can be read as its linear part plus one weak-nonlinearity knob, and that knob
+      can be equalized, so artists and engineers can tune a material's nonlinear behavior independently.`,
+    ref: 'SCA 2026, Best Presentation Award',
+  },
+  {
+    title: 'Measuring materials from real objects',
+    img: '/img/poking.jpg',
+    text: `A low-cost robotic poking rig and an inverse solver recover a full nonlinear, stable-by-construction
+      material law from force measurements on real objects. Ongoing work under NSF Award 2622123 uses computed
+      tomography (CT) to observe the interior of deforming specimens, making the whole material law identifiable.`,
+    ref: 'SIGGRAPH Asia 2023 · ongoing (NSF)',
+  },
+];
+---
+<BaseLayout title="Research — Huanyu Chen" description="Research of Huanyu Chen: computational mechanics and interpretable physical AI.">
+  <h1>Research</h1>
+  <p>
+    AI is learning to predict and act in the physical world, and robots are increasingly trained in simulation.
+    Physics-based simulators are interpretable but hand-built; learned models are general but opaque. I build
+    <strong>interpretable physical AI</strong>: models whose parts are written in the language of physics, so physics
+    becomes the interpretation of what a model learns rather than a limit on it.
+  </p>
+  <p>
+    A common thread is <strong>connections between descriptions</strong>: how a 3D body becomes a rod or a shell, how a
+    material law summarizes a microstructure, and how measurements become a model. Each one can keep all the physics if
+    it is built right, and each one is a place where learning can enter in a form we can still read and check.
+  </p>
+
+  {topics.map((t) => (
+    <article class="project">
+      <img src={t.img} alt="" loading="lazy" />
+      <div>
+        <h2>{t.title}</h2>
+        <p>{t.text}</p>
+        <p class="muted">{t.ref}</p>
+      </div>
+    </article>
+  ))}
+
+  <h2>Open source</h2>
+  <p>
+    <a href="https://huanyuusc.github.io/isotropic-energies-tutorial/">Isotropic Distortion Energies</a>: one Python
+    solver core (batched SVD, closed-form Hessian eigensystems, projected Newton, implicit Euler with IPC contact) for
+    parameterization, deformation and elastodynamics in 2D and 3D, with the slides of my UCLA lecture.
+  </p>
+</BaseLayout>
