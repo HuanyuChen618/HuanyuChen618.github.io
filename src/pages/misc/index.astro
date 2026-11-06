@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = [
+  {
+    href: '/misc/roadtrip-2024',
+    title: 'After SIGGRAPH: New York to Key West, a City a Day',
+    date: 'July–August 2024',
+    img: '/misc/roadtrip-2024/niagara-falls.jpg',
+    text: `SIGGRAPH 2024 in Denver, then a flight to New York and two weeks and 2,541 miles through New England, the Great
+      Lakes and Chicago, a hop to Florida, and down the Overseas Highway to Key West. One toy hedgehog, lost twice.`,
+  },
+];
+---
+<BaseLayout title="Misc — Huanyu Chen" description="Travel and other writing by Huanyu Chen, outside research.">
+  <h1>Misc</h1>
+  <p class="muted">Things outside research: mostly road trips.</p>
+  {posts.map((p) => (
+    <article class="project">
+      <a href={p.href} style="flex:none"><img src={p.img} alt="" loading="lazy" /></a>
+      <div>
+        <h2><a href={p.href}>{p.title}</a></h2>
+        <p class="muted">{p.date}</p>
+        <p>{p.text}</p>
+      </div>
+    </article>
+  ))}
+</BaseLayout>
