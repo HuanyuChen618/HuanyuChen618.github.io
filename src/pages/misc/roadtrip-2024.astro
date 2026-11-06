@@ -2,10 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 const P = '/misc/roadtrip-2024/';
 ---
-<BaseLayout title="After SIGGRAPH 2024: A City a Day — Huanyu Chen"
+<BaseLayout title="The Hedgehog Who Went to Key West — Huanyu Chen"
   description="SIGGRAPH 2024 in Denver, then a two-week road trip: New York, New England, the Great Lakes, Chicago, Orlando and Key West.">
   <p class="muted"><a href="/misc">← Misc</a> · July–August 2024</p>
-  <h1>After SIGGRAPH: New York to Key West, a City a Day</h1>
+  <h1>The Hedgehog Who Went to Key West</h1>
+  <p class="muted trip-sub">SIGGRAPH 2024 in Denver, then New York to Key West, a city a day.</p>
 
   <div class="callout trip-stats">
     <strong>18 days · July 28 – August 14, 2024</strong><br />
@@ -233,6 +234,7 @@ const P = '/misc/roadtrip-2024/';
 </BaseLayout>
 
 <style>
+  .trip-sub { margin-top: -.4em; font-size: 1.1rem; }
   .trip-stats { margin: 1.2em 0; line-height: 1.6; }
   .trip-fig { margin: 1.2em 0; }
   .trip-fig img { width: 100%; height: auto; border-radius: 8px; display: block; }
