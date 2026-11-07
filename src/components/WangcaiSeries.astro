@@ -1,0 +1,33 @@
+---
+// "Wangcai's road trips" series box, shown at the end of every post she appears in.
+// Usage: <WangcaiSeries current="/misc/tahoe-2026" />
+const { current } = Astro.props;
+const trips = [
+  { href: '/misc/wangcai-2025', title: 'Bringing Wangcai Home', date: 'Jan 2025' },
+  { href: '/misc/joshua-tree', title: 'Four Visits to the Same Desert', date: 'Jul 2025 visit' },
+  { href: '/misc/big-bear-2025', title: 'A Weekend Above the Clouds', date: 'Jul 2025' },
+  { href: '/misc/oregon-2025', title: 'Thanksgiving, the Long Way Round', date: 'Nov 2025' },
+  { href: '/misc/sedona-2026', title: 'Red Rocks, a Pink Jeep and Teal Arches', date: 'Jan 2026' },
+  { href: '/misc/spring-break-2026', title: 'Hoodoos, Earthships and Red Rocks', date: 'Mar 2026' },
+  { href: '/misc/tahoe-2026', title: 'Two Capitols and a Very Clear Lake', date: 'Aug 2026' },
+];
+---
+<aside class="callout wangcai-series" aria-label="Wangcai's road trips">
+  <strong>Wangcai's road trips</strong>
+  <ol>
+    {trips.map((t) => (
+      <li>
+        {t.href === current
+          ? <span class="here">{t.title} <span class="muted">· {t.date} · you are here</span></span>
+          : <a href={t.href}>{t.title}</a>}
+        {t.href !== current && <span class="muted"> · {t.date}</span>}
+      </li>
+    ))}
+  </ol>
+</aside>
+
+<style>
+  .wangcai-series { margin: 2.2em 0 1em; }
+  .wangcai-series ol { margin: .5em 0 0; padding-left: 1.4em; line-height: 1.7; }
+  .wangcai-series .here { font-weight: 600; }
+</style>

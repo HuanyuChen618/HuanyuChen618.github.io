@@ -1,7 +1,38 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-// Newest first.
+const places = [
+  {
+    href: '/misc/joshua-tree',
+    title: 'Four Visits to the Same Desert',
+    date: '2022–2025',
+    img: '/misc/joshua-tree/joshua-tree-orion.jpg',
+    text: `Four trips to Joshua Tree, made easy by the area's affordable homestays and mostly spent looking up: Keys View at 3 a.m., Jumbo Rocks under storm clouds, Orion over the Joshua trees, and a field of giant desert hands with Wangcai.`,
+  },
+  {
+    href: '/misc/las-vegas',
+    title: 'Las Vegas, Again',
+    date: '2022–2026',
+    img: '/misc/las-vegas/2024-sphere-night.jpg',
+    text: `Seven visits to the same four miles of boulevard, because the luxury hotels are surprisingly affordable and the shows are wonderful: a fake Venice, the STRAT twice, the Sphere both dark and lit, and a dawn walk past the Luxor with Wangcai.`,
+  },
+  {
+    href: '/misc/bay-area',
+    title: 'The Bay Area, Again and Again',
+    date: '2022–2026',
+    img: '/misc/bay-area/castello-di-amorosa.jpg',
+    text: `Close to Napa, more in San Francisco than one trip can hold, and on the way to Oregon: a castle winery, Highway 1 down to 17-Mile Drive, Twin Peaks at night and the skyline from Treasure Island.`,
+  },
+  {
+    href: '/misc/san-diego',
+    title: 'San Diego, Again',
+    date: '2022–2025',
+    img: '/misc/san-diego/balloon-shadow.jpg',
+    text: `Not a far drive, and close to the border: a Halloween panda at the San Diego Zoo, Christmas Day in LEGOLAND's Miniland, and an Easter balloon ride over the Safari Park.`,
+  },
+];
+
+// Trips, newest first.
 const posts = [
   {
     href: '/misc/hawaii-2026',
@@ -10,6 +41,13 @@ const posts = [
     img: '/misc/hawaii-2026/kilauea-glow.jpg',
     text: `Kīlauea erupting under a blood-red night sky on our first evening, then Hilo, a Kona coffee farm and a week
       on Oʻahu, from Waikīkī and Pearl Harbor to Byodo-In and Kualoa.`,
+  },
+  {
+    href: '/misc/tahoe-2026',
+    title: 'Two Capitols and a Very Clear Lake',
+    date: 'August 2026',
+    img: '/misc/tahoe-2026/wangcai-tour-boat.jpg',
+    text: `A relaxed five-day loop at the end of summer: Sacramento's Capitol and Tower Bridge, Wangcai on a pedal boat on Lake Tahoe, Carson City and Reno, Emerald Bay and the ruined tea house on Fannette Island, then Santa Cruz and Carmel.`,
   },
   {
     href: '/misc/july4-2026',
@@ -29,12 +67,40 @@ const posts = [
       rolled in the dirt.`,
   },
   {
+    href: '/misc/sedona-2026',
+    title: 'Red Rocks, a Pink Jeep and Teal Arches',
+    date: 'January–February 2026',
+    img: '/misc/sedona-2026/moonrise.jpg',
+    text: `A Pink Jeep up the Broken Arrow route to Chicken Point, a nearly full moon rising over glowing red rocks at golden hour, and Wangcai under the world's only teal McDonald's arches.`,
+  },
+  {
+    href: '/misc/oregon-2025',
+    title: 'Thanksgiving, the Long Way Round',
+    date: 'November–December 2025',
+    img: '/misc/oregon-2025/crater-lake-wizard.jpg',
+    text: `Thanksgiving by car from Southern California to Portland and back to Napa: Crater Lake under fresh snow, Mt. Hood over Trillium Lake, and the sea stacks of Bandon. Wangcai came along.`,
+  },
+  {
+    href: '/misc/big-island-2025',
+    title: 'Fishponds, a Crater and the Milky Way',
+    date: 'September 2025',
+    img: '/misc/big-island-2025/afterglow.jpg',
+    text: `Four days on the Big Island: Kona, Hilo and the lava coast, then one long Saturday from the ancient Kalahuipuaʻa fishponds to the floor of Kīlauea Iki, a sunset above the clouds on Mauna Kea, and the Milky Way.`,
+  },
+  {
     href: '/misc/siggraph-2025',
     title: 'Rods in Vancouver',
     date: 'August 2025',
     img: '/misc/siggraph-2025/canada-place-ship.jpg',
     text: `A sequel to the 2024 trip: presenting ANIME-Rod at SIGGRAPH 2025 in Vancouver, with harbor views from the
       convention centre, Richmond takeout, and the driverless Canada Line home.`,
+  },
+  {
+    href: '/misc/big-bear-2025',
+    title: 'A Weekend Above the Clouds',
+    date: 'July 2025',
+    img: '/misc/big-bear-2025/big-bear-marina.jpg',
+    text: `A short weekend at Big Bear Lake: the Rim of the World Highway at golden hour, cat-themed mochas, stars through the pines and a Sunday morning at Lake Arrowhead, with Wangcai on dawn watch at the window.`,
   },
   {
     href: '/misc/wangcai-2025',
@@ -114,6 +180,13 @@ const posts = [
       through a roadside market.`,
   },
   {
+    href: '/misc/roadtrips-2022',
+    title: 'Two Road Trips on a Brand-New License',
+    date: 'May 2022',
+    img: '/misc/roadtrips-2022/canyon-snow-pines.jpg',
+    text: `A new driver's license and two road trips in one month: a loop through Berkeley, San Francisco, Stanford and Silicon Valley and home down Highway 1, then a Memorial Day snowstorm in Yellowstone and the Tetons.`,
+  },
+  {
     href: '/misc/desert-2022',
     title: 'Death Valley, Vegas & Page',
     date: 'March 2022',
@@ -126,6 +199,18 @@ const posts = [
 <BaseLayout title="Misc — Huanyu Chen" description="Travel and other writing by Huanyu Chen, outside research.">
   <h1>Misc</h1>
   <p class="muted">Things outside research: mostly road trips.</p>
+  <h2 class="misc-group">Places we keep going back to</h2>
+  {places.map((p) => (
+    <article class="project">
+      <a href={p.href} style="flex:none"><img src={p.img} alt="" loading="lazy" /></a>
+      <div>
+        <h2><a href={p.href}>{p.title}</a></h2>
+        <p class="muted">{p.date}</p>
+        <p>{p.text}</p>
+      </div>
+    </article>
+  ))}
+  <h2 class="misc-group">Trips</h2>
   {posts.map((p) => (
     <article class="project">
       <a href={p.href} style="flex:none"><img src={p.img} alt="" loading="lazy" /></a>
@@ -137,3 +222,7 @@ const posts = [
     </article>
   ))}
 </BaseLayout>
+
+<style>
+  .misc-group { margin-top: 1.6em; }
+</style>
