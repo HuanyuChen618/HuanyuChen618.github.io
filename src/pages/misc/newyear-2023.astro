@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/newyear-2023/';
 ---
 <BaseLayout title="New Year on the East Coast — Huanyu Chen"
@@ -10,7 +11,7 @@ const P = '/misc/newyear-2023/';
 
   <div class="callout trip-stats">
     <strong>7 days · December 29, 2022 – January 4, 2023</strong><br />
-    New York → Philadelphia → Washington, DC<br />
+    Fly into Newark → New York → train to Philadelphia → train to Washington, DC → fly home<br />
     one ball drop, seen from above · three ferry rides on New Year's Day · 102 floors up at One World Observatory ·
     one giant clothespin · the Capitol and the Supreme Court after dark
   </div>
@@ -24,7 +25,7 @@ const P = '/misc/newyear-2023/';
   <p>
     That was the centerpiece of a week on the East Coast in the dead of winter. It was four days in New York, with fog
     in Brooklyn, sun on the harbor and a lot of time on ferries, followed by a night in Philadelphia and a night in
-    Washington. As with the other trip posts here, everything is reconstructed from the camera roll, which remembers
+    Washington, with the train in between. As with the other trip posts here, everything is reconstructed from the camera roll, which remembers
     where and when every photo was taken far better than we do. Where the photos are silent, I've kept quiet too.
     Where a place has a story, I've added a little of it. Readers of the <a href="/misc/roadtrip-2024">summer 2024
     road trip</a> will recognize some of the scenery; this is the same coast, eighteen months earlier and about sixty
@@ -37,7 +38,8 @@ const P = '/misc/newyear-2023/';
     and northern New Jersey, and the window filled with that particular view you only get landing in the Northeast at
     night: no darkness anywhere, just one continuous carpet of orange streetlights, broken by the black ribbons of
     rivers and the brighter threads of highways, all the way to the horizon. The wingtip light flashed against it every
-    second, like a metronome counting down the last few minutes of the flight.
+    second, like a metronome counting down the last few minutes of the flight. We landed at Newark, if memory serves,
+    and crossed the river into Manhattan.
   </p>
   <figure class="trip-fig narrow-fig"><img src={P + 'plane-approach.jpg'} alt="Night view from a plane window: the wingtip light glowing over a vast carpet of city lights." loading="lazy" /><figcaption>Descending over New Jersey, December 29th, a little after 7 pm.</figcaption></figure>
   <p>
@@ -409,14 +411,16 @@ const P = '/misc/newyear-2023/';
 
   <h2>January 2: Philadelphia</h2>
   <p>
-    On the second day of the year we left New York for <strong>Philadelphia</strong>, and by half past two we
-    were outside 30th Street Station. Philadelphia is only ninety-odd miles from Manhattan, but it feels like a different
+    On the second day of the year we took the train to <strong>Philadelphia</strong>, down the Northeast Corridor,
+    the busy rail line that runs from Boston through New York to Washington. The stretch south of New York was
+    electrified by the Pennsylvania Railroad in the 1930s, and today Amtrak covers it in well under two hours, through
+    the marshes and factory towns of New Jersey. By half past two we were outside 30th Street Station. Philadelphia is only ninety-odd miles from Manhattan, but it feels like a different
     century of a different country: lower, older, red-brick, built on William Penn's orderly grid between two
     rivers, and much less interested in impressing you.
   </p>
   <figure class="trip-fig wide-fig">
     <a href={P + 'daymap-philly.jpg'}><img src={P + 'daymap-philly.jpg'} alt="Map of the route: Day 5, January 2: from 30th Street Station to City Hall and the Clothespin, Chinatown, Center City at night, the JFK Boulevard bridge and the Penn campus." loading="lazy" /></a>
-    <figcaption>Day 5: City Hall, Chinatown and Penn after dark.</figcaption>
+    <figcaption>Day 5: by train to 30th Street, then City Hall, Chinatown and Penn after dark.</figcaption>
   </figure>
   <p>
     It is impossible to miss <strong>City Hall</strong>, because it sits in the exact center of Penn's plan, in the
@@ -479,13 +483,13 @@ const P = '/misc/newyear-2023/';
 
   <h2>January 3–4: Washington</h2>
   <p>
-    The next day we moved on to <strong>Washington, DC</strong>. The camera roll skips the journey entirely and picks
-    up again after dark, at the place every visitor ends up at least once: the <strong>United States Capitol</strong>,
+    The next day we moved on to <strong>Washington, DC</strong>, by train again, on the last leg of the Corridor
+    into Union Station. The camera roll skips the ride entirely and picks up again after dark, at the place every visitor ends up at least once: the <strong>United States Capitol</strong>,
     at eight o'clock at night.
   </p>
   <figure class="trip-fig wide-fig">
     <a href={P + 'daymap-dc.jpg'}><img src={P + 'daymap-dc.jpg'} alt="Map of the route: Days 6 and 7, January 3 and 4: the U.S. Capitol and Supreme Court at night, then Georgetown the next morning." loading="lazy" /></a>
-    <figcaption>Days 6–7: Capitol Hill at night, Georgetown in the morning.</figcaption>
+    <figcaption>Days 6–7: Capitol Hill at night, Georgetown in the morning, then the flight home.</figcaption>
   </figure>
   <p>
     We came at it from the East Front plaza, the side where presidents were inaugurated for a century and a half,
@@ -532,8 +536,8 @@ const P = '/misc/newyear-2023/';
     <figure class="trip-fig"><img src={P + 'georgetown-view.jpg'} alt="A gray morning view from a rooftop over Georgetown brick roofs and bare trees to the Potomac River and the towers of Rosslyn beyond." loading="lazy" /><figcaption>Across the Potomac to Rosslyn, January 4th.</figcaption></figure>
   </div>
   <p>
-    That rooftop is the last photo. The camera roll doesn't say how the rest of the day went or how we got home, so
-    I'll leave the trip where the photos do: looking across a river on a cold, quiet morning.
+    That rooftop is the last photo. We flew home from DC, but the camera roll doesn't say how the rest of the day
+    went, so I'll leave the trip where the photos do: looking across a river on a cold, quiet morning.
   </p>
 
   <h2>Looking back</h2>
@@ -559,6 +563,7 @@ const P = '/misc/newyear-2023/';
   <p class="muted"><small>Maps built from the trip's photo timestamps and locations. Photo locations have been removed
     from the published images. Day maps: map data © OpenStreetMap contributors; each stop is placed where its photo was
     taken, hotels and home are never marked, and the dashed lines show the order of stops, not the exact roads.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

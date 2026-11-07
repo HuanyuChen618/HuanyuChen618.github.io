@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/desert-2022/';
 ---
 <BaseLayout title="Death Valley, Vegas &amp; Page — Huanyu Chen"
@@ -23,7 +24,8 @@ const P = '/misc/desert-2022/';
   <p>
     This was a short trip with a lot of geology in it. In five days in March 2022 we flew from Los Angeles to Las
     Vegas, picked up a rental car, and drove it to two of the most photographed landscapes in the American
-    Southwest and back. The first was Death Valley, the lowest, driest and hottest national park in the country,
+    Southwest and back. I didn't have a driver's license yet, so a friend did all of the driving, and I did the
+    looking out of the window. The first was Death Valley, the lowest, driest and hottest national park in the country,
     which in March is merely warm. The second was Page, Arizona, a small town on the edge of Lake Powell, which sits
     within a short drive of Horseshoe Bend and Antelope Canyon. In between, and at both ends, was Las Vegas,
     which turns out to be a very convenient place to start a desert road trip and a very strange place to finish one.
@@ -34,7 +36,8 @@ const P = '/misc/desert-2022/';
     holds one small puzzle, which turned out to be the most interesting thing in the metadata. Every phone photo is
     stamped with its offset from universal time, and on this trip those offsets jump around in a way that no single
     clock on the wall would. Daylight saving time began in the middle of the trip. And the trip ended up in the
-    one corner of the country where a ten-minute drive can move you an hour forward or back. More on that in Page.
+    one corner of the country where a ten-minute drive can move you an hour forward or back. On the road to Page the
+    phone's clock changed several times, and at the time it was genuinely confusing. More on that in Page.
   </p>
 
   <h2>Day 1: Death Valley at sunset</h2>
@@ -181,7 +184,8 @@ const P = '/misc/desert-2022/';
   <h3>Las Vegas at night</h3>
   <p>
     After that the camera roll goes quiet for nearly ten hours. Somewhere in there is the drive out of the park and
-    across the desert to Las Vegas, but the photos don't say which way we went or what we did on the way. The next
+    across the desert to Las Vegas, but the photos don't say which way we went or what we did on the way, and I
+    don't remember either. The next
     picture is at 11:11 that night, on the Strip, in front of <strong>New York-New York</strong>.
   </p>
   <p>
@@ -221,8 +225,7 @@ const P = '/misc/desert-2022/';
   </p>
   <figure class="trip-fig narrow-fig"><img src={P + 'wynn-encore-morning.jpg'} alt="A curved bronze hotel tower at the end of a wide, nearly empty boulevard on a sunny morning." loading="lazy" /><figcaption>Down the Strip toward the Wynn.</figcaption></figure>
   <p>
-    Lunch was at the <strong>Bellagio</strong>, around half past twelve, and judging by the plates it was a buffet:
-    a plate of sausages, mussels, noodles and roast carrots, then fruit, then a second plate entirely of small desserts,
+    Lunch, around half past twelve, was the buffet at the <strong>Bellagio</strong>: a plate of sausages, mussels, noodles and roast carrots, then fruit, then a second plate entirely of small desserts,
     a blueberry tart, a mango square, panna cotta with raspberries, a pink doughnut and a chocolate one. A Vegas buffet
     is less a meal than a test of planning, and this one was handled with a clear strategy.
   </p>
@@ -233,7 +236,8 @@ const P = '/misc/desert-2022/';
 
   <h3>Glen Canyon Dam at dusk</h3>
   <p>
-    Then came the long drive east. Las Vegas to Page is about 275 miles of empty desert, and the camera roll
+    Then came the long drive east, our friend at the wheel. Las Vegas to Page is about 275 miles of empty desert;
+    I don't remember the roads we took, and the camera roll
     records almost none of it; the photos simply stop at the Bellagio and start again at Glen Canyon. The one
     exception, at 6:56 pm, is a blurred shot through the car window of the canyon walls, taken as we crossed the
     bridge beside the dam.
@@ -262,7 +266,9 @@ const P = '/misc/desert-2022/';
     Most of the United States moved its clocks forward on March 13th. <strong>Arizona</strong> doesn't. It is too hot
     in summer for anyone to want an extra hour of evening sun, and the state has stayed on standard time all year round
     since 1968. In winter, Arizona shares a clock with Colorado and Utah; in summer, with California and Nevada. So
-    the day before, when we drove from Las Vegas into Arizona, the clocks didn't change at all.
+    the day before, when we drove from Las Vegas into Arizona, the clocks officially didn't change at all. The phone
+    in my pocket disagreed: on that one drive its clock changed several times, and by the time we reached Page none of
+    us was sure what time it was.
   </p>
   <p>
     But the <strong>Navajo Nation</strong>, the largest reservation in the country, covering the whole northeast
@@ -650,6 +656,7 @@ const P = '/misc/desert-2022/';
     estimate from the route. Photo locations have been removed from the published images. Day maps: map data ©
     OpenStreetMap contributors; each stop is placed where its photo was taken, hotels and home are never marked, and the
     dashed lines show the order of stops, not the exact roads.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

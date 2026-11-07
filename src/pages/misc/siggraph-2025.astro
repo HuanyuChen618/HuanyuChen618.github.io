@@ -1,18 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/siggraph-2025/';
 ---
 <BaseLayout title="Rods in Vancouver — Huanyu Chen"
-  description="SIGGRAPH 2025 in Vancouver: presenting ANIME-Rod, a week of harbor views from the convention centre, Richmond takeout, and the Canada Line home.">
+  description="SIGGRAPH 2025 in Vancouver: presenting ANIME-Rod, a week of harbor views from the convention centre, Richmond takeout, and an Air Canada strike that kept me an extra day.">
   <p class="muted"><a href="/misc">← Misc</a> · August 2025</p>
   <h1>Rods in Vancouver</h1>
-  <p class="muted trip-sub">SIGGRAPH 2025, a paper to present, and a harbor full of cruise ships.</p>
+  <p class="muted trip-sub">SIGGRAPH 2025, presenting ANIME-Rod, and a strike that kept me in Vancouver an extra day.</p>
 
   <div class="callout trip-stats">
     <strong>8 days · August 9 – 16, 2025</strong><br />
     YVR → Richmond → downtown Vancouver (SIGGRAPH 2025, Vancouver Convention Centre) → Yaletown → Richmond → YVR<br />
     one paper presented · five days of conference · four beds in three neighborhoods · no rental car, mostly the
-    Canada Line and our feet · one sequel
+    Canada Line and my feet · one cancelled flight · one sequel
   </div>
 
   <p>
@@ -32,7 +33,7 @@ const P = '/misc/siggraph-2025/';
 
   <h2>Days 1–2: Landing, and opening day</h2>
   <p>
-    We came in to <strong>Vancouver International Airport</strong> on the evening of Saturday, August 9th. The first
+    I came in to <strong>Vancouver International Airport</strong> on the evening of Saturday, August 9th. The first
     photo of the trip is from a terminal window at 8:32 pm. An Air Canada jet sits nose-in at its gate, the apron
     in front of it is crowded with baggage carts and cargo containers stenciled with the names of airlines from the
     other side of the Pacific, and beyond the runways a low, dark line of mountains stands against a peach-colored sky.
@@ -49,7 +50,7 @@ const P = '/misc/siggraph-2025/';
     the airport with it. Richmond sits on Lulu Island in the delta of the Fraser River, so flat and so close to sea level
     that it is ringed by dikes. It is also, by reputation and in practice, one of the best places to eat Chinese food in
     North America: a large share of its residents have roots in Hong Kong, Taiwan and mainland China, and the
-    restaurants along its main roads follow. Our first dinner, late that night, came in a paper bowl: a fish soup with
+    restaurants along its main roads follow. My first dinner, late that night, came in a paper bowl: a fish soup with
     pickled mustard greens, a side of rice noodles to drop into it, and a small cup of steamed milk custard for
     afterwards. After a day of travel it was exactly right.
   </p>
@@ -57,7 +58,7 @@ const P = '/misc/siggraph-2025/';
 
   <h3>Into the city</h3>
   <p>
-    Sunday was opening day. Around half past noon we crossed the <strong>Middle Arm of the Fraser</strong>, one of the
+    Sunday was opening day. Around half past noon I crossed the <strong>Middle Arm of the Fraser</strong>, one of the
     channels the river splits into before it reaches the sea. Under a perfectly clear sky the water was wide and
     glassy, with gravel docks and silos on its banks and, far off on the horizon, the faint towers of downtown
     Vancouver. It is a working river: logs, barges and gravel still move along it, and the delta it built is the
@@ -88,15 +89,15 @@ const P = '/misc/siggraph-2025/';
     <figure class="trip-fig"><img src={P + 'north-shore-window.jpg'} alt="Floor-to-ceiling windows looking across Burrard Inlet to the North Shore Mountains." loading="lazy" /><figcaption>The North Shore Mountains, through the convention centre's glass.</figcaption></figure>
   </div>
   <p>
-    The evening belonged to the big hall. The record has a short video at 7:19 pm and a photo at 8:52 pm: a dark
-    auditorium with rows of heads in silhouette, stage lights raking through the haze, a glowing SIGGRAPH logo, a wall
-    of glowing blocks, and a screen showing a slide from a paper in a session called "Rigid Bodies &amp; Contacts".
-    That session was scheduled for Thursday, so a Sunday-evening slide from it points to SIGGRAPH's traditional opening
-    ritual, the Technical Papers Fast Forward, where every paper in the conference gets well under a minute to make its
-    pitch, one after another, for a couple of hours. It is part trailer reel and part endurance sport, and the
-    audience reacts to the jokes like a comedy crowd.
+    The evening belonged to the big hall and to SIGGRAPH's traditional opening ritual, the
+    <strong>Technical Papers Fast Forward</strong>, where every paper in the conference gets well under a minute to
+    make its pitch, one after another, for a couple of hours. It is part trailer reel and part endurance sport, and the
+    audience reacts to the jokes like a comedy crowd. The record has a short video at 7:19 pm and a photo at 8:52 pm: a
+    dark auditorium with rows of heads in silhouette, stage lights raking through the haze, a glowing SIGGRAPH logo, a
+    wall of glowing blocks, and on the screen a slide from a paper in a session called "Rigid Bodies &amp; Contacts",
+    which wasn't due to be presented in full until Thursday.
   </p>
-  <figure class="trip-fig narrow-fig"><img src={P + 'evening-session.jpg'} alt="A dark auditorium with stage lighting, a glowing SIGGRAPH logo sculpture and a slide on a large screen." loading="lazy" /><figcaption>The big hall on Sunday evening.</figcaption></figure>
+  <figure class="trip-fig narrow-fig"><img src={P + 'evening-session.jpg'} alt="A dark auditorium with stage lighting, a glowing SIGGRAPH logo sculpture and a slide on a large screen." loading="lazy" /><figcaption>The Technical Papers Fast Forward, Sunday evening.</figcaption></figure>
   <p>
     Coming out at nine o'clock, the sky over the North Shore had caught fire. From the plaza outside the West Building,
     the mountains were a black cutout against a band of orange and red, the tall street lamps of the plaza leaning over
@@ -223,7 +224,7 @@ const P = '/misc/siggraph-2025/';
 
   <h3>Thursday: the last day</h3>
   <p>
-    Thursday, August 14th, was the conference's last day and our moving day, from near the convention centre to
+    Thursday, August 14th, was the conference's last day and my moving day, from near the convention centre to
     Yaletown for one more night downtown. The morning was gray and cool, and West Hastings Street had the look Vancouver
     is famous for under cloud: green-glass towers, dense and glossy, rising behind trees that are still lush in
     August. A bronze bird with outstretched wings stood on a plinth at
@@ -250,7 +251,7 @@ const P = '/misc/siggraph-2025/';
   </p>
   <figure class="trip-fig narrow-fig"><img src={P + 'lunch-bowl.jpg'} alt="A paper bowl of rice with fried chicken, kimchi, egg, sesame and chili sauce, next to a cup of berries, on a gray wooden table." loading="lazy" /><figcaption>Thursday lunch.</figcaption></figure>
   <p>
-    By six we were in <strong>Yaletown</strong>, high above the south end of downtown. Yaletown was a district of
+    By six I was in <strong>Yaletown</strong>, high above the south end of downtown. Yaletown was a district of
     railway yards and brick warehouses a century ago, named for the railway workers who moved here in the 1880s from
     the town of Yale, up the Fraser Canyon; today it is a forest of glass
     and concrete residential towers, built mostly since the city hosted Expo 86 on the old rail lands along False Creek.
@@ -265,14 +266,28 @@ const P = '/misc/siggraph-2025/';
     Dinner was Chinese takeout, spread out across a table: a coiled, flaky layered flatbread, a bowl of
     golden millet congee dotted with goji berries, a stir-fry of garlic scapes with wood ear mushrooms, and a dark,
     spicy braise. That night it rained, and the last photo of the day is of city lights blurred by water running down
-    the glass. Vancouver had finally produced the weather it is known for, one day before we left downtown.
+    the glass. Vancouver had finally produced the weather it is known for, one day before I left downtown.
   </p>
   <figure class="trip-fig narrow-fig"><img src={P + 'takeout.jpg'} alt="Takeout containers of a coiled flatbread, millet congee with goji berries, garlic scapes with wood ear mushrooms, and a spicy braise." loading="lazy" /><figcaption>Takeout in Yaletown.</figcaption></figure>
 
-  <h2>Days 7–8: Richmond, and the Canada Line home</h2>
+  <h2>Days 7–8: A strike, and an extra day in Richmond</h2>
   <p>
-    With the conference over, Friday went back south to <strong>Richmond</strong> for the last night. The camera roll
-    records one errand, a new suitcase from an outdoor-gear store, for reasons it does not explain, and one dinner. It
+    Friday, August 15th, was supposed to be the flight home. It wasn't. Air Canada's flight attendants, around ten
+    thousand of them, were heading for their first strike in decades, and the airline had already begun winding
+    down its schedule ahead of the deadline. My flight was one of the ones cancelled. The strike itself began in the
+    early hours of the next morning, and for a few days the country's largest airline was almost entirely on the
+    ground.
+  </p>
+  <p>
+    So instead of an airport, Friday became a scramble. I needed a bed for the night at short notice, and found one in
+    an Airbnb back in <strong>Richmond</strong>. A flight was harder. At first there was nothing to book at all, and
+    once seats did appear they cost several times the original fare, because everyone else on every cancelled Air
+    Canada flight was looking at the same screens. Eventually I got a seat on a Delta flight for Saturday: first class,
+    since that was what was left, at a price I'd rather not repeat. Then, early on Saturday morning, a much cheaper
+    flight turned up, still more than double what I'd originally paid, and I switched to it.
+  </p>
+  <p>
+    In between, the camera roll records one errand, a new suitcase from an outdoor-gear store, and one dinner. It
     was Cantonese takeout this time: rice-noodle rolls, slippery and translucent with shrimp showing through, a tub of
     congee, and a box of deep-fried durian mochi balls. Bite into one and the crisp golden shell gives way to a chewy
     layer of glutinous rice and then a soft, pale-yellow center of durian, which is as divisive as fruit gets and
@@ -280,11 +295,12 @@ const P = '/misc/siggraph-2025/';
   </p>
   <figure class="trip-fig wide-fig">
     <a href={P + 'daymap-0816.jpg'}><img src={P + 'daymap-0816.jpg'} alt="Map of the route: Days 7–8: from Richmond–Brighouse on the Canada Line to Waterfront and back to YVR, then takeoff over Richmond." loading="lazy" /></a>
-    <figcaption>Days 7–8: one last ride downtown on the Canada Line, then home.</figcaption>
+    <figcaption>Days 7–8: an unplanned morning in Richmond, one last ride downtown on the Canada Line, then home.</figcaption>
   </figure>
-  <figure class="trip-fig narrow-fig"><img src={P + 'durian-mochi.jpg'} alt="Golden fried durian mochi balls in a takeout box, one bitten open to show the yellow filling." loading="lazy" /><figcaption>Fried durian mochi, the last dinner.</figcaption></figure>
+  <figure class="trip-fig narrow-fig"><img src={P + 'durian-mochi.jpg'} alt="Golden fried durian mochi balls in a takeout box, one bitten open to show the yellow filling." loading="lazy" /><figcaption>Fried durian mochi, the unplanned last dinner.</figcaption></figure>
   <p>
-    Saturday was the flight home, in the afternoon, which left a morning. It started at the
+    The new flight left in the afternoon, which handed me something I hadn't planned on: a free morning in Richmond,
+    a city I had mostly seen from the train and from takeout boxes. It started at the
     <strong>Richmond–Brighouse</strong> terminus of the Canada Line, on No. 3 Road. The sky had cleared into a mass of
     bright, piled-up clouds, and the guideway ran past on its concrete beam with a two-car train sitting at the
     station, white residential towers with blue and lime-green panels standing over it. Next to the station is
@@ -305,7 +321,7 @@ const P = '/misc/siggraph-2025/';
   </p>
   <figure class="trip-fig"><img src={P + 'canada-line-front.jpg'} alt="The view from the front window of a driverless Canada Line train, looking down a curving elevated track toward buildings and clouds." loading="lazy" /><figcaption>The front window of a driverless Canada Line train.</figcaption></figure>
   <p>
-    We rode it all the way to the end at <strong>Waterfront</strong>, half an hour from Richmond, for one last look
+    I rode it all the way to the end at <strong>Waterfront</strong>, half an hour from Richmond, for one last look
     at downtown. Waterfront Station was built in 1914 by the Canadian Pacific Railway as the western end of the
     transcontinental line, and its columned front still faces Cordova Street. Today it is the hub where the SkyTrain
     lines, the SeaBus to North Vancouver and the commuter trains all meet. Standing between its columns you see the
@@ -332,13 +348,14 @@ const P = '/misc/siggraph-2025/';
   </p>
   <figure class="trip-fig narrow-fig"><img src={P + 'yvr-souvenirs.jpg'} alt="An Explore Canada souvenir display at the airport with patterned bags, travel mugs and water bottles." loading="lazy" /><figcaption>Last chance for souvenirs, YVR.</figcaption></figure>
   <p>
-    Takeoff was a little after three. Taxiing out, the window showed a long line of Air Canada jets parked in a row
-    across a field of tall golden grass, with the mountains behind them under the clouds. Then the plane lifted off
+    Takeoff was a little after three. Taxiing out, the window showed the strike in a single frame: a long line of Air
+    Canada jets parked nose to tail across a field of tall golden grass, going nowhere, with the mountains behind them
+    under the clouds. Then the plane lifted off
     eastward over the delta, and below, the Middle Arm of the Fraser curled past new apartment blocks, a bridge and a
     stretch of empty fields.
   </p>
   <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'yvr-airliners.jpg'} alt="A row of Air Canada jets parked across a field of golden grass, with clouds and mountains behind." loading="lazy" /><figcaption>Air Canada's row of tails.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'yvr-airliners.jpg'} alt="A row of Air Canada jets parked across a field of golden grass, with clouds and mountains behind." loading="lazy" /><figcaption>Air Canada's grounded fleet, on the first day of the strike.</figcaption></figure>
     <figure class="trip-fig"><img src={P + 'takeoff-middle-arm.jpg'} alt="Aerial view after takeoff over the Middle Arm of the Fraser River, with a bridge, roads and apartment blocks." loading="lazy" /><figcaption>The Middle Arm, just after takeoff.</figcaption></figure>
   </div>
   <p>
@@ -347,7 +364,8 @@ const P = '/misc/siggraph-2025/';
   </p>
   <figure class="trip-fig"><img src={P + 'takeoff-richmond.jpg'} alt="Aerial view over the grid of central Richmond, with the sea and islands on the horizon." loading="lazy" /><figcaption>Richmond from the air.</figcaption></figure>
   <p>
-    That is where the record ends: an engine cowling, the delta, and the sea shining in the distance.
+    That is where the record ends: an engine cowling, the delta, and the sea shining in the distance, a day later
+    than planned.
   </p>
 
   <h2>A sequel</h2>
@@ -364,6 +382,12 @@ const P = '/misc/siggraph-2025/';
     airport, is where a lot of the best food is.
   </p>
   <p>
+    The strike didn't feel like a gift at the time. A cancelled flight, a night found at a few hours' notice and a
+    morning spent refreshing fares are nobody's idea of a holiday. But it bought me a morning in Richmond that I would
+    never have had otherwise, one more ride at the front of the train, and a lesson in how quickly a trip home can stop
+    being something you can take for granted. Looking back, I'm glad of it.
+  </p>
+  <p>
     And then there is the reason for going. A year earlier I had stood on a show floor in Denver and photographed an
     ad for this conference. This time the photos that matter most aren't of mountains or ships at all. They are of a
     projector screen in Rooms 220–222, with a rod twisting on it and a title above our names. Somewhere on a show
@@ -373,6 +397,7 @@ const P = '/misc/siggraph-2025/';
     from the published images, and the photos of the talk are of the slides only. Day maps: map data © OpenStreetMap
     contributors; each stop is placed where its photo was taken, hotels and home are never marked, and the dashed
     lines show the order of stops, not the exact roads or rail lines.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

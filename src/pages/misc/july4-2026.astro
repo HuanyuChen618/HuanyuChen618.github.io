@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/july4-2026/';
 ---
 <BaseLayout title="Fireworks for the 250th — Huanyu Chen"
-  description="Independence weekend on the East Coast, celebrating the US's 250th birthday in Philadelphia and D.C., then Baltimore's harbor and a drive back up I-95.">
+  description="Independence weekend on the East Coast, celebrating the US's 250th birthday in Philadelphia and D.C., then Baltimore's harbor, a drive back up I-95, and a very long way home.">
   <p class="muted"><a href="/misc">← Misc</a> · July 2026</p>
   <h1>Fireworks for the 250th</h1>
   <p class="muted trip-sub">Independence weekend on the East Coast, celebrating the US's 250th birthday in Philadelphia and D.C.</p>
@@ -11,33 +12,51 @@ const P = '/misc/july4-2026/';
   <div class="callout trip-stats">
     <strong>4 days · July 3 – 6, 2026</strong><br />
     Philadelphia → Washington, D.C. → Baltimore → Wilmington → Philadelphia<br />
-    Pennsylvania, D.C., Maryland, Delaware and a few minutes of New Jersey · one fireworks show over the Potomac ·
-    one harbor seen from 27 floors up · two cheesesteaks, one at each end
+    Pennsylvania, D.C., Maryland, Delaware and two brief visits to New Jersey · one fireworks show over the Potomac ·
+    one harbor seen from 27 floors up · two cheesesteaks, one at each end · zero fridge magnets<br />
+    The way home: one line of thunderstorms, a six-hour delay, a missed connection, and seven states in one day
+    (Maryland → Delaware → New Jersey → Pennsylvania → Illinois → Arizona → California)
   </div>
 
   <p>
     On July 4th, 1776, a room full of delegates in Philadelphia adopted the Declaration of Independence. On July 4th,
     2026, the country turned two hundred and fifty, and it seemed like the kind of birthday you should show up for in
-    person. So we spent the long weekend on the East Coast, in the two cities that have the best claim to the
+    person. So a friend and I spent the long weekend on the East Coast, in the two cities that have the best claim to the
     occasion: Philadelphia, where it was signed, and Washington, where the country puts on its biggest show for it.
   </p>
   <p>
-    As with the other trips on this page, everything below is reconstructed from the camera roll. It is a short trip
-    and a short roll, a few dozen photos over four days, and it has some big gaps in it. Where the photos are silent
-    I've left the gap alone rather than fill it with a guess. What the camera did record, in great detail, is two
-    things: one night of fireworks over the Potomac, and one hour above Baltimore's Inner Harbor.
+    As with the other trips on this page, the maps and times below come from the camera roll. It is a short trip
+    and a short roll, a few dozen photos over four days, and whole afternoons went unphotographed. What the camera did
+    record, in great detail, is two things: one night of fireworks over the Potomac, and one hour above Baltimore's
+    Inner Harbor.
   </p>
 
   <h2>Philadelphia</h2>
   <p>
-    The record starts on the evening of Friday, July 3rd, in Philadelphia's <strong>Chinatown</strong>, a compact
-    grid of restaurants and bakeries a few blocks north of City Hall and the convention center. How we got there is not
-    in the photos. What is in the photos is dinner.
+    The trip started with an overnight flight from California, landing at PHL on the morning of Friday, July 3rd. I
+    arrived with a migraine, which is not the ideal way to meet a city, so the first stop was not a landmark. I picked
+    up a rental car, drove to a quiet spot by a bridge, and sat there until the headache let go.
+  </p>
+  <p>
+    Once it did, I crossed the bridge into <strong>New Jersey</strong> on a small mission. On every trip I try to
+    bring home a fridge magnet (the <a href="/misc/roadtrip-2024">2024 road trip</a> covered most of a fridge door with
+    them), and New Jersey, just across the Delaware River, looked like an easy one to collect. It was not. I came back
+    to Philadelphia empty-handed, and New Jersey remains, magnetically speaking, unvisited.
+  </p>
+  <p>
+    The rest of the afternoon was quieter: a bookstore, a chair and a laptop, which is a perfectly good way to spend a
+    few hours in a city while you wait for someone. In the evening I drove to <strong>30th Street Station</strong>,
+    Philadelphia's grand 1930s rail station with its rows of giant stone columns, to pick up a friend coming in by
+    train. From here on, "we" is the two of us.
   </p>
   <figure class="trip-fig wide-fig">
-    <a href={P + 'daymap-0703-04.jpg'}><img src={P + 'daymap-0703-04.jpg'} alt="Map of the route: from Chinatown and Old City in Philadelphia to the Key Bridge in Washington, D.C." loading="lazy" /></a>
-    <figcaption>Days 1–2: Philadelphia, then the Potomac for the Fourth.</figcaption>
+    <a href={P + 'daymap-0703.jpg'}><img src={P + 'daymap-0703.jpg'} alt="Map of Day 1 in Philadelphia: from the airport to 30th Street Station, then to dinner in Chinatown." loading="lazy" /></a>
+    <figcaption>Day 1: PHL, 30th Street Station, Chinatown. The bridge, New Jersey and the bookstore left no photos, so the map skips them.</figcaption>
   </figure>
+  <p>
+    Dinner was in Philadelphia's <strong>Chinatown</strong>, a compact grid of restaurants and bakeries a few blocks
+    north of City Hall and the convention center.
+  </p>
 
   <h3>Hot pot in Chinatown</h3>
   <p>
@@ -52,6 +71,10 @@ const P = '/misc/july4-2026/';
   <figure class="trip-fig narrow-fig"><img src={P + 'philly-hotpot.jpg'} alt="A split hot pot with red spicy broth and mild broth, surrounded by plates of sliced meat, greens and fried rolls." loading="lazy" /><figcaption>The night before the Fourth: hot pot in Chinatown.</figcaption></figure>
 
   <h3>Independence Day morning</h3>
+  <figure class="trip-fig wide-fig">
+    <a href={P + 'daymap-0704.jpg'}><img src={P + 'daymap-0704.jpg'} alt="Map of Day 2: from Old City in Philadelphia down to the Key Bridge in Washington, D.C." loading="lazy" /></a>
+    <figcaption>Day 2: Philadelphia, then the Potomac for the Fourth.</figcaption>
+  </figure>
   <p>
     The morning of the Fourth was clear and very blue. From a high window on the east side of Center City, the view
     looked down over I-95, running in its trench along the Delaware waterfront, to a set of tall white concrete towers
@@ -94,8 +117,8 @@ const P = '/misc/july4-2026/';
   </p>
   <figure class="trip-fig"><img src={P + 'key-bridge-night.jpg'} alt="View from the Key Bridge at night: the Georgetown waterfront and the Potomac, with the Kennedy Center and the Washington Monument in the distance under heavy clouds." loading="lazy" /><figcaption>Downstream from the Key Bridge: Georgetown on the left, the Kennedy Center and the Washington Monument ahead.</figcaption></figure>
   <p>
-    The fireworks on the Mall are launched a couple of miles downstream, and the Key Bridge is one of the classic
-    places to watch them from: high above the water, with nothing between you and the show except a river and an
+    The show was the big one, the National Mall fireworks, launched a couple of miles downstream, and the Key Bridge
+    is one of the classic places to watch them from: high above the water, with nothing between you and the show except a river and an
     island. Everyone else knew this too. The sidewalk was packed several deep along the railing, and the far end of
     the bridge, toward the office towers of Rosslyn, was a long line of people under the streetlamps, some in
     stars-and-stripes shirts, most of them holding phones and looking downstream, waiting.
@@ -163,7 +186,7 @@ const P = '/misc/july4-2026/';
   <h2>Baltimore: the harbor, from the water and from the top</h2>
   <p>
     The next day, Sunday the 5th, we drove up to <strong>Baltimore</strong>, an hour northeast, arriving a little before
-    one in the afternoon. The plan, as far as the photos tell it, was the <strong>Inner Harbor</strong>, Baltimore's
+    one in the afternoon. The plan was the <strong>Inner Harbor</strong>, Baltimore's
     downtown waterfront, followed by the long drive north up I-95 to the airport in Philadelphia.
   </p>
   <figure class="trip-fig wide-fig">
@@ -312,14 +335,31 @@ const P = '/misc/july4-2026/';
     into New Jersey. It is a big steel cantilever bridge, opened in 1974 between Chester, Pennsylvania, and Bridgeport,
     New Jersey, and its main span is the longest of any cantilever bridge in the country. Its namesake fits the
     weekend too: John Barry was a Philadelphia ship captain who fought in the Revolution and is often called the father
-    of the American Navy. The photos don't say what happened in the hours after that.
+    of the American Navy. It was also my second visit to New Jersey in three days, and once again I left without a
+    magnet.
   </p>
   <p>
-    The trip ends the way it began, with Philadelphia food. That evening, at the airport, we had cheesesteak number
+    The Philadelphia part of the trip ends the way it began, with food. That evening at PHL we had cheesesteak number
     two, from Chickie's &amp; Pete's, in a cardboard box and paper printed with Philadelphia Eagles logos: chopped steak
-    and onions spilling out of a soft roll, with a fork stuck in it. It was less photogenic than the Old City one, and it did the job. Then came a late flight out of PHL, and the long weekend was over.
+    and onions spilling out of a soft roll, with a fork stuck in it. It was less photogenic than the Old City one, and
+    it did the job. We ate it off a seat-back tray table, already on board and sure we were about to leave. We were
+    optimistic.
   </p>
-  <figure class="trip-fig narrow-fig"><img src={P + 'phl-cheesesteak.jpg'} alt="A cheesesteak in a cardboard box with printed paper and a plastic fork." loading="lazy" /><figcaption>Cheesesteak number two, at PHL.</figcaption></figure>
+  <figure class="trip-fig narrow-fig"><img src={P + 'phl-cheesesteak.jpg'} alt="A cheesesteak in a cardboard box with printed paper and a plastic fork, on an airplane tray table." loading="lazy" /><figcaption>Cheesesteak number two, at PHL, on a plane that was not going anywhere yet.</figcaption></figure>
+
+  <h2>Seven states in a day</h2>
+  <p>
+    The plan for getting back to California was simple: PHL to Chicago, change planes, and land in San Jose at 11 pm.
+    Then a line of thunderstorms rolled through, and the flight sat, and sat. It finally left about six hours late,
+    deep into the night, and by then the Chicago connection was long gone. The replacement went Chicago to Phoenix,
+    then Phoenix to San Jose, landing at 9 the next morning.
+  </p>
+  <p>
+    Counted from that Sunday morning in Maryland, the last day of the trip went Maryland, Delaware, New Jersey,
+    Pennsylvania, Illinois, Arizona, California: seven states in one day, more than the rest of the weekend managed put
+    together, and most of them seen only from a gate. It is not how I would have chosen to cross the country. But for
+    a weekend about America, it was, in its way, thorough.
+  </p>
 
   <h2>Two hundred and fifty</h2>
   <p>
@@ -328,7 +368,7 @@ const P = '/misc/july4-2026/';
     was adopted, and spent the Fourth on a bridge named for the man who wrote the anthem, watching fireworks over the
     capital. The next day it climbed above a harbor whose oldest ship was already sailing when the country was not yet
     eighty, then crossed the first state to ratify the Constitution and a bridge named for the father of the Navy, and
-    flew home from Philadelphia.
+    finally, courtesy of the weather, flew back to California by way of half the country.
   </p>
   <p>
     Mostly, though, what I'll remember is the view from the Key Bridge: a river, an island, a lit-up Kennedy Center, a
@@ -338,6 +378,7 @@ const P = '/misc/july4-2026/';
   <p class="muted"><small>Maps built from the trip's photo timestamps and locations. Photo locations have been removed
     from the published images. Day maps: map data © OpenStreetMap contributors; each stop is placed where its photo was
     taken, hotels and home are never marked, and the dashed lines show the order of stops, not the exact roads.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

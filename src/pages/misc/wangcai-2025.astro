@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/wangcai-2025/';
 ---
 <BaseLayout title="Bringing Wangcai Home — Huanyu Chen"
@@ -11,8 +12,8 @@ const P = '/misc/wangcai-2025/';
   <div class="callout trip-stats">
     <strong>4 days · January 24–27, 2025</strong><br />
     Los Angeles → Boston → Portsmouth, New Hampshire → Portland, Maine → Boston → Los Angeles<br />
-    three New England states in one snowy weekend · two harbors at sunset · one Boston evening on foot ·
-    one dog named Muffin, then WONHTSAI, now Wangcai
+    three New England states in one snowy weekend · one rental car with a dog in the back · two harbors at sunset ·
+    one Boston evening on foot · one dog named Muffin, then WONHTSAI, now Wangcai
   </div>
 
   <figure class="trip-fig wide-fig">
@@ -24,7 +25,7 @@ const P = '/misc/wangcai-2025/';
     Every January, a lot of graphics researchers spend the weeks before the SIGGRAPH paper deadline living on coffee and
     compile errors, and then, the moment the submission goes through, go a little blank. This trip came right after one
     of those deadlines. On paper it was just a long weekend in New England: a flight to Boston, a drive up the coast to
-    Portsmouth and Portland, Maine, an evening walk through Back Bay, and a flight home. But the reason we went to Boston
+    Portsmouth and Portland, Maine, an evening walk through Back Bay, and a flight home. But the reason I went to Boston
     in the coldest week of the year has four legs and a cream-colored coat, and she is asleep on the couch as I write
     this.
   </p>
@@ -45,21 +46,33 @@ const P = '/misc/wangcai-2025/';
     So we took her home as a foster. It was supposed to be about a week, since she already had a family waiting. It was
     a good week. She ate her first meal in our home, discovered the little cups of whipped cream that coffee shops hand
     to dogs and decided they were the best thing in Los Angeles, wore a pink sweater, saw the ocean for the first time
-    at the beach, and watched a sunset from a hilltop in the Hollywood Hills. Within days she was sleeping belly-up on
-    the couch, which in dog terms is a signed lease. Then the week was over. The last photo of her in LA shows her in a
+    at the beach, and watched a sunset from a hilltop in the Hollywood Hills.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'wangcai-pier.jpg'} alt="A cream-colored dog in a pink knit sweater looking out through a pier railing at the ocean and a sandy beach." loading="lazy" /><figcaption>Her first look at the ocean, during her foster week in LA, December 2024.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'wangcai-hollywood-hills.jpg'} alt="The same dog in a pink sweater and a teal harness at a railing high in the Hollywood Hills, with the Hollywood sign on the ridge behind in late sun." loading="lazy" /><figcaption>Sunset in the Hollywood Hills, the same week.</figcaption></figure>
+  </div>
+  <p>
+    Within days she was sleeping belly-up on the couch, which in dog terms is a signed lease. Then the week was over. The last photo of her in LA shows her in a
     travel crate in the car, surrounded by all her toys. She was the first dog we had ever raised.
   </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'wangcai-couch.jpg'} alt="The dog asleep upside down on a tan leather couch, still in her pink sweater, one front paw in the air." loading="lazy" /><figcaption>The signed lease. Foster week, December 2024.</figcaption></figure>
   <p>
     She arrived in a snowy Boston, and for a while that was the end of the story. Then it wasn't. Her new home didn't
     work out, and by January she was at the <strong>MSPCA</strong>'s shelter in Boston, up for adoption again. Her
     listing on Adopt-a-Pet opened with "My name is WONHTSAI!", which, read aloud, is very nearly
     <strong>Wangcai</strong> (旺财), the most classic name a Chinese family can give a dog. It means, roughly,
-    "prosperous fortune". We took that as a sign. The deadline was over. We booked flights to Boston.
+    "prosperous fortune". We took that as a sign.
+  </p>
+  <p>
+    The trouble was that I was in Los Angeles, rushing to finish a SIGGRAPH paper, and that deadline does not move for
+    anyone. So the other half of this story's "we" flew to Boston about a week ahead of me and took Wangcai out of the
+    shelter, while I finished the deadline in LA. The moment the paper was in, I booked a flight to Boston.
   </p>
 
   <h2>Friday: Boston by night</h2>
   <p>
-    We flew out of LAX around lunchtime on Friday, January 24th, and by evening the moving map had us over southern
+    I flew out of LAX around lunchtime on Friday, January 24th, and by evening the moving map had me over southern
     Wisconsin. A little before ten that night we were standing on the <strong>East Boston</strong> waterfront, in
     snow. East Boston is the part of the city that sits across the harbor, next to the airport, and from its piers you
     get the downtown skyline the way the postcards do: the whole Financial District lit up and doubled in the black water
@@ -84,7 +97,8 @@ const P = '/misc/wangcai-2025/';
     Saturday was the big day on the road: a loop through Boston's university district in the late morning, then an hour
     north on I-95 to New Hampshire, across the river into Maine, and up the coast to Portland in time for sunset. The sky
     stayed a hard, cloudless blue the whole way, the kind of blue you only get on very cold days, and the snow that had
-    fallen earlier in the week was still piled everywhere.
+    fallen earlier in the week was still piled everywhere. We had rented a car, and Wangcai came along for the whole
+    loop, riding in the back.
   </p>
   <figure class="trip-fig wide-fig">
     <a href={P + 'daymap-0125.jpg'}><img src={P + 'daymap-0125.jpg'} alt="Map of the route: from the East Boston waterfront and Boston University north to Portsmouth, across the Piscataqua River Bridge, and on to Portland, Maine." loading="lazy" /></a>
@@ -190,13 +204,13 @@ const P = '/misc/wangcai-2025/';
 
   <h2>Sunday: Back Bay and the Charles</h2>
   <p>
-    Sunday's daylight hours left no photos at all; at some point we drove back down the coast from Portland, and that
-    is all the record says. By a quarter to six it was dark and we were in Boston, at <strong>Christian Science
+    Sunday was the drive back: from Portland down the coast to Boston, with Wangcai in the back seat again. The daylight
+    hours left no photos at all. By a quarter to six it was dark and we were in Boston, at <strong>Christian Science
     Plaza</strong> in Back Bay, one of the strangest and most impressive public spaces in the city.
   </p>
   <figure class="trip-fig wide-fig">
-    <a href={P + 'daymap-0126.jpg'}><img src={P + 'daymap-0126.jpg'} alt="Map of the route: from Christian Science Plaza to the Harvard Bridge on foot, then across the harbor to Logan Airport." loading="lazy" /></a>
-    <figcaption>Day 3: Back Bay and the Charles at dusk, then Logan.</figcaption>
+    <a href={P + 'daymap-0126.jpg'}><img src={P + 'daymap-0126.jpg'} alt="Map of the route: from Portland, Maine down the coast to Boston, from Christian Science Plaza to the Harvard Bridge on foot, then across the harbor to Logan Airport." loading="lazy" /></a>
+    <figcaption>Day 3: back down the coast from Portland, then Back Bay and the Charles at dusk, then Logan.</figcaption>
   </figure>
   <p>
     The plaza is two centuries jammed together. On one side is <strong>The Mother Church</strong>, the headquarters of
@@ -242,14 +256,13 @@ const P = '/misc/wangcai-2025/';
     goodbye to Boston.
   </p>
   <p>
-    The last record of the night is a short video at <strong>Logan Airport</strong>, at a quarter to eleven. The
-    check-in lanes were empty, rows of steel stanchions on a shiny floor, and the only traveler in sight was a small
-    mouse, darting from one stanchion to the next. It is, I think, the only wildlife footage in the album.
+    The last record of the night is from <strong>Logan Airport</strong>, at a quarter to eleven: empty check-in
+    lanes, rows of steel stanchions on a shiny floor, and the trip home about to begin.
   </p>
 
   <h2>Monday: home</h2>
   <p>
-    The way home went by way of the Pacific Northwest. At 9:43 the next morning we were high over the foothills of the
+    The way home went through Seattle, with a short connection there. At 9:43 the next morning we were high over the foothills of the
     Cascades, looking down on <strong>Lake Washington</strong>, the long lake between Seattle and the Eastside, with the
     towers of downtown Bellevue on its shore and Mercer Island in the middle. The lake is crossed by floating bridges,
     which really do float, on huge concrete pontoons, because the lake is too deep and too soft-bottomed for ordinary
@@ -295,20 +308,38 @@ const P = '/misc/wangcai-2025/';
 
   <h2>Wangcai</h2>
   <p>
-    The camera roll from this trip has harbors and steeples and strawberries, and not a single photo of the reason we
-    went. But the story itself is not in doubt. Somewhere in those four
-    days, at the MSPCA in Boston, Muffin, otherwise known as WONHTSAI, came back to us. When we met her again she
-    jumped on us like an old friend. Getting a dog from Boston to Los Angeles turned out to involve a remarkable amount of
-    paperwork, and none of it mattered.
+    The camera roll from this trip has harbors and steeples and strawberries, and not a single photo of the reason I
+    went. But the story itself is not in doubt. Muffin, otherwise known as WONHTSAI, came back to us from the MSPCA in
+    Boston, and she spent that weekend in the back of a rental car, touring three states she will not remember. When
+    she saw us again, she jumped on us like an old friend.
   </p>
   <p>
     She has been <strong>Wangcai</strong> ever since. She has a pair of yellow pajamas, which settles the question of
-    where she lives. She has since come along on plenty of road trips of her own. A fortune-bringing name is a lot to live up to. So far she is managing it.
+    where she lives. A fortune-bringing name is a lot to live up to. So far she is managing it.
   </p>
+
+  <h2>Wangcai today</h2>
+  <p>
+    Since she is missing from every photo above, here she is on some of the road trips she has taken since. None of
+    these are from the January trip.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'wangcai-desert-hands.jpg'} alt="The cream-colored dog sitting on desert sand in a harness, with a row of giant white hand sculptures behind a wire fence at dusk." loading="lazy" /><figcaption>Among the giant hands on Coyote Valley Road, in California's high desert, July 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'wangcai-bisti.jpg'} alt="The dog lying stretched out on gravel in low golden sunlight, eyes closed, next to a water bowl." loading="lazy" /><figcaption>A roll in the dirt at the Bisti/De-Na-Zin trailhead, New Mexico, March 2026.</figcaption></figure>
+  </div>
+  <p>
+    She has turned out to be a natural on the road, and the back seat of a car in a strange state seems to suit her
+    just fine.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'wangcai-red-rocks.jpg'} alt="The dog lying on the bench rows of Red Rocks Amphitheatre, looking to the side, with the stage, red sandstone and the plains beyond." loading="lazy" /><figcaption>Red Rocks Amphitheatre, Colorado, March 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'wangcai-tahoe.jpg'} alt="The dog on a lakeside path, tongue out, with the turquoise water of Lake Tahoe and a wooden boathouse on a pier behind." loading="lazy" /><figcaption>Sugar Pine Point, Lake Tahoe, August 2026.</figcaption></figure>
+  </div>
   <p class="muted"><small>Maps built from the trip's photo timestamps and locations. Photo locations have been removed
     from the published images. Day maps: map data © OpenStreetMap contributors; each stop is placed where its photo
     was taken, hotels and home are never marked, and the dashed lines show the order of stops, not the exact roads or
     flight paths.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/texas-2023/';
 ---
 <BaseLayout title="Independence Break in the Texas Triangle — Huanyu Chen"
@@ -160,7 +161,7 @@ const P = '/misc/texas-2023/';
     We stayed on the river until after half past eight, when the light went soft and gold and then gray. Back up at
     street level, on the way out, the city had one more surprise: a line of horse-drawn carriages shaped like
     Cinderella's pumpkin coach, outlined in blue and white and pink LED lights, clopping down the avenue in the dusk.
-    Then it was eighty miles back up I-35 to Austin for the night, the red Charger finally getting to stretch its legs.
+    Then, that same night, it was eighty miles back up I-35 to Austin, the red Charger finally getting to stretch its legs.
   </p>
   <figure class="trip-fig"><img src={P + 'sa-carriages.jpg'} alt="Two horse-drawn carriages shaped like pumpkin coaches, lit with blue and white LED lights, on a San Antonio street at dusk." loading="lazy" /><figcaption>Pumpkin coaches on the street at dusk.</figcaption></figure>
 
@@ -423,6 +424,7 @@ const P = '/misc/texas-2023/';
     estimate. Photo locations have been removed from the published images; a few pictures are stills from short
     videos. Day maps: map data © OpenStreetMap contributors; each stop is placed where its photo was taken, hotels and
     home are never marked, and the dashed lines show the order of stops, not the exact roads.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

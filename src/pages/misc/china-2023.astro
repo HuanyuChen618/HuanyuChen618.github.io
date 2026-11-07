@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/china-2023/';
 ---
 <BaseLayout title="The Doors Had Just Opened — Huanyu Chen"
@@ -10,14 +11,15 @@ const P = '/misc/china-2023/';
 
   <div class="callout trip-stats">
     <strong>17 days · January 27 – February 12, 2023</strong><br />
-    Los Angeles → Hong Kong airport → Shanghai → Sanya, Hainan → Shenzhen → Hong Kong airport → Taipei → Los Angeles<br />
+    Los Angeles ✈ Hong Kong airport ✈ Shanghai ✈ Sanya, Hainan ✈ Shenzhen → (metro and taxi) Hong Kong airport ✈ Taipei ✈ Los Angeles<br />
+    six flights · 
     three weeks after China dropped arrival quarantine · the tail of Chinese New Year, Year of the Rabbit ·
     one night in an airport · two sunsets over the sea · one observation deck on the 116th floor
   </div>
 
   <figure class="trip-fig wide-fig">
-    <a href={P + 'daymap-route.jpg'}><img src={P + 'daymap-route.jpg'} alt="Map of the trip: an overnight stop at Hong Kong airport, a flight to Shanghai, then south to Sanya on Hainan, Shenzhen, back to Hong Kong airport and home via Taipei." /></a>
-    <figcaption>The whole loop. Dashed lines show the order of places, not the routes flown.</figcaption>
+    <a href={P + 'daymap-route.jpg'}><img src={P + 'daymap-route.jpg'} alt="Map of the trip: in from Los Angeles to Hong Kong airport overnight, a flight to Shanghai, flights south to Sanya on Hainan and back up to Shenzhen, metro and taxi to Hong Kong airport, and home via Taipei." /></a>
+    <figcaption>The whole loop, minus the Pacific. Blue legs were flights; the short red one, Shenzhen to Hong Kong airport, was metro and taxi. Lines show the order of places, not the routes flown.</figcaption>
   </figure>
 
   <p>
@@ -30,7 +32,9 @@ const P = '/misc/china-2023/';
   </p>
   <p>
     So we did. On the morning of January 27th a silver suitcase stood packed by the door in Los Angeles, and seventeen
-    days later we were home again, having seen three very different Chinas. Shanghai in late winter was grey and chilly
+    days later we were home again. It was a trip that was mostly about family: hers in Shanghai, mine wintering in
+    Sanya, and friends in Shenzhen. Most of those days belong to them and stay off this page. What is here is the
+    in-between: the mornings out, and three very different Chinas. Shanghai in late winter was grey and chilly
     and still full of New Year decorations. Sanya, on the tropical island of Hainan, had palm trees, warm sea and
     a sunset shared with what looked like half the island. Shenzhen, the city that did not exist forty-five years ago, we mostly
     saw from above. It was the tail end of Chinese New Year, which in 2023 fell on January 22nd and opened the Year of
@@ -45,7 +49,7 @@ const P = '/misc/china-2023/';
 
   <h2>Getting there: a night in Hong Kong's airport</h2>
   <p>
-    The route home to mainland China ran, as it often did in those months, through Hong Kong. Getting there took a
+    The route from Los Angeles to mainland China ran, as it often did in those months, through Hong Kong. Getting there took a
     long day in the air and a night that never quite became a night. By the evening of January 28th we were at <strong>Hong Kong International
     Airport</strong>, with an early-morning connection to Shanghai and nowhere in
     particular to be in between. If you have done an overnight in a big airport you know the shape of it. The shops
@@ -148,8 +152,8 @@ const P = '/misc/china-2023/';
   <p>
     On a weekday morning in winter the promenade had room to breathe: a few people strolling or taking photographs
     along the railing, the river traffic sliding past, and the wind coming off the water. A few minutes later we were
-    eating a round, flaky pastry in a foil cup, stamped with red characters. That was the end of Shanghai. By the next evening we were two thousand
-    kilometres south, and it was summer.
+    eating a round, flaky pastry in a foil cup, stamped with red characters. That was the end of Shanghai. The next day we flew south, and by evening we were two thousand
+    kilometres away, and it was summer.
   </p>
 
   <h2>Act II: Sanya, at the southern edge</h2>
@@ -161,6 +165,7 @@ const P = '/misc/china-2023/';
     busy, and every beach at sunset was full.
   </p>
   <p>
+    Part of the pull was family: my parents were spending the winter there, as a lot of Chinese retirees do.
     We arrived on the evening of February 4th. The first photo is from a height, looking out over the curve of
     Sanya Bay at night. The city's hotels and apartment towers made a long chain of gold and pink lights along the
     water, the sea below was black and still, and the low cloud over it all glowed orange with the reflected light of
@@ -393,7 +398,8 @@ const P = '/misc/china-2023/';
     On February 10th we flew from Sanya to <strong>Shenzhen</strong>, an hour and a bit north across the South China
     Sea. If Sanya is China's beach, Shenzhen is its machine room. In 1980, when Deng Xiaoping made it the country's
     first Special Economic Zone, it was a small border town facing Hong Kong across a river. Today it has more than seventeen million, and it builds a large share of the world's phones, drones and
-    circuit boards. It is a city with almost no "old" in it, and it doesn't seem to miss it.
+    circuit boards. It is a city with almost no "old" in it, and it doesn't seem to miss it. We were there mainly to
+    see friends, and the photos below are from the hours in between.
   </p>
   <figure class="trip-fig wide-fig">
     <a href={P + 'daymap-shenzhen.jpg'}><img src={P + 'daymap-shenzhen.jpg'} alt="Map of Shenzhen: Shenzhen Bay at sunset on February 10, the Futian CBD and Ping An Finance Centre on February 11, then SEG Plaza in Huaqiangbei, and the Convention Center on February 12." loading="lazy" /></a>
@@ -535,7 +541,8 @@ const P = '/misc/china-2023/';
 
   <h2>Home, the long way round</h2>
   <p>
-    That afternoon we crossed back to Hong Kong, and by early evening we were at <strong>Hong Kong International
+    That afternoon we crossed back to Hong Kong the unglamorous way, by metro to the border and a taxi on the other
+    side, and by early evening we were at <strong>Hong Kong International
     Airport</strong> again, two weeks after the long night there. The bakeries were open this time, and two slices of
     cake in a white box, a tiramisu and a chocolate-and-orange mousse cake, got us to the gate.
   </p>
@@ -561,6 +568,7 @@ const P = '/misc/china-2023/';
   <p class="muted"><small>Maps built from the trip's photo timestamps and locations. Photo locations have been removed
     from the published images. Day maps: map data © OpenStreetMap contributors; each stop is placed where its photo was
     taken, hotels and home are never marked, and the dashed lines show the order of stops, not the exact roads.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

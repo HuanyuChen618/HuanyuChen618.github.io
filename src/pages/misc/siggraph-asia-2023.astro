@@ -1,18 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/siggraph-asia-2023/';
 ---
 <BaseLayout title="Summer at Christmas — Huanyu Chen"
-  description="SIGGRAPH Asia 2023 in Sydney, a harbour ferry past the Opera House, and a side trip to Canberra, Australia's planned capital.">
+  description="SIGGRAPH Asia 2023 in Sydney and a first SIGGRAPH talk at 9 a.m., a harbour ferry past the Opera House, and a side trip to Canberra, Australia's planned capital.">
   <p class="muted"><a href="/misc">← Misc</a> · December 2023</p>
   <h1>Summer at Christmas</h1>
-  <p class="muted trip-sub">SIGGRAPH Asia in Sydney, a day on the harbour, and two days in Canberra.</p>
+  <p class="muted trip-sub">SIGGRAPH Asia in Sydney, my first SIGGRAPH talk, a day on the harbour, and two days in Canberra.</p>
 
   <div class="callout trip-stats">
     <strong>8 days · December 10–17, 2023</strong><br />
     Sydney (Darling Harbour, Taronga Zoo, the harbour ferry, SIGGRAPH Asia 2023) → Canberra (the zoo, ANU,
     the Parliamentary Triangle, the National Gallery) → Sydney (a night at the Opera House) → home<br />
-    one conference · two cities · two zoos · one Opera House, photographed from every side ·
+    one conference · one first SIGGRAPH talk, at 9 a.m. · two cities · two zoos · one Opera House, photographed from every side ·
     sunsets after eight in the evening, a week before Christmas
   </div>
 
@@ -189,7 +190,24 @@ const P = '/misc/siggraph-asia-2023/';
     the computer animation festival, but it feels more like a large family gathering than a festival.
   </p>
   <p>
-    A conference day looks, in the camera roll, mostly like lunch. On Tuesday it was a spiced rice dish heaped in a
+    For me it was also a debut. I was there to present a paper, <a href="/publications"><em>Capturing Animation-Ready
+    Isotropic Materials Using Systematic Poking</em></a>, which had appeared in <em>ACM Transactions on Graphics</em>,
+    and it was my first talk at any SIGGRAPH. The program, it is fair to say, did not roll out the red carpet. The talk
+    was at nine in the morning, in the earliest paper session of the day, which is an hour when even the speakers are
+    still looking for coffee. The session was also a slightly puzzling home for it. It was first announced as "All About
+    Rendering", then quietly renamed "All About Animation", and the other papers in it were mostly about animating
+    characters, while mine was about poking soft objects to measure what they are made of. A paper about squishy
+    materials, in a session about character animation that used to be about rendering: it had, at least, a certain
+    shape-shifting logic to it.
+  </p>
+  <p>
+    The audience was what you would expect at nine o'clock on a conference morning: small, loyal, and
+    caffeinated. I gave the talk anyway, with all the seriousness of someone who had rehearsed it far too many times,
+    and it went fine. Every SIGGRAPH speaker has to give a first talk somewhere. Mine just happened to be at breakfast,
+    on the other side of the world, in a session that could not decide what it was about.
+  </p>
+  <p>
+    The rest of a conference day looks, in the camera roll, mostly like lunch. On Tuesday it was a spiced rice dish heaped in a
     white bowl, eaten near the venue. On Thursday the camera recorded the exhibition-hall menu in detail: a cup of
     coconut yoghurt layered with mango and passionfruit under a crust of granola, and a breakfast burger with bacon,
     cheese and a fried egg.
@@ -246,7 +264,8 @@ const P = '/misc/siggraph-asia-2023/';
 
   <h2>Canberra</h2>
   <p>
-    On Friday we went to <strong>Canberra</strong>, about 280 kilometers southwest of Sydney. Canberra is a capital
+    On Friday we went to <strong>Canberra</strong>, about 280 kilometers southwest of Sydney, by coach, if memory
+    serves. Canberra is a capital
     that was invented on purpose. When the Australian colonies federated in 1901, neither Sydney nor Melbourne would
     accept the other as the capital, so the constitution required a new city to be built in New South Wales, at least a
     hundred miles from Sydney. An international design competition in 1912 was won by two architects from Chicago,
@@ -348,7 +367,7 @@ const P = '/misc/siggraph-asia-2023/';
     At the bottom of the slope, the land axis meets <strong>Lake Burley Griffin</strong>. The lake was finished in
     1964 by damming the Molonglo River, half a century after the Griffins drew it. From the shore you can see the
     whole second half of the axis at once: across the water, up the long red avenue of Anzac Parade, to the copper
-    dome of the Australian War Memorial at the foot of Mount Ainslie. A tourist boat cut across the lake,. For a capital city, Canberra on a Saturday morning is astonishingly quiet.
+    dome of the Australian War Memorial at the foot of Mount Ainslie. A tourist boat cut across the lake. For a capital city, Canberra on a Saturday morning is astonishingly quiet.
   </p>
   <figure class="trip-fig"><img src={P + 'land-axis.jpg'} alt="View across Lake Burley Griffin along Canberra's land axis to the Australian War Memorial and Mount Ainslie, with a boat on the water." loading="lazy" /><figcaption>The land axis across the lake to Mount Ainslie.</figcaption></figure>
 
@@ -383,7 +402,8 @@ const P = '/misc/siggraph-asia-2023/';
 
   <h2>Back to Sydney: a night at the Opera House</h2>
   <p>
-    By evening we were back in Sydney, with one last plan for the trip: a show at the <strong>Opera House</strong>.
+    By evening we were back in Sydney, with one last plan for the trip: a show at the <strong>Opera House</strong>,
+    <em>Gatsby at the Green Light</em>.
     Having seen it from a giraffe's enclosure and from a ferry, it seemed only fair to go inside. We arrived on the
     forecourt at about half past eight, just as the sun was setting behind the city, and the whole of Circular Quay
     was out on the promenade to watch.
@@ -431,7 +451,8 @@ const P = '/misc/siggraph-asia-2023/';
 
   <h2>Looking back</h2>
   <p>
-    It was a short trip, and most of it was spent at a conference. But conferences are good at putting you in places
+    It was a short trip, and most of it was spent at a conference, including one nine o'clock talk that I will
+    always remember more fondly than its audience will. But conferences are good at putting you in places
     you would never otherwise have gone, and this one did it twice. Sydney is the obvious half of the story: the
     harbour, the bridge, the shells. Even so, the camera roll is full of things I would not have predicted. There are
     giraffes posing in front of a skyline, a café with the sea outside the window, and a capybara that would not get up.
@@ -448,6 +469,7 @@ const P = '/misc/siggraph-asia-2023/';
   <p class="muted"><small>Maps built from the trip's photo timestamps and locations. Photo locations have been removed
     from the published images. Day maps: map data © OpenStreetMap contributors; each stop is placed where its photo was
     taken, hotels and home are never marked, and the dashed lines show the order of stops, not the exact roads.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>

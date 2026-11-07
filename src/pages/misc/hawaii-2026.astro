@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 const P = '/misc/hawaii-2026/';
 ---
 <BaseLayout title="A Sky on Fire, Then Waikīkī — Huanyu Chen"
@@ -18,7 +19,13 @@ const P = '/misc/hawaii-2026/';
   </div>
 
   <p>
-    This trip has a simple shape. It starts with fire and ends with a city. The first half is the Island of Hawaiʻi,
+    There was no occasion for this one. No anniversary, no conference, no long-laid plan: we decided to go, and the
+    whole trip was planned the day before we left. Easy come, easy go. It turned out to be a good way to see Hawaiʻi,
+    which rewards showing up more than it rewards preparation, and which on our very first night handed us something
+    no itinerary could have promised.
+  </p>
+  <p>
+    The trip has a simple shape. It starts with fire and ends with a city. The first half is the Island of Hawaiʻi,
     the Big Island, where the ground is young and black and in places still being made: we landed in Kona on Labor Day
     and that same night were standing on the rim of Kīlauea, watching the sky above the caldera glow like the inside
     of a furnace. The second half is Oʻahu, where nearly a million people live on an island you can drive around in a
@@ -199,7 +206,7 @@ const P = '/misc/hawaii-2026/';
   </p>
   <figure class="trip-fig"><img src={P + 'holualoa-uplands.jpg'} alt="A red-roofed farmhouse among trees on a misty, overcast slope, with red earth in the foreground." loading="lazy" /><figcaption>Holualoa, in the afternoon clouds.</figcaption></figure>
   <p>
-    At a coffee farm in Holualoa we saw how the beans are made, and it is far more involved than you would guess
+    At <strong>Heavenly Hawaiian Kona Coffee Farms</strong> in Holualoa we saw how the beans are made, and it is far more involved than you would guess
     from a cup. Coffee starts as a fruit: a small red cherry. The cherries go into a pulper,
     which strips off the skin and fruit, and what is left are the beans in a papery husk called parchment. The farm's
     pulping deck was piled with burlap sacks, and a wooden box beside the machine was heaped with glossy red cherries
@@ -419,7 +426,8 @@ const P = '/misc/hawaii-2026/';
 
   <h3>Pearl Harbor</h3>
   <p>
-    Half an hour later we were at Pearl Harbor. The visitor center sits on the shore of the harbor, looking across
+    Half an hour later we were at Pearl Harbor. We kept to the shore this time, walking the grounds around the visitor
+    center rather than taking the boats out, and that turned out to be plenty. The visitor center sits on the shore of the harbor, looking across
     the water at Ford Island, where the battleships of the Pacific Fleet were moored on the morning of December 7,
     1941. The attack that morning killed more than 2,400 Americans and brought the United States into the Second World
     War. It is a quiet place now, and the water is calm and gray-blue.
@@ -431,11 +439,11 @@ const P = '/misc/hawaii-2026/';
   </p>
   <figure class="trip-fig"><img src={P + 'uss-bowfin.jpg'} alt="The submarine USS Bowfin moored beside a walkway on Pearl Harbor under a cloudy sky." loading="lazy" /><figcaption>USS <em>Bowfin</em> (SS-287).</figcaption></figure>
   <p>
-    Across the harbor, on Ford Island, are the two ships that stand for the beginning and the end of America's war.
-    The battleship <strong>USS <em>Missouri</em></strong>, gray and enormous, her hull number 63 visible even from the
+    Across the harbor, on Ford Island, are the two ships that stand for the beginning and the end of America's war,
+    and from the shore you see them the way the harbor itself does, at a distance across the water. The battleship <strong>USS <em>Missouri</em></strong>, gray and enormous, her hull number 63 visible even from the
     far shore, is where Japan signed the formal surrender in Tokyo Bay in September 1945. She was moored here as a
-    museum ship so that she would look over the <strong>USS <em>Arizona</em> Memorial</strong>, the white structure
-    that spans the sunken hull of the battleship <em>Arizona</em>, where more than 1,100 of her crew died on the
+    museum ship so that she would look over the <strong>USS <em>Arizona</em> Memorial</strong>, out in the harbor
+    a short boat ride from the visitor center: the white structure that spans the sunken hull of the battleship <em>Arizona</em>, where more than 1,100 of her crew died on the
     morning of the attack and most of them still lie. Between them stands the red-and-white control tower of Ford
     Island's old airfield.
   </p>
@@ -459,7 +467,10 @@ const P = '/misc/hawaii-2026/';
 
   <h3>Around the east end</h3>
   <p>
-    Sunday was the big drive, and it started early. At 6:49 we were out in Waikīkī, and by 7:23 we were on Diamond Head
+    Sunday we left the driving to someone else. We had signed up for a day-long guided tour around the island, the
+    kind where a bus collects you at dawn, a driver talks the whole way, and every famous view gets about ten
+    minutes: out, look, photograph, back on the bus. It is not a way to know a place, but it is a very efficient way
+    to see a lot of one. At 6:49 we were out in Waikīkī waiting for pickup, and by 7:23 the bus was on Diamond Head
     Road, which hugs the cliffs on the seaward side of the crater. The morning sun was low over the ocean, turning a
     long path of water to silver, and below the road the surf was rolling in along a narrow beach under the cliffs.
   </p>
@@ -477,7 +488,8 @@ const P = '/misc/hawaii-2026/';
   <p>
     A few minutes on, near the Hālona Blowhole lookout, the coast turns to raw lava shelf: dark, layered rock with the
     surf crashing over it, a long sandy beach curving away beyond, and the cliffs of Makapuʻu in the distance. It is
-    the windiest, wildest bit of the drive, and it comes just half an hour from Waikīkī.
+    the windiest, wildest bit of the loop, and it comes just half an hour from Waikīkī. We had a few minutes at the
+    lookout, long enough for the wind to rearrange everyone's hair, and then it was back on the bus.
   </p>
   <div class="trip-pair">
     <figure class="trip-fig"><img src={P + 'koko-crater.jpg'} alt="A steep green volcanic cone with deeply ribbed slopes under a blue sky with white clouds." loading="lazy" /><figcaption>Koko Crater, 7:44 am.</figcaption></figure>
@@ -486,8 +498,9 @@ const P = '/misc/hawaii-2026/';
 
   <h3>Byodo-In Temple</h3>
   <p>
-    From there we went up the windward coast to the <strong>Byodo-In Temple</strong>, in the Valley of the Temples at
-    the foot of the Koʻolau cliffs. We got there at nine, and a line was already forming. The temple was built in 1968
+    From there the bus went over to the windward side and up the coast to the <strong>Byodo-In Temple</strong>, in the
+    Valley of the Temples at the foot of the Koʻolau cliffs. We got there at nine, and a line was already forming. This
+    was a photo stop, not a visit, so what we came away with is the view from the edge of the pond. The temple was built in 1968
     to mark the hundredth anniversary of the first Japanese immigrants to Hawaiʻi, and it is a replica, at smaller
     scale, of the Byōdō-in in Uji, near Kyoto, a Buddhist temple built in the eleventh century, whose Phoenix Hall
     appears on the Japanese ten-yen coin.
@@ -505,8 +518,9 @@ const P = '/misc/hawaii-2026/';
     Further up the coast, at <strong>Kualoa</strong>, the Koʻolau range ends in a spectacular row of jagged peaks
     above the flat green land by the sea. Kualoa is one of the most sacred places on Oʻahu, and these ridges and the
     valleys behind them, now a working ranch, will look familiar to anyone who has seen <em>Jurassic Park</em> or
-    any of the many films shot here since. In the beach park across the road, the lawn runs down to the water under
-    wind-bent trees.
+    any of the many films shot here since. We didn't go into the ranch; the tour pulled over for the view, and the
+    white shuttle in the photo below is a reminder of how most people see Kualoa. In the beach park across the road,
+    the lawn runs down to the water under wind-bent trees.
   </p>
   <p>
     Just offshore sits <strong>Mokoliʻi</strong>, a small, steep, cone-shaped island. Its name means "little lizard":
@@ -518,10 +532,11 @@ const P = '/misc/hawaii-2026/';
     <figure class="trip-fig"><img src={P + 'kualoa-mokolii.jpg'} alt="A grassy park with wind-bent trees by the sea, with the small cone-shaped island of Mokoliʻi offshore." loading="lazy" /><figcaption>Kualoa Regional Park and Mokoliʻi.</figcaption></figure>
   </div>
   <p>
-    By one o'clock we had come around to <strong>Haleʻiwa</strong>, the old plantation-era town that is now the
+    By one o'clock the bus had come around to <strong>Haleʻiwa</strong>, the old plantation-era town that is now the
     capital of the North Shore. In winter this coast gets some of the biggest surf in the world, and Haleʻiwa fills
     with surfers and spectators. In September the sea is mostly calm, and the town is about shave ice, food trucks and
-    surf shops. The camera roll has just one photo from there, of a parking lot, so I'll leave Haleʻiwa at that.
+    surf shops. It was another short stop, and the camera roll has just one photo from there, of a parking lot, so
+    I'll leave Haleʻiwa at that. Then the bus took us back down the middle of the island to Waikīkī.
   </p>
 
   <h2>Leaving</h2>
@@ -556,6 +571,7 @@ const P = '/misc/hawaii-2026/';
   <p class="muted"><small>Maps built from the trip's photo timestamps and locations. Photo locations have been removed
     from the published images. Day maps: map data © OpenStreetMap contributors; each stop is placed where its photo
     was taken, hotels and home are never marked, and the dashed lines show the order of stops, not the exact roads.</small></p>
+  <Comments />
 </BaseLayout>
 
 <style>
