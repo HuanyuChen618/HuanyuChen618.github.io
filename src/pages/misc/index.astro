@@ -1,228 +1,374 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const places = [
-  {
-    href: '/misc/joshua-tree',
-    title: 'Four Visits to the Same Desert',
-    date: '2022–2025',
-    img: '/misc/joshua-tree/joshua-tree-orion.jpg',
-    text: `Four trips to Joshua Tree, made easy by the area's affordable homestays and mostly spent looking up: Keys View at 3 a.m., Jumbo Rocks under storm clouds, Orion over the Joshua trees, and a field of giant desert hands with Wangcai.`,
-  },
-  {
-    href: '/misc/las-vegas',
-    title: 'Las Vegas, Again',
-    date: '2022–2026',
-    img: '/misc/las-vegas/2024-sphere-night.jpg',
-    text: `Seven visits to the same four miles of boulevard, because the luxury hotels are surprisingly affordable and the shows are wonderful: a fake Venice, the STRAT twice, the Sphere both dark and lit, and a dawn walk past the Luxor with Wangcai.`,
-  },
-  {
-    href: '/misc/bay-area',
-    title: 'The Bay Area, Again and Again',
-    date: '2022–2026',
-    img: '/misc/bay-area/castello-di-amorosa.jpg',
-    text: `Close to Napa, more in San Francisco than one trip can hold, and on the way to Oregon: a castle winery, Highway 1 down to 17-Mile Drive, Twin Peaks at night and the skyline from Treasure Island.`,
-  },
-  {
-    href: '/misc/san-diego',
-    title: 'San Diego, Again',
-    date: '2022–2025',
-    img: '/misc/san-diego/balloon-shadow.jpg',
-    text: `Not a far drive, and close to the border: a Halloween panda at the San Diego Zoo, Christmas Day in LEGOLAND's Miniland, and an Easter balloon ride over the Safari Park.`,
-  },
-];
-
-// Trips, newest first.
+// One entry per post. group: 'places' or a year (trips are listed newest first within each year).
+// tags drive the filter chips; blurb shows as a hover tooltip.
 const posts = [
   {
-    href: '/misc/hawaii-2026',
-    title: 'A Sky on Fire, Then Waikīkī',
-    date: 'September 2026',
-    img: '/misc/hawaii-2026/kilauea-glow.jpg',
-    text: `Kīlauea erupting under a blood-red night sky on our first evening, then Hilo, a Kona coffee farm and a week
-      on Oʻahu, from Waikīkī and Pearl Harbor to Byodo-In and Kualoa.`,
+    "href": "/misc/joshua-tree",
+    "title": "Four Visits to the Same Desert",
+    "group": "places",
+    "when": "4 visits · 2022–25",
+    "where": "Joshua Tree, CA",
+    "tags": [
+      "places",
+      "wangcai"
+    ],
+    "img": "/misc/joshua-tree/joshua-tree-orion.jpg",
+    "blurb": "Four trips to Joshua Tree, made easy by the area's affordable homestays and mostly spent looking up: Keys View at 3 a.m., Jumbo Rocks under storm clouds, Orion over the Joshua trees, and a field of giant desert hands with Wangcai."
   },
   {
-    href: '/misc/tahoe-2026',
-    title: 'Two Capitols and a Very Clear Lake',
-    date: 'August 2026',
-    img: '/misc/tahoe-2026/wangcai-tour-boat.jpg',
-    text: `A relaxed five-day loop at the end of summer: Sacramento's Capitol and Tower Bridge, Wangcai on a pedal boat on Lake Tahoe, Carson City and Reno, Emerald Bay and the ruined tea house on Fannette Island, then Santa Cruz and Carmel.`,
+    "href": "/misc/las-vegas",
+    "title": "Las Vegas, Again",
+    "group": "places",
+    "when": "7 visits · 2022–26",
+    "where": "Las Vegas, NV",
+    "tags": [
+      "places"
+    ],
+    "img": "/misc/las-vegas/2024-sphere-night.jpg",
+    "blurb": "Seven visits to the same four miles of boulevard, because the luxury hotels are surprisingly affordable and the shows are wonderful: a fake Venice, the STRAT twice, the Sphere both dark and lit, and a dawn walk past the Luxor with Wangcai."
   },
   {
-    href: '/misc/july4-2026',
-    title: 'Fireworks for the 250th',
-    date: 'July 2026',
-    img: '/misc/july4-2026/fireworks-04.jpg',
-    text: `America's 250th birthday, celebrated where it started: a cheesesteak in Old City, fireworks over the Potomac
-      from the Key Bridge, then Baltimore's Inner Harbor from the top of the World Trade Center.`,
+    "href": "/misc/bay-area",
+    "title": "The Bay Area, Again and Again",
+    "group": "places",
+    "when": "5 visits · 2022–26",
+    "where": "San Francisco Bay Area",
+    "tags": [
+      "places"
+    ],
+    "img": "/misc/bay-area/castello-di-amorosa.jpg",
+    "blurb": "Close to Napa, more in San Francisco than one trip can hold, and on the way to Oregon: a castle winery, Highway 1 down to 17-Mile Drive, Twin Peaks at night and the skyline from Treasure Island."
   },
   {
-    href: '/misc/spring-break-2026',
-    title: 'Hoodoos, Earthships and Red Rocks',
-    date: 'March 2026',
-    img: '/misc/spring-break-2026/bisti-hoodoos.jpg',
-    text: `Four days of spring break in the car: sunset among the hoodoos of the Bisti badlands, a town of
-      tire-and-bottle houses near Taos, an empty Red Rocks Amphitheatre, and the Bellagio's spring garden. Wangcai
-      rolled in the dirt.`,
+    "href": "/misc/san-diego",
+    "title": "San Diego, Again",
+    "group": "places",
+    "when": "3 visits · 2022–25",
+    "where": "San Diego, CA",
+    "tags": [
+      "places"
+    ],
+    "img": "/misc/san-diego/balloon-shadow.jpg",
+    "blurb": "Not a far drive, and close to the border: a Halloween panda at the San Diego Zoo, Christmas Day in LEGOLAND's Miniland, and an Easter balloon ride over the Safari Park."
   },
   {
-    href: '/misc/sedona-2026',
-    title: 'Red Rocks, a Pink Jeep and Teal Arches',
-    date: 'January–February 2026',
-    img: '/misc/sedona-2026/moonrise.jpg',
-    text: `A Pink Jeep up the Broken Arrow route to Chicken Point, a nearly full moon rising over glowing red rocks at golden hour, and Wangcai under the world's only teal McDonald's arches.`,
+    "href": "/misc/hawaii-2026",
+    "title": "A Sky on Fire, Then Waikīkī",
+    "group": "2026",
+    "when": "Sep",
+    "where": "Big Island & Oʻahu",
+    "tags": [],
+    "img": "/misc/hawaii-2026/kilauea-glow.jpg",
+    "blurb": "Kīlauea erupting under a blood-red night sky on our first evening, then Hilo, a Kona coffee farm and a week on Oʻahu, from Waikīkī and Pearl Harbor to Byodo-In and Kualoa."
   },
   {
-    href: '/misc/oregon-2025',
-    title: 'Thanksgiving, the Long Way Round',
-    date: 'November–December 2025',
-    img: '/misc/oregon-2025/crater-lake-wizard.jpg',
-    text: `Thanksgiving by car from Southern California to Portland and back to Napa: Crater Lake under fresh snow, Mt. Hood over Trillium Lake, and the sea stacks of Bandon. Wangcai came along.`,
+    "href": "/misc/tahoe-2026",
+    "title": "Two Capitols and a Very Clear Lake",
+    "group": "2026",
+    "when": "Aug",
+    "where": "Lake Tahoe & the coast",
+    "tags": [
+      "wangcai"
+    ],
+    "img": "/misc/tahoe-2026/wangcai-tour-boat.jpg",
+    "blurb": "A relaxed five-day loop at the end of summer: Sacramento's Capitol and Tower Bridge, Wangcai on a pedal boat on Lake Tahoe, Carson City and Reno, Emerald Bay and the ruined tea house on Fannette Island, then Santa Cruz and Carmel."
   },
   {
-    href: '/misc/big-island-2025',
-    title: 'Fishponds, a Crater and the Milky Way',
-    date: 'September 2025',
-    img: '/misc/big-island-2025/afterglow.jpg',
-    text: `Four days on the Big Island: Kona, Hilo and the lava coast, then one long Saturday from the ancient Kalahuipuaʻa fishponds to the floor of Kīlauea Iki, a sunset above the clouds on Mauna Kea, and the Milky Way.`,
+    "href": "/misc/july4-2026",
+    "title": "Fireworks for the 250th",
+    "group": "2026",
+    "when": "Jul",
+    "where": "Philadelphia, D.C., Baltimore",
+    "tags": [
+      "holidays"
+    ],
+    "img": "/misc/july4-2026/fireworks-04.jpg",
+    "blurb": "America's 250th birthday, celebrated where it started: a cheesesteak in Old City, fireworks over the Potomac from the Key Bridge, then Baltimore's Inner Harbor from the top of the World Trade Center."
   },
   {
-    href: '/misc/siggraph-2025',
-    title: 'Rods in Vancouver',
-    date: 'August 2025',
-    img: '/misc/siggraph-2025/canada-place-ship.jpg',
-    text: `A sequel to the 2024 trip: presenting ANIME-Rod at SIGGRAPH 2025 in Vancouver, with harbor views from the
-      convention centre, Richmond takeout, and the driverless Canada Line home.`,
+    "href": "/misc/spring-break-2026",
+    "title": "Hoodoos, Earthships and Red Rocks",
+    "group": "2026",
+    "when": "Mar",
+    "where": "Six states in four days",
+    "tags": [
+      "wangcai",
+      "holidays"
+    ],
+    "img": "/misc/spring-break-2026/bisti-hoodoos.jpg",
+    "blurb": "Four days of spring break in the car: sunset among the hoodoos of the Bisti badlands, a town of tire-and-bottle houses near Taos, an empty Red Rocks Amphitheatre, and the Bellagio's spring garden. Wangcai rolled in the dirt."
   },
   {
-    href: '/misc/big-bear-2025',
-    title: 'A Weekend Above the Clouds',
-    date: 'July 2025',
-    img: '/misc/big-bear-2025/big-bear-marina.jpg',
-    text: `A short weekend at Big Bear Lake: the Rim of the World Highway at golden hour, cat-themed mochas, stars through the pines and a Sunday morning at Lake Arrowhead, with Wangcai on dawn watch at the window.`,
+    "href": "/misc/sedona-2026",
+    "title": "Red Rocks, a Pink Jeep and Teal Arches",
+    "group": "2026",
+    "when": "Jan–Feb",
+    "where": "Sedona, AZ",
+    "tags": [
+      "wangcai"
+    ],
+    "img": "/misc/sedona-2026/moonrise.jpg",
+    "blurb": "A Pink Jeep up the Broken Arrow route to Chicken Point, a nearly full moon rising over glowing red rocks at golden hour, and Wangcai under the world's only teal McDonald's arches."
   },
   {
-    href: '/misc/wangcai-2025',
-    title: 'Bringing Wangcai Home',
-    date: 'January 2025',
-    img: '/misc/wangcai-2025/portland-pier-buoys.jpg',
-    text: `A snowy long weekend after the SIGGRAPH deadline: Boston by night, Portsmouth's white steeple, Portland's
-      harbor at sunset, and the trip that brought a shelter dog called Muffin home to LA as Wangcai.`,
+    "href": "/misc/oregon-2025",
+    "title": "Thanksgiving, the Long Way Round",
+    "group": "2025",
+    "when": "Nov",
+    "where": "Oregon & Napa, Thanksgiving",
+    "tags": [
+      "wangcai",
+      "holidays"
+    ],
+    "img": "/misc/oregon-2025/crater-lake-wizard.jpg",
+    "blurb": "Thanksgiving by car from Southern California to Portland and back to Napa: Crater Lake under fresh snow, Mt. Hood over Trillium Lake, and the sea stacks of Bandon. Wangcai came along."
   },
   {
-    href: '/misc/roadtrip-2024',
-    title: 'The Hedgehog Who Went to Key West',
-    date: 'July–August 2024',
-    img: '/misc/roadtrip-2024/niagara-falls.jpg',
-    text: `SIGGRAPH 2024 in Denver, then a flight to New York and two weeks and 2,541 miles through New England, the Great
-      Lakes and Chicago, a hop to Florida, and down the Overseas Highway to Key West. A toy hedgehog, bought at a Vermont rest stop, was the mascot
-      throughout.`,
+    "href": "/misc/big-island-2025",
+    "title": "Fishponds, a Crater and the Milky Way",
+    "group": "2025",
+    "when": "Sep",
+    "where": "Big Island",
+    "tags": [],
+    "img": "/misc/big-island-2025/afterglow.jpg",
+    "blurb": "Four days on the Big Island: Kona, Hilo and the lava coast, then one long Saturday from the ancient Kalahuipuaʻa fishponds to the floor of Kīlauea Iki, a sunset above the clouds on Mauna Kea, and the Milky Way."
   },
   {
-    href: '/misc/springfield-2024',
-    title: 'Welcome to Springfield (the Real One)',
-    date: 'May 2024',
-    img: '/misc/springfield-2024/homer-couch.jpg',
-    text: `An overnight drive to chase the once-in-twenty-years aurora that never showed, ending at 3 a.m. in
-      Springfield, Oregon, the town the Simpsons' Springfield is named after. So we spent Sunday hunting its murals:
-      28 of them, one painted fence, and a literal dumpster fire.`,
+    "href": "/misc/siggraph-2025",
+    "title": "Rods in Vancouver",
+    "group": "2025",
+    "when": "Aug",
+    "where": "SIGGRAPH, Vancouver",
+    "tags": [
+      "siggraph",
+      "abroad"
+    ],
+    "img": "/misc/siggraph-2025/canada-place-ship.jpg",
+    "blurb": "A sequel to the 2024 trip: presenting ANIME-Rod at SIGGRAPH 2025 in Vancouver, with harbor views from the convention centre, Richmond takeout, and the driverless Canada Line home."
   },
   {
-    href: '/misc/siggraph-asia-2023',
-    title: 'Summer at Christmas',
-    date: 'December 2023',
-    img: '/misc/siggraph-asia-2023/taronga-giraffe-skyline.jpg',
-    text: `SIGGRAPH Asia 2023 in Sydney in the middle of the Australian summer: giraffes in front of the skyline, a
-      ferry past the Opera House, and a side trip to Canberra, a capital planned around lines of sight.`,
+    "href": "/misc/big-bear-2025",
+    "title": "A Weekend Above the Clouds",
+    "group": "2025",
+    "when": "Jul",
+    "where": "Big Bear Lake",
+    "tags": [
+      "wangcai"
+    ],
+    "img": "/misc/big-bear-2025/big-bear-marina.jpg",
+    "blurb": "A short weekend at Big Bear Lake: the Rim of the World Highway at golden hour, cat-themed mochas, stars through the pines and a Sunday morning at Lake Arrowhead, with Wangcai on dawn watch at the window."
   },
   {
-    href: '/misc/labor-day-2023',
-    title: 'Rainbows, Adele and Zzyzx',
-    date: 'September 2023',
-    img: '/misc/labor-day-2023/double-rainbow.jpg',
-    text: `A holiday-weekend drive to Las Vegas for Adele's residency: a double rainbow in a desert traffic jam, the
-      Sphere a month before it opened, the Strip from the High Roller, and a detour home through a flooded dry lake
-      to the oasis at Zzyzx.`,
+    "href": "/misc/wangcai-2025",
+    "title": "Bringing Wangcai Home",
+    "group": "2025",
+    "when": "Jan",
+    "where": "Boston, Portsmouth, Portland",
+    "tags": [
+      "wangcai"
+    ],
+    "img": "/misc/wangcai-2025/portland-pier-buoys.jpg",
+    "blurb": "A snowy long weekend after the SIGGRAPH deadline: Boston by night, Portsmouth's white steeple, Portland's harbor at sunset, and the trip that brought a shelter dog called Muffin home to LA as Wangcai."
   },
   {
-    href: '/misc/texas-2023',
-    title: 'Independence Break in the Texas Triangle',
-    date: 'July 2023',
-    img: '/misc/texas-2023/space-shuttle.jpg',
-    text: `A Fourth of July long weekend driving the Texas Triangle: brisket and the UT Tower in Austin, the River Walk
-      at dusk, Fort Worth's Stockyards, Dallas's bronze longhorns, and a space shuttle named Independence in Houston
-      on Independence Day.`,
+    "href": "/misc/roadtrip-2024",
+    "title": "The Hedgehog Who Went to Key West",
+    "group": "2024",
+    "when": "Jul–Aug",
+    "where": "SIGGRAPH Denver → Key West",
+    "tags": [
+      "siggraph"
+    ],
+    "img": "/misc/roadtrip-2024/niagara-falls.jpg",
+    "blurb": "SIGGRAPH 2024 in Denver, then a flight to New York and two weeks and 2,541 miles through New England, the Great Lakes and Chicago, a hop to Florida, and down the Overseas Highway to Key West. A toy hedgehog, bought at a Vermont rest stop, was the mascot throughout."
   },
   {
-    href: '/misc/china-2023',
-    title: 'The Doors Had Just Opened',
-    date: 'January–February 2023',
-    img: '/misc/china-2023/tianya-sunset.jpg',
-    text: `Right after the SIGGRAPH deadline, the first weeks after China reopened: Shanghai with its New Year rabbits,
-      a crowded sunset at the "ends of the earth" in Sanya, and Shenzhen seen from 116 floors up.`,
+    "href": "/misc/springfield-2024",
+    "title": "Welcome to Springfield (the Real One)",
+    "group": "2024",
+    "when": "May",
+    "where": "Springfield, OR",
+    "tags": [],
+    "img": "/misc/springfield-2024/homer-couch.jpg",
+    "blurb": "An overnight drive to chase the once-in-twenty-years aurora that never showed, ending at 3 a.m. in Springfield, Oregon, the town the Simpsons' Springfield is named after. So we spent Sunday hunting its murals: 28 of them, one painted fence, and a literal dumpster fire."
   },
   {
-    href: '/misc/newyear-2023',
-    title: 'New Year on the East Coast',
-    date: 'December 2022 – January 2023',
-    img: '/misc/newyear-2023/nye-from-above.jpg',
-    text: `New Year's Eve from a window high above Times Square, then fog in Dumbo, three ferries and One World
-      Observatory on New Year's Day, and short winter stops in Philadelphia and Washington, DC.`,
+    "href": "/misc/siggraph-asia-2023",
+    "title": "Summer at Christmas",
+    "group": "2023",
+    "when": "Dec",
+    "where": "SIGGRAPH Asia, Sydney",
+    "tags": [
+      "siggraph",
+      "abroad"
+    ],
+    "img": "/misc/siggraph-asia-2023/taronga-giraffe-skyline.jpg",
+    "blurb": "SIGGRAPH Asia 2023 in Sydney in the middle of the Australian summer: giraffes in front of the skyline, a ferry past the Opera House, and a side trip to Canberra, a capital planned around lines of sight."
   },
   {
-    href: '/misc/tijuana-2022',
-    title: 'Where the Fence Meets the Sea',
-    date: 'October 2022',
-    img: '/misc/tijuana-2022/fence-into-pacific.jpg',
-    text: `A Día de Muertos weekend in Tijuana: the painted border fence where it runs into the Pacific, Catrinas and
-      papel picado on Avenida Revolución, lunch at the hotel where the Caesar salad was born, and a slow line home
-      through a roadside market.`,
+    "href": "/misc/labor-day-2023",
+    "title": "Rainbows, Adele and Zzyzx",
+    "group": "2023",
+    "when": "Sep",
+    "where": "Las Vegas, Labor Day",
+    "tags": [
+      "holidays"
+    ],
+    "img": "/misc/labor-day-2023/double-rainbow.jpg",
+    "blurb": "A holiday-weekend drive to Las Vegas for Adele's residency: a double rainbow in a desert traffic jam, the Sphere a month before it opened, the Strip from the High Roller, and a detour home through a flooded dry lake to the oasis at Zzyzx."
   },
   {
-    href: '/misc/roadtrips-2022',
-    title: 'Two Road Trips on a Brand-New License',
-    date: 'May 2022',
-    img: '/misc/roadtrips-2022/canyon-snow-pines.jpg',
-    text: `A new driver's license and two road trips in one month: a loop through Berkeley, San Francisco, Stanford and Silicon Valley and home down Highway 1, then a Memorial Day snowstorm in Yellowstone and the Tetons.`,
+    "href": "/misc/texas-2023",
+    "title": "Independence Break in the Texas Triangle",
+    "group": "2023",
+    "when": "Jul",
+    "where": "Texas Triangle, July 4th",
+    "tags": [
+      "holidays"
+    ],
+    "img": "/misc/texas-2023/space-shuttle.jpg",
+    "blurb": "A Fourth of July long weekend driving the Texas Triangle: brisket and the UT Tower in Austin, the River Walk at dusk, Fort Worth's Stockyards, Dallas's bronze longhorns, and a space shuttle named Independence in Houston on Independence Day."
   },
   {
-    href: '/misc/desert-2022',
-    title: 'Death Valley, Vegas & Page',
-    date: 'March 2022',
-    img: '/misc/desert-2022/horseshoe-bend.jpg',
-    text: `Five days in March, from the salt flats of Death Valley to sunrise at Horseshoe Bend and the light beams of
-      Upper Antelope Canyon, while the phone's clock kept switching between Arizona and Navajo time.`,
+    "href": "/misc/china-2023",
+    "title": "The Doors Had Just Opened",
+    "group": "2023",
+    "when": "Jan–Feb",
+    "where": "Shanghai, Sanya, Shenzhen",
+    "tags": [
+      "abroad"
+    ],
+    "img": "/misc/china-2023/tianya-sunset.jpg",
+    "blurb": "Right after the SIGGRAPH deadline, the first weeks after China reopened: Shanghai with its New Year rabbits, a crowded sunset at the \"ends of the earth\" in Sanya, and Shenzhen seen from 116 floors up."
   },
+  {
+    "href": "/misc/newyear-2023",
+    "title": "New Year on the East Coast",
+    "group": "2022",
+    "when": "Dec–Jan",
+    "where": "New York, Philly, D.C.",
+    "tags": [
+      "holidays"
+    ],
+    "img": "/misc/newyear-2023/nye-from-above.jpg",
+    "blurb": "New Year's Eve from a window high above Times Square, then fog in Dumbo, three ferries and One World Observatory on New Year's Day, and short winter stops in Philadelphia and Washington, DC."
+  },
+  {
+    "href": "/misc/tijuana-2022",
+    "title": "Where the Fence Meets the Sea",
+    "group": "2022",
+    "when": "Oct",
+    "where": "Tijuana, Día de Muertos",
+    "tags": [
+      "abroad",
+      "holidays"
+    ],
+    "img": "/misc/tijuana-2022/fence-into-pacific.jpg",
+    "blurb": "A Día de Muertos weekend in Tijuana: the painted border fence where it runs into the Pacific, Catrinas and papel picado on Avenida Revolución, lunch at the hotel where the Caesar salad was born, and a slow line home through a roadside market."
+  },
+  {
+    "href": "/misc/roadtrips-2022",
+    "title": "Two Road Trips on a Brand-New License",
+    "group": "2022",
+    "when": "May",
+    "where": "Bay Area & Yellowstone",
+    "tags": [],
+    "img": "/misc/roadtrips-2022/canyon-snow-pines.jpg",
+    "blurb": "A new driver's license and two road trips in one month: a loop through Berkeley, San Francisco, Stanford and Silicon Valley and home down Highway 1, then a Memorial Day snowstorm in Yellowstone and the Tetons."
+  },
+  {
+    "href": "/misc/desert-2022",
+    "title": "Death Valley, Vegas & Page",
+    "group": "2022",
+    "when": "Mar",
+    "where": "Death Valley, Vegas, Page",
+    "tags": [],
+    "img": "/misc/desert-2022/horseshoe-bend.jpg",
+    "blurb": "Five days in March, from the salt flats of Death Valley to sunrise at Horseshoe Bend and the light beams of Upper Antelope Canyon, while the phone's clock kept switching between Arizona and Navajo time."
+  }
 ];
+
+const filters = [
+  { id: 'all', label: 'All' },
+  { id: 'places', label: 'Places' },
+  { id: 'wangcai', label: 'Wangcai' },
+  { id: 'siggraph', label: 'SIGGRAPH' },
+  { id: 'holidays', label: 'Holidays' },
+  { id: 'abroad', label: 'Abroad' },
+];
+const groups = ['places', ...[...new Set(posts.filter((p) => p.group !== 'places').map((p) => p.group))]];
+const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g);
 ---
 <BaseLayout title="Misc — Huanyu Chen" description="Travel and other writing by Huanyu Chen, outside research.">
   <h1>Misc</h1>
-  <p class="muted">Things outside research: mostly road trips.</p>
-  <h2 class="misc-group">Places we keep going back to</h2>
-  {places.map((p) => (
-    <article class="project">
-      <a href={p.href} style="flex:none"><img src={p.img} alt="" loading="lazy" /></a>
-      <div>
-        <h2><a href={p.href}>{p.title}</a></h2>
-        <p class="muted">{p.date}</p>
-        <p>{p.text}</p>
-      </div>
-    </article>
-  ))}
-  <h2 class="misc-group">Trips</h2>
-  {posts.map((p) => (
-    <article class="project">
-      <a href={p.href} style="flex:none"><img src={p.img} alt="" loading="lazy" /></a>
-      <div>
-        <h2><a href={p.href}>{p.title}</a></h2>
-        <p class="muted">{p.date}</p>
-        <p>{p.text}</p>
-      </div>
-    </article>
+  <p class="muted">Things outside research: mostly road trips. {posts.length} posts.</p>
+
+  <div class="chips" role="group" aria-label="Filter posts">
+    {filters.map((f) => (
+      <button type="button" class="chip" data-filter={f.id} aria-pressed={f.id === 'all' ? 'true' : 'false'}>{f.label}</button>
+    ))}
+  </div>
+
+  {groups.map((g) => (
+    <section class="misc-group" data-group={g}>
+      <h2>{groupTitle(g)}</h2>
+      <ul class="cards">
+        {posts.filter((p) => p.group === g).map((p) => (
+          <li class="card" data-tags={p.tags.join(' ')}>
+            <a href={p.href} title={p.blurb}>
+              <img src={p.img} alt="" loading="lazy" />
+              <span class="card-title">{p.title}{p.tags.includes('wangcai') && <span class="dog" title="With Wangcai" aria-label="with Wangcai"> 🐕</span>}</span>
+              <span class="card-meta">{p.when} · {p.where}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
   ))}
 </BaseLayout>
 
+<script is:inline>
+  (function () {
+    var chips = document.querySelectorAll('.chip');
+    function apply(id) {
+      if (!document.querySelector('.chip[data-filter="' + id + '"]')) id = 'all';
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.filter === id ? 'true' : 'false'); });
+      document.querySelectorAll('.card').forEach(function (card) {
+        var tags = card.dataset.tags.split(' ');
+        card.hidden = !(id === 'all' || tags.indexOf(id) !== -1);
+      });
+      document.querySelectorAll('.misc-group').forEach(function (g) {
+        g.hidden = !g.querySelector('.card:not([hidden])');
+      });
+    }
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () {
+        var id = c.dataset.filter;
+        history.replaceState(null, '', id === 'all' ? location.pathname : '#' + id);
+        apply(id);
+      });
+    });
+    apply((location.hash || '#all').slice(1));
+  })();
+</script>
+
 <style>
-  .misc-group { margin-top: 1.6em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 1.2em 0 .4em; }
+  .chip { font: inherit; font-size: .9rem; padding: .3em .9em; border-radius: 999px; cursor: pointer;
+          border: 1px solid rgba(127, 127, 127, .45); background: transparent; color: inherit; }
+  .chip[aria-pressed="true"] { color: inherit; background: rgba(127, 127, 127, .22); border-color: rgba(127, 127, 127, .8); font-weight: 600; }
+  .misc-group h2 { font-size: 1.15rem; margin: 1.6em 0 .6em; }
+  .cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px;
+           grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); }
+  .card a { display: block; color: inherit; text-decoration: none; }
+  .card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;
+              transition: transform .15s ease, box-shadow .15s ease; }
+  .card a:hover img, .card a:focus-visible img { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, .18); }
+  .card-title { display: block; margin-top: .45em; font-weight: 600; font-size: .95rem; line-height: 1.3; }
+  .card a:hover .card-title { text-decoration: underline; }
+  .card-meta { display: block; font-size: .82rem; opacity: .7; margin-top: .15em; line-height: 1.3; }
+  .dog { font-weight: 400; }
+  @media (max-width: 480px) { .cards { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
 </style>
