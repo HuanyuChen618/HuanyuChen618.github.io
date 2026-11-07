@@ -1,7 +1,49 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
+// Newest first.
 const posts = [
+  {
+    href: '/misc/hawaii-2026',
+    title: 'A Sky on Fire, Then Waikīkī',
+    date: 'September 2026',
+    img: '/misc/hawaii-2026/kilauea-glow.jpg',
+    text: `Kīlauea erupting under a blood-red night sky on our first evening, then Hilo, a Kona coffee farm and a week
+      on Oʻahu, from Waikīkī and Pearl Harbor to Byodo-In and Kualoa.`,
+  },
+  {
+    href: '/misc/july4-2026',
+    title: 'Fireworks for the 250th',
+    date: 'July 2026',
+    img: '/misc/july4-2026/fireworks-04.jpg',
+    text: `America's 250th birthday, celebrated where it started: a cheesesteak in Old City, fireworks over the Potomac
+      from the Key Bridge, then Baltimore's Inner Harbor from the top of the World Trade Center.`,
+  },
+  {
+    href: '/misc/spring-break-2026',
+    title: 'Hoodoos, Earthships and Red Rocks',
+    date: 'March 2026',
+    img: '/misc/spring-break-2026/bisti-hoodoos.jpg',
+    text: `Four days of spring break in the car: sunset among the hoodoos of the Bisti badlands, a town of
+      tire-and-bottle houses near Taos, an empty Red Rocks Amphitheatre, and the Bellagio's spring garden. Wangcai
+      rolled in the dirt.`,
+  },
+  {
+    href: '/misc/siggraph-2025',
+    title: 'Rods in Vancouver',
+    date: 'August 2025',
+    img: '/misc/siggraph-2025/canada-place-ship.jpg',
+    text: `A sequel to the 2024 trip: presenting ANIME-Rod at SIGGRAPH 2025 in Vancouver, with harbor views from the
+      convention centre, Richmond takeout, and the driverless Canada Line home.`,
+  },
+  {
+    href: '/misc/wangcai-2025',
+    title: 'Bringing Wangcai Home',
+    date: 'January 2025',
+    img: '/misc/wangcai-2025/portland-pier-buoys.jpg',
+    text: `A snowy long weekend after the SIGGRAPH deadline: Boston by night, Portsmouth's white steeple, Portland's
+      harbor at sunset, and the trip that brought a shelter dog called Muffin home to LA as Wangcai.`,
+  },
   {
     href: '/misc/roadtrip-2024',
     title: 'The Hedgehog Who Went to Key West',
@@ -10,6 +52,74 @@ const posts = [
     text: `SIGGRAPH 2024 in Denver, then a flight to New York and two weeks and 2,541 miles through New England, the Great
       Lakes and Chicago, a hop to Florida, and down the Overseas Highway to Key West. A toy hedgehog, bought at a Vermont rest stop, was the mascot
       throughout.`,
+  },
+  {
+    href: '/misc/springfield-2024',
+    title: 'Welcome to Springfield (the Real One)',
+    date: 'May 2024',
+    img: '/misc/springfield-2024/homer-couch.jpg',
+    text: `An overnight drive to chase the once-in-twenty-years aurora that never showed, ending at 3 a.m. in
+      Springfield, Oregon, the town the Simpsons' Springfield is named after. So we spent Sunday hunting its murals:
+      28 of them, one painted fence, and a literal dumpster fire.`,
+  },
+  {
+    href: '/misc/siggraph-asia-2023',
+    title: 'Summer at Christmas',
+    date: 'December 2023',
+    img: '/misc/siggraph-asia-2023/taronga-giraffe-skyline.jpg',
+    text: `SIGGRAPH Asia 2023 in Sydney in the middle of the Australian summer: giraffes in front of the skyline, a
+      ferry past the Opera House, and a side trip to Canberra, a capital planned around lines of sight.`,
+  },
+  {
+    href: '/misc/labor-day-2023',
+    title: 'Rainbows, Adele and Zzyzx',
+    date: 'September 2023',
+    img: '/misc/labor-day-2023/double-rainbow.jpg',
+    text: `A holiday-weekend drive to Las Vegas for Adele's residency: a double rainbow in a desert traffic jam, the
+      Sphere a month before it opened, the Strip from the High Roller, and a detour home through a flooded dry lake
+      to the oasis at Zzyzx.`,
+  },
+  {
+    href: '/misc/texas-2023',
+    title: 'Independence Break in the Texas Triangle',
+    date: 'July 2023',
+    img: '/misc/texas-2023/space-shuttle.jpg',
+    text: `A Fourth of July long weekend driving the Texas Triangle: brisket and the UT Tower in Austin, the River Walk
+      at dusk, Fort Worth's Stockyards, Dallas's bronze longhorns, and a space shuttle named Independence in Houston
+      on Independence Day.`,
+  },
+  {
+    href: '/misc/china-2023',
+    title: 'The Doors Had Just Opened',
+    date: 'January–February 2023',
+    img: '/misc/china-2023/tianya-sunset.jpg',
+    text: `Right after the SIGGRAPH deadline, the first weeks after China reopened: Shanghai with its New Year rabbits,
+      a crowded sunset at the "ends of the earth" in Sanya, and Shenzhen seen from 116 floors up.`,
+  },
+  {
+    href: '/misc/newyear-2023',
+    title: 'New Year on the East Coast',
+    date: 'December 2022 – January 2023',
+    img: '/misc/newyear-2023/nye-from-above.jpg',
+    text: `New Year's Eve from a window high above Times Square, then fog in Dumbo, three ferries and One World
+      Observatory on New Year's Day, and short winter stops in Philadelphia and Washington, DC.`,
+  },
+  {
+    href: '/misc/tijuana-2022',
+    title: 'Where the Fence Meets the Sea',
+    date: 'October 2022',
+    img: '/misc/tijuana-2022/fence-into-pacific.jpg',
+    text: `A Día de Muertos weekend in Tijuana: the painted border fence where it runs into the Pacific, Catrinas and
+      papel picado on Avenida Revolución, lunch at the hotel where the Caesar salad was born, and a slow line home
+      through a roadside market.`,
+  },
+  {
+    href: '/misc/desert-2022',
+    title: 'Death Valley, Vegas & Page',
+    date: 'March 2022',
+    img: '/misc/desert-2022/horseshoe-bend.jpg',
+    text: `Five days in March, from the salt flats of Death Valley to sunrise at Horseshoe Bend and the light beams of
+      Upper Antelope Canyon, while the phone's clock kept switching between Arizona and Navajo time.`,
   },
 ];
 ---
