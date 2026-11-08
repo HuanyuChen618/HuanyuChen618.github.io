@@ -4,7 +4,7 @@ import Comments from '../../components/Comments.astro';
 const P = '/misc/stars/';
 ---
 <BaseLayout title="Connecting the Dots — Huanyu Chen"
-  description="Nine night-sky photos from four years of trips, from Death Valley to Mauna Kea, with the constellations drawn in: Orion over a Joshua tree, Mars in Taurus, the Milky Way's core and the Northern Cross.">
+  description="Night-sky photos from four years of trips, from Death Valley to Mauna Kea, with the constellations drawn in: Orion over a Joshua tree, Mars in Taurus, the Milky Way's core, the southern constellations only Hawaii could show, an interactive sky globe of every photo, and a lunar eclipse.">
   <p class="muted"><a href="/misc">← Misc</a> · 2022–2025</p>
   <h1>Connecting the Dots</h1>
   <p class="muted trip-sub">Nine night skies from four years of trips, with the constellations drawn back in.</p>
@@ -13,7 +13,8 @@ const P = '/misc/stars/';
     <strong>9 photos · 7 nights · March 2022 – November 2025</strong><br />
     Dante's View · Keys View (twice) · the Angeles Crest Highway · Joshua Tree · the San Bernardino Mountains ·
     Mauna Kea (twice) · the Klamath Basin<br />
-    21 constellations drawn · 2 planets, each landing on a bright dot · between 54 and 322 stars matched per photo
+    24 constellations drawn · 2 planets, each landing on a bright dot · between 54 and 322 stars matched per photo ·
+    1 sky globe with 24 photos · 1 lunar eclipse
   </div>
 
   <p>
@@ -31,7 +32,7 @@ const P = '/misc/stars/';
     It did, every time. The photos are in date order, and each one links back to the trip it came from.
   </p>
 
-  <h2>March 2022: Orion over Death Valley</h2>
+  <h2 id="dantes-view">March 2022: Orion over Death Valley</h2>
   <p>
     The first is from the night of March 12, 2022, at <strong>Dante's View</strong>, the overlook more than five
     thousand feet above Death Valley (the trip is in <a href="/misc/desert-2022">Death Valley, Vegas &amp; Page</a>).
@@ -50,7 +51,7 @@ const P = '/misc/stars/';
     about 8.6 light-years away. Under Orion's feet crouches <strong>Lepus</strong>, the hare he is hunting.
   </p>
 
-  <h2>September 2022: the winter sky at 3 a.m.</h2>
+  <h2 id="keys-view">September 2022: the winter sky at 3 a.m.</h2>
   <p>
     Six months later we were at <strong>Keys View</strong> in Joshua Tree at three in the morning on September 28,
     for no better reason than a sudden urge to drive to the desert (the story is in
@@ -82,7 +83,7 @@ const P = '/misc/stars/';
   </p>
   <figure class="trip-fig"><img src={P + 'keys-view-sirius.jpg'} alt="A dark sky with constellation lines for Orion at top, Lepus in the middle, and Canis Major with Sirius and Columba low near the bottom." loading="lazy" /><figcaption>Sirius low in the southeast, 3:29 a.m. 118 stars matched.</figcaption></figure>
 
-  <h2>November 2022: Mars at its brightest</h2>
+  <h2 id="angeles-crest">November 2022: Mars at its brightest</h2>
   <p>
     Seven weeks after that, at 1:55 on the morning of November 19, we were at a turnout on the
     <strong>Angeles Crest Highway</strong>, high in the San Gabriel Mountains above Los Angeles. It was the week of the Leonid meteor shower, which
@@ -98,7 +99,7 @@ const P = '/misc/stars/';
     <strong>Auriga</strong>, the charioteer, a lopsided pentagon anchored by <strong>Capella</strong>.
   </p>
 
-  <h2>December 2024: Orion and Jupiter over a Joshua tree</h2>
+  <h2 id="joshua-tree">December 2024: Orion and Jupiter over a Joshua tree</h2>
   <p>
     The best photo of the set came two years later, at 1:22 a.m. on December 9, 2024, in a garden in the town of
     Joshua Tree (also in <a href="/misc/joshua-tree">Four Visits to the Same Desert</a>). A Joshua tree in the garden
@@ -125,7 +126,7 @@ const P = '/misc/stars/';
     Taken all together, it is about as much of the winter sky as one phone photo can hold.
   </p>
 
-  <h2>July 2025: summer stars through the pines</h2>
+  <h2 id="big-bear">July 2025: summer stars through the pines</h2>
   <p>
     Summer brings a different sky. At 10:41 p.m. on July 19, 2025, outside the cabin near Running Springs in the
     San Bernardino Mountains (<a href="/misc/big-bear-2025">A Weekend Above the Clouds</a>), the phone looked up
@@ -144,7 +145,7 @@ const P = '/misc/stars/';
     the zodiac.
   </p>
 
-  <h2>September 2025: the middle of the galaxy, from Mauna Kea</h2>
+  <h2 id="mauna-kea">September 2025: the middle of the galaxy, from Mauna Kea</h2>
   <p>
     The darkest sky in the collection is from the Big Island, at the <strong>Mauna Kea Visitor Information
     Station</strong>, at 9,200 feet, on September 13, 2025 (<a href="/misc/big-island-2025">Fishponds, a Crater and
@@ -183,7 +184,21 @@ const P = '/misc/stars/';
   </p>
   <figure class="trip-fig tall-fig"><img src={P + 'mauna-kea-cygnus.jpg'} alt="The Milky Way running down a dense star field, with constellation lines for Cygnus as a large cross in the middle with Deneb labeled, Lyra with Vega at left, and Aquila with Altair, Sagitta and Delphinus at top." loading="lazy" /><figcaption>Cygnus flying down the Milky Way, Mauna Kea, 7:45 p.m., looking northeast and high. 246 stars matched.</figcaption></figure>
 
-  <h2>November 2025: Perseus over the Klamath Basin</h2>
+  <h3 id="southern-sky">What Hawaii adds: the far southern sky</h3>
+  <p>
+    The same photo holds something the California photos never could. Mauna Kea is about 14 degrees of latitude
+    farther south than Los Angeles, and that lifts the whole southern sky 14 degrees higher. Drawn for the bottom of
+    the frame instead of the middle, the photo shows three small constellations that from home barely clear the
+    horizon, if they clear it at all. <strong>Ara</strong>, the altar, never gets more than about 6 degrees up in Los
+    Angeles, and the bottom of the figure never rises at all; <strong>Norma</strong>, the carpenter's square, peaks at
+    about the same height, and <strong>Lupus</strong>, the wolf, at about 9. That is inside the haze and the glow of
+    the city. From Mauna Kea all three reach 20 to 23 degrees, clear of the horizon. Even here Lupus did not fit
+    completely: 7 of its 12 stars are in the frame, the rest were already setting in the southwest. Above them,
+    Scorpius has its whole tail, which from California always drags through the murk.
+  </p>
+  <figure class="trip-fig tall-fig"><img src={P + 'mauna-kea-south.jpg'} alt="The Milky Way above, with constellation lines drawn low in the frame: Ara, Norma and Lupus along the bottom, Scorpius with Antares and its curling tail above them, and Telescopium and Corona Australis at left." loading="lazy" /><figcaption>The same Mauna Kea photo, 7:49 p.m., drawn for the far south: Ara, Norma and Lupus along the bottom.</figcaption></figure>
+
+  <h2 id="klamath">November 2025: Perseus over the Klamath Basin</h2>
   <p>
     The last photo is from just after midnight on November 28, 2025, outside Klamath Falls in southern Oregon,
     on the overnight drive north at Thanksgiving (<a href="/misc/oregon-2025">Thanksgiving, the Long Way Round</a>).
@@ -203,7 +218,34 @@ const P = '/misc/stars/';
     Keys View three years earlier.
   </p>
 
-  <h2>How the lines were drawn</h2>
+  <h2 id="globe">All of them on one sky</h2>
+  <p>
+    Because every photo was solved, each one knows exactly which patch of sky it covers. So here they all are at once,
+    24 of them, each pinned to the sky where the phone was pointing, with the constellation figures between them. The
+    view opens inside the sphere, as if you were standing under the sky, looking at the middle of the galaxy. Drag to
+    look around; switch to the outside view to see the whole thing as an old-fashioned celestial globe, which is
+    mirror-reversed because you are looking at the sky from beyond it. Tap a photo to jump to the night it was taken.
+  </p>
+  <div class="globe-frame">
+    <iframe src="/misc/stars/globe/" title="Interactive sky globe with our night-sky photos placed where they were pointing" loading="lazy"></iframe>
+  </div>
+  <p class="muted"><small>A few of the photos on the globe are not shown above: second frames from the same nights, and
+    nights from Page, Arizona, Mulholland Drive, Joshua Tree in July and Lake Arrowhead.</small></p>
+
+  <h2 id="eclipse">Coda: the Moon in Earth's shadow</h2>
+  <p>
+    One more night, with no stars in it at all. On March 14, 2025, there was a total lunar eclipse over North America,
+    the first in more than two years. During totality the Moon sits entirely inside Earth's shadow, and the only light
+    that reaches it has passed through Earth's atmosphere, which filters out the blue and bends the red inward. Every
+    sunrise and sunset on Earth at that moment, all at once, is what turns the Moon that dark copper color. Later,
+    as it moved out of the shadow, its edge came back into direct sunlight, bright and gray again.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'eclipse-red.jpg'} alt="A copper-red full Moon in total eclipse against a black sky, its darker seas visible." loading="lazy" /><figcaption>The red Moon of totality, March 14, 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'eclipse-edge.jpg'} alt="The Moon partly back in sunlight: a bright gray upper edge with craters, the rest fading into Earth's shadow." loading="lazy" /><figcaption>Coming out of the shadow.</figcaption></figure>
+  </div>
+
+  <h2 id="how">How the lines were drawn</h2>
   <p>
     Each overlay started from the photo alone. A short program found every point of light in the frame, then used
     the photo's timestamp and location to work out where every catalogued star brighter than about magnitude 6.5
@@ -243,4 +285,9 @@ const P = '/misc/stars/';
   .sky-switch { cursor: pointer; font-weight: 600; color: var(--text, inherit); }
   .sky-switch input { margin-right: .3em; vertical-align: middle; }
   h3 { margin-top: 1.6em; }
+  .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  .trip-pair .trip-fig { margin: .6em 0; }
+  .globe-frame { margin: 1.2em 0; }
+  .globe-frame iframe { width: 100%; height: min(78vh, 760px); border: 0; display: block; }
+  @media (max-width: 640px) { .trip-pair { grid-template-columns: 1fr; } .globe-frame iframe { height: 82vh; } }
 </style>

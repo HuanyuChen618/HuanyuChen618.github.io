@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Photos on the Sky</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --bg: #f6f3ec; --ink: #2a2b33; --muted: #6b6a72; --panel: rgba(255,255,255,.86); --border: #d9d4c7;
+    --accent: #3b5bab; --halo: #f3efe4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #0d1020; --ink: #e6e8f2; --muted: #9aa0b8; --panel: rgba(18,22,40,.86); --border: #2b3150; --accent: #9db4ff; --halo: #0b0e1c; }
+  }
+  :root[data-theme="dark"] { --bg: #0d1020; --ink: #e6e8f2; --muted: #9aa0b8; --panel: rgba(18,22,40,.86); --border: #2b3150; --accent: #9db4ff; --halo: #0b0e1c; }
+  .stage.night { --halo: #0b0e1c; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; box-sizing: border-box; }
+  h1 { font-size: 1.25rem; margin: 0 0 4px; font-weight: 650; }
+  p.lede { margin: 0 0 12px; color: var(--muted); }
+  .stage { position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 78vh; border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+  .stage.dragging { cursor: grabbing; }
+  canvas { display: block; width: 100%; height: 100%; }
+  .labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .lab { text-shadow: 0 0 3px var(--halo), 0 0 6px var(--halo); }
+  .lab { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; font-size: 11px; letter-spacing: .08em;
+    text-transform: uppercase; opacity: .62; }
+  .lab.star { text-transform: none; letter-spacing: 0; font-size: 11px; opacity: .8; transform: translate(6px, -50%); }
+  .bar { position: absolute; left: 10px; top: 10px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 2; }
+  .bar button { font: inherit; font-size: 13px; color: var(--ink); background: var(--panel); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+  .bar button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .tip { position: absolute; z-index: 3; pointer-events: none; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 9px; font-size: 13px; display: none; max-width: 240px; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+  .tip b { display: block; font-weight: 600; }
+  .tip span { color: var(--muted); }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+  .embed .wrap { padding: 0; } .embed h1, .embed p.lede { display: none; }
+  html.embedded, html.embedded body { background: transparent; }
+  @media (max-width: 600px) { .stage { aspect-ratio: 3 / 4; } .lab { font-size: 10px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Our photos on the sky</h1>
+  <p class="lede">Every night-sky photo we matched to a star catalogue, placed where it was pointing. Drag to turn, scroll or pinch to zoom, tap a photo to read about that night.</p>
+  <div class="stage" id="stage">
+    <canvas id="c" aria-label="Celestial sphere with constellation figures and our night-sky photos placed on it"></canvas>
+    <div class="labels" id="labels"></div>
+    <div class="bar">
+      <button id="bInside" aria-pressed="true" title="The sky as seen from Earth">Inside: the sky</button>
+      <button id="bOutside" aria-pressed="false" title="A classic celestial globe, seen from outside (mirrored)">Outside: the globe</button>
+      <button id="bSpin" aria-pressed="false">Turn slowly</button>
+    </div>
+    <div class="tip" id="tip"></div>
+  </div>
+  <p class="note" id="note">Inside view: as seen from the ground, north celestial pole up. Outside view: a celestial globe, which is mirror-reversed because you look at the sky from beyond it. Lines: Stellarium modern sky culture. Stars: HYG catalogue.</p>
+</div>
+<script src="data.js"></script>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+const SKY = window.SKY;
+const stage = document.getElementById('stage'), canvas = document.getElementById('c'), labelsEl = document.getElementById('labels'), tip = document.getElementById('tip');
+const D2R = Math.PI / 180;
+// celestial (x to RA 0h, y to RA 6h, z to NCP) -> three (X, Y up, Z) by a proper rotation: (x, z, -y)
+function dir(ra, dec, r = 1) { const c = Math.cos(dec * D2R); return new THREE.Vector3(r * c * Math.cos(ra * D2R), r * Math.sin(dec * D2R), -r * c * Math.sin(ra * D2R)); }
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(70, 1, 0.01, 50);
+
+// ---------- theme ----------
+const PAL = {
+  dark:  { bg: 0x0b0e1c, body: 0x121733, line: 0x9fb6ff, lineOp: .42, grid: 0x7f8ab8, gridOp: .16, star: 0xfff3dc, lab: '#c9d3f5', starLab: '#ffe9c4', photoOp: .95, edge: 0xffd27a },
+  light: { bg: 0xf3efe4, body: 0xeae4d3, line: 0x3d63c9, lineOp: .62, grid: 0x5d5a50, gridOp: .16, star: 0x1c1f2e, lab: '#2d4aa0', starLab: '#7a4a12', photoOp: .97, edge: 0xc2571a },
+};
+function themeName() {
+  const t = document.documentElement.getAttribute('data-theme');
+  if (t === 'light' || t === 'dark') return t;
+  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+// the inside view is a night sky in either page theme; the outside globe follows the page theme
+function pal() { return st.mode === 'inside' ? PAL.dark : PAL[themeName()]; }
+let P = PAL.dark;
+
+// ---------- globe body (outside mode only) ----------
+const body = new THREE.Mesh(new THREE.SphereGeometry(0.985, 64, 48), new THREE.MeshBasicMaterial({ color: P.body }));
+body.renderOrder = 0; scene.add(body);
+
+// ---------- RA/Dec grid ----------
+const gridPts = [];
+for (let h = 0; h < 24; h += 2) for (let d = -88; d < 88; d += 4) gridPts.push(dir(h * 15, d, 1.003), dir(h * 15, d + 4, 1.003));
+for (let d = -60; d <= 60; d += 30) for (let a = 0; a < 360; a += 4) gridPts.push(dir(a, d, 1.003), dir(a + 4, d, 1.003));
+const gridMat = new THREE.LineBasicMaterial({ color: P.grid, transparent: true, opacity: P.gridOp, depthWrite: false });
+const grid = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(gridPts), gridMat); grid.renderOrder = 5; scene.add(grid);
+
+// ---------- constellation lines (great-circle arcs) ----------
+const linePts = [];
+function arc(a, b, r) { const n = Math.max(2, Math.ceil(a.angleTo(b) / (2 * D2R))); let p = a.clone().setLength(r);
+  for (let i = 1; i <= n; i++) { const q = a.clone().lerp(b, i / n).setLength(r); linePts.push(p, q); p = q; } }
+for (const c of SKY.cons) for (const s of c.s) arc(dir(s[0], s[1]), dir(s[2], s[3]), 1.004);
+const lineMat = new THREE.LineBasicMaterial({ color: P.line, transparent: true, opacity: P.lineOp, depthWrite: false });
+const lines = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(linePts), lineMat); lines.renderOrder = 6; scene.add(lines);
+
+// ---------- stars (points, size by magnitude) ----------
+const sPos = [], sSize = [];
+for (const s of SKY.stars) { const v = dir(s[0], s[1], 1.005); sPos.push(v.x, v.y, v.z); sSize.push(Math.max(1.2, 5.2 - 0.95 * s[2])); }
+const sGeo = new THREE.BufferGeometry();
+sGeo.setAttribute('position', new THREE.Float32BufferAttribute(sPos, 3)); sGeo.setAttribute('size', new THREE.Float32BufferAttribute(sSize, 1));
+const starMat = new THREE.ShaderMaterial({
+  uniforms: { color: { value: new THREE.Color(P.star) }, scale: { value: 1 } }, transparent: true, depthWrite: false,
+  vertexShader: `attribute float size; uniform float scale; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); gl_PointSize = size*scale; gl_Position = projectionMatrix*mv; }`,
+  fragmentShader: `uniform vec3 color; void main(){ float d = length(gl_PointCoord-.5); if(d>.5) discard; gl_FragColor = vec4(color, smoothstep(.5,.15,d)); }`,
+});
+const starPts = new THREE.Points(sGeo, starMat); starPts.renderOrder = 7; scene.add(starPts);
+
+// ---------- photos as meshes on their true footprints ----------
+const loader = new THREE.TextureLoader();
+const photoMeshes = [];
+SKY.photos.forEach((p, k) => {
+  const r = 1.0 + 0.0004 * k;                      // tiny offsets; draw order decides overlaps
+  const pos = [], uv = [], idx = [];
+  for (let j = 0; j < p.nv; j++) for (let i = 0; i < p.nu; i++) {
+    const n = j * p.nu + i, v = dir(p.ra[n], p.dec[n], r);
+    pos.push(v.x, v.y, v.z); uv.push(i / (p.nu - 1), 1 - j / (p.nv - 1));
+  }
+  for (let j = 0; j < p.nv - 1; j++) for (let i = 0; i < p.nu - 1; i++) {
+    const a = j * p.nu + i, b = a + 1, c = a + p.nu, d = c + 1; idx.push(a, c, b, b, c, d);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx);
+  const tex = loader.load(p.src, () => render()); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: P.photoOp, depthWrite: false }));
+  m.renderOrder = 2 + k * 0.001; m.userData = p; scene.add(m); photoMeshes.push(m);
+  // footprint outline (shown on hover)
+  const ring = [];
+  const edge = (i, j) => { const n = j * p.nu + i; return dir(p.ra[n], p.dec[n], r + 0.002); };
+  for (let i = 0; i < p.nu - 1; i++) ring.push(edge(i, 0), edge(i + 1, 0), edge(i, p.nv - 1), edge(i + 1, p.nv - 1));
+  for (let j = 0; j < p.nv - 1; j++) ring.push(edge(0, j), edge(0, j + 1), edge(p.nu - 1, j), edge(p.nu - 1, j + 1));
+  const o = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(ring), new THREE.LineBasicMaterial({ color: P.edge, transparent: true, opacity: .95, depthWrite: false }));
+  o.visible = false; o.renderOrder = 8; scene.add(o); m.userData.outline = o;
+});
+
+// ---------- HTML labels ----------
+const labs = [];
+for (const c of SKY.cons) { const e = document.createElement('div'); e.className = 'lab'; e.textContent = c.name; labelsEl.appendChild(e); labs.push({ e, v: dir(c.ra, c.dec, 1.01), kind: 'con' }); }
+for (const s of SKY.stars) if (s[3]) { const e = document.createElement('div'); e.className = 'lab star'; e.textContent = s[3]; labelsEl.appendChild(e); labs.push({ e, v: dir(s[0], s[1], 1.01), kind: 'star', mag: s[2] }); }
+function applyTheme() {
+  P = pal(); stage.classList.toggle('night', P === PAL.dark);
+  scene.background = new THREE.Color(P.bg); body.material.color.set(P.body);
+  gridMat.color.set(P.grid); gridMat.opacity = P.gridOp; lineMat.color.set(P.line); lineMat.opacity = P.lineOp; starMat.uniforms.color.value.set(P.star);
+  photoMeshes.forEach(m => { m.material.opacity = P.photoOp; m.userData.outline.material.color.set(P.edge); });
+  labs.forEach(l => l.e.style.color = l.kind === 'con' ? P.lab : P.starLab);
+  render();
+}
+
+// ---------- view state ----------
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const st = { mode: 'inside', yaw: 266 * D2R, pitch: -28 * D2R, fov: 75, dist: 3.5, spin: false };
+// start the inside view looking at the Milky Way core (Sagittarius, RA 18h, Dec -28): yaw = RA
+function setCamera() {
+  if (st.mode === 'inside') {
+    camera.fov = st.fov; camera.position.set(0, 0, 0);
+    const look = dir(st.yaw / D2R, st.pitch / D2R); camera.up.set(0, 1, 0); camera.lookAt(look);
+    body.visible = false;
+  } else {
+    const a = camera.aspect || 1; camera.fov = a < 1 ? 2 * Math.atan(Math.tan(19 * D2R) / a) / D2R : 38; const v = dir(st.yaw / D2R, st.pitch / D2R, st.dist);
+    camera.position.copy(v); camera.up.set(0, 1, 0); camera.lookAt(0, 0, 0); body.visible = true;
+  }
+  camera.updateProjectionMatrix();
+}
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+  starMat.uniforms.scale.value = renderer.getPixelRatio() * (st.mode === 'inside' ? Math.min(1.6, 75 / st.fov) : 0.75 * 3.1 / st.dist);
+  render();
+}
+const tmp = new THREE.Vector3(), camDir = new THREE.Vector3();
+function render() {
+  setCamera();
+  starMat.uniforms.scale.value = renderer.getPixelRatio() * (st.mode === 'inside' ? Math.min(1.8, Math.sqrt(75 / st.fov)) : 0.8 * Math.sqrt(3.1 / st.dist));
+  renderer.render(scene, camera);
+  const w = stage.clientWidth, h = stage.clientHeight; camera.getWorldDirection(camDir);
+  const zoomed = st.mode === 'inside' ? st.fov < 60 : st.dist < 2.4, narrow = w < 600;
+  for (const l of labs) {
+    let show;
+    if (st.mode === 'inside') show = l.v.dot(camDir) > 0.35;
+    else show = l.v.dot(tmp.copy(camera.position).normalize()) > 0.45;
+    if (show && l.kind === 'star') show = l.mag < (zoomed ? 1.6 : narrow ? 0.6 : 1.0);
+    if (show && l.kind === 'con' && narrow && !zoomed) show = false;   // phones: names appear once zoomed in
+    if (!show) { l.e.style.display = 'none'; continue; }
+    tmp.copy(l.v).project(camera);
+    const x = (tmp.x + 1) / 2 * w, y = (1 - tmp.y) / 2 * h;
+    if (tmp.z > 1 || x < -40 || x > w + 40 || y < -20 || y > h + 20) { l.e.style.display = 'none'; continue; }
+    l.e.style.display = ''; l.e.style.left = x + 'px'; l.e.style.top = y + 'px';
+  }
+}
+
+// ---------- interaction ----------
+const ptrs = new Map(); let pinch0 = null, moved = 0, hover = null;
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pick(ev) {
+  const r = stage.getBoundingClientRect(); ndc.set((ev.clientX - r.left) / r.width * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  let hits = ray.intersectObjects(photoMeshes, false);
+  if (st.mode === 'outside') hits = hits.filter(hh => hh.point.dot(camera.position) > 0);   // front hemisphere only
+  if (!hits.length) return null;
+  // the visible one is the last drawn (highest renderOrder) among hits
+  return hits.reduce((a, b) => (b.object.renderOrder > a.object.renderOrder ? b : a)).object;
+}
+function setHover(m, ev) {
+  if (hover && hover !== m) hover.userData.outline.visible = false;
+  hover = m;
+  if (m) {
+    m.userData.outline.visible = true; const p = m.userData; const r = stage.getBoundingClientRect();
+    tip.innerHTML = `<b>${p.place}</b><span>${p.date}</span>`; tip.style.display = 'block';
+    const x = ev.clientX - r.left, y = ev.clientY - r.top; tip.style.left = Math.min(x + 14, r.width - tip.offsetWidth - 6) + 'px'; tip.style.top = Math.max(6, y - tip.offsetHeight - 10) + 'px';
+    stage.style.cursor = 'pointer';
+  } else { tip.style.display = 'none'; stage.style.cursor = ''; }
+  render();
+}
+stage.addEventListener('pointerdown', e => { if (e.target.closest('.bar')) return; stage.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); moved = 0;
+  if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch0 = { d: Math.hypot(a.x - b.x, a.y - b.y), fov: st.fov, dist: st.dist }; }
+  stage.classList.add('dragging'); });
+stage.addEventListener('pointermove', e => {
+  if (!ptrs.has(e.pointerId)) { if (e.pointerType === 'mouse') setHover(pick(e), e); return; }
+  const prev = ptrs.get(e.pointerId), dx = e.clientX - prev.x, dy = e.clientY - prev.y; ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  moved += Math.abs(dx) + Math.abs(dy);
+  if (ptrs.size === 2 && pinch0) { const [a, b] = [...ptrs.values()]; const k = pinch0.d / Math.max(10, Math.hypot(a.x - b.x, a.y - b.y));
+    if (st.mode === 'inside') st.fov = Math.min(100, Math.max(15, pinch0.fov * k)); else st.dist = Math.min(6, Math.max(1.5, pinch0.dist * k)); render(); return; }
+  const h = stage.clientHeight, degPerPx = st.mode === 'inside' ? st.fov / h : 90 / h;
+  // inside: dragging moves the sky with the finger; outside: dragging turns the globe
+  st.yaw += (st.mode === 'inside' ? 1 : -1) * dx * degPerPx * D2R;
+  st.pitch = Math.max(-89 * D2R, Math.min(89 * D2R, st.pitch + (st.mode === 'inside' ? 1 : 1) * dy * degPerPx * D2R));
+  tip.style.display = 'none'; render();
+});
+function endPtr(e) {
+  if (!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch0 = null;
+  if (!ptrs.size) stage.classList.remove('dragging');
+  if (moved < 6 && e.type === 'pointerup') { const m = pick(e); if (m) { if (e.pointerType !== 'mouse' && hover !== m) { setHover(m, e); return; } go(m.userData); } }
+}
+stage.addEventListener('pointerup', endPtr); stage.addEventListener('pointercancel', endPtr);
+stage.addEventListener('pointerleave', () => { if (!ptrs.size) setHover(null); });
+stage.addEventListener('wheel', e => { e.preventDefault(); const k = Math.exp(e.deltaY * 0.0012);
+  if (st.mode === 'inside') st.fov = Math.min(100, Math.max(15, st.fov * k)); else st.dist = Math.min(6, Math.max(1.5, st.dist * k)); render(); }, { passive: false });
+// photo -> section of the post (/misc/stars/); photos with no section of their own are not links
+const SECTION = { 'dantes-view': 'dantes-view', 'page': 'dantes-view', 'keys-view': 'keys-view', 'keys-view-mars': 'keys-view',
+  'angeles-crest': 'angeles-crest', 'joshua-tree-orion': 'joshua-tree', 'joshua-tree-july': 'big-bear', 'big-bear': 'big-bear',
+  'mauna-kea': 'mauna-kea', 'mauna-kea-core': 'mauna-kea', 'mauna-kea-cygnus': 'mauna-kea', 'lake-arrowhead': 'klamath', 'klamath': 'klamath' };
+function go(p) {
+  const id = SECTION[p.anchor]; if (!id) return;
+  try {
+    if (window.top !== window.self) { const el = window.top.document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth' }); return; } }
+  } catch (e) {}
+  window.open('/misc/stars/#' + id, '_top');
+}
+const bIn = document.getElementById('bInside'), bOut = document.getElementById('bOutside'), bSpin = document.getElementById('bSpin');
+function setMode(m) { st.mode = m; bIn.setAttribute('aria-pressed', m === 'inside'); bOut.setAttribute('aria-pressed', m === 'outside');
+  if (m === 'outside') st.pitch = Math.max(-60 * D2R, Math.min(60 * D2R, st.pitch)); applyTheme(); }
+bIn.onclick = () => setMode('inside'); bOut.onclick = () => setMode('outside');
+let raf = 0, last = 0;
+function tick(t) { if (!st.spin) return; if (last) st.yaw += (st.mode === 'inside' ? -1 : 1) * (t - last) * 0.004 * D2R; last = t; render(); raf = requestAnimationFrame(tick); }
+bSpin.onclick = () => { st.spin = !st.spin; bSpin.setAttribute('aria-pressed', st.spin); last = 0; if (st.spin) raf = requestAnimationFrame(tick); else cancelAnimationFrame(raf); };
+if (reduce) bSpin.title = 'Off by default (reduced motion)';
+// URL options for testing: ?mode=outside&ra=..&dec=..&fov=..
+const q = new URLSearchParams(location.search);
+if (q.get('ra')) st.yaw = +q.get('ra') * D2R; if (q.get('dec')) st.pitch = +q.get('dec') * D2R; if (q.get('fov')) st.fov = +q.get('fov'); if (q.get('dist')) st.dist = +q.get('dist');
+if (q.get('theme')) document.documentElement.setAttribute('data-theme', q.get('theme'));
+setMode(q.get('mode') === 'outside' ? 'outside' : 'inside');
+new ResizeObserver(resize).observe(stage);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+const EMBED = window.top !== window.self;
+if (EMBED) {
+  document.body.classList.add('embed'); document.documentElement.classList.add('embedded');
+  try {
+    const pd = window.top.document.documentElement;
+    const syncTheme = () => { const t = pd.getAttribute('data-theme'); if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); };
+    syncTheme(); new MutationObserver(syncTheme).observe(pd, { attributes: true, attributeFilter: ['data-theme'] });
+  } catch (e) {}
+}
+applyTheme(); resize();
+window.__ready = true;
+</script>
+</body>
+</html>
