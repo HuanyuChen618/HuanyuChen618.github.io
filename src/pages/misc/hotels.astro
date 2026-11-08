@@ -61,9 +61,12 @@ const P = '/misc/hotels/';
   <p>
     The surprise. The Ambassador is a small Tapestry hotel a few blocks back from the beach, and our room had a
     double-decker bed: compact, cozy and a bit like a college dorm. My wife liked it a lot, more than some of the
-    much grander rooms on this list. We did not take a single photo there, so the picture below is the hotel's own.
+    much grander rooms on this list. We did not take a single photo there, so the pictures below are the hotel's own.
   </p>
-  <figure class="trip-fig small-fig"><img src={P + 'ambassador-bunk-room.jpg'} alt="A compact hotel room with a bed below and a wooden bunk bed with a ladder above it, a small window and a wall-mounted TV." loading="lazy" /><figcaption>A bunk-bed room at the Ambassador. Photo: Ambassador Waikiki (hotel website).</figcaption></figure>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'ambassador-bunk-room.jpg'} alt="A compact hotel room: a bed below a wooden bunk with a ladder, a window onto city towers, a wall-mounted TV, two round leather stools and a slatted wooden wardrobe." loading="lazy" /><figcaption>The bunk-bed room.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'ambassador-bunk-close.jpg'} alt="Close-up of the wooden bunk bed with white bedding, a ladder and a reading light, beside a window and pink leaf-patterned wallpaper." loading="lazy" /><figcaption>Bunk, ladder and reading light. Photos: Ambassador Waikiki (hotel website).</figcaption></figure>
+  </div>
 
   <h3>4. Embassy Suites Waikiki Beach Walk</h3>
   <p>
@@ -265,7 +268,6 @@ const P = '/misc/hotels/';
   .trip-fig { margin: 1.2em 0; }
   .trip-fig img { width: 100%; height: auto; border-radius: 8px; display: block; }
   .trip-fig figcaption { color: var(--muted); font-size: .9rem; margin-top: .35em; text-align: center; }
-  .small-fig { max-width: 320px; margin-left: auto; margin-right: auto; }
   .narrow-fig { max-width: 420px; margin-left: auto; margin-right: auto; }
   .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
   .trip-pair .trip-fig { margin: .6em 0; }
