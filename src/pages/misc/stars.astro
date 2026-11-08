@@ -4,7 +4,7 @@ import Comments from '../../components/Comments.astro';
 const P = '/misc/stars/';
 ---
 <BaseLayout title="Connecting the Dots — Huanyu Chen"
-  description="Night-sky photos from four years of trips, from Death Valley to Mauna Kea, with the constellations drawn in: Orion over a Joshua tree, Mars in Taurus, the Milky Way's core, the southern constellations only Hawaii could show, an interactive sky globe of every photo, and a lunar eclipse.">
+  description="Night-sky photos from four years of trips, from Death Valley to Mauna Kea, with the constellations drawn in: Orion over a Joshua tree, Mars in Taurus, the Milky Way's core, the southern constellations only Hawaii could show, an interactive globe of which sky you get from Los Angeles, the desert and Mauna Kea, and a lunar eclipse.">
   <p class="muted"><a href="/misc">← Misc</a> · 2022–2025</p>
   <h1>Connecting the Dots</h1>
   <p class="muted trip-sub">Nine night skies from four years of trips, with the constellations drawn back in.</p>
@@ -14,7 +14,7 @@ const P = '/misc/stars/';
     Dante's View · Keys View (twice) · the Angeles Crest Highway · Joshua Tree · the San Bernardino Mountains ·
     Mauna Kea (twice) · the Klamath Basin<br />
     24 constellations drawn · 2 planets, each landing on a bright dot · between 54 and 322 stars matched per photo ·
-    1 sky globe with 24 photos · 1 lunar eclipse
+    1 sky globe of three places · 1 lunar eclipse
   </div>
 
   <p>
@@ -218,19 +218,24 @@ const P = '/misc/stars/';
     Keys View three years earlier.
   </p>
 
-  <h2 id="globe">All of them on one sky</h2>
+  <h2 id="globe">Which sky you get</h2>
   <p>
-    Because every photo was solved, each one knows exactly which patch of sky it covers. So here they all are at once,
-    24 of them, each pinned to the sky where the phone was pointing, with the constellation figures between them. The
-    view opens inside the sphere, as if you were standing under the sky, looking at the middle of the galaxy. Drag to
-    look around; switch to the outside view to see the whole thing as an old-fashioned celestial globe, which is
-    mirror-reversed because you are looking at the sky from beyond it. Tap a photo to jump to the night it was taken.
+    Putting all of these nights side by side, two things decide what you see: how far south you are, and how dark it
+    is. The globe below shows both. Pick a place, and it shades the part of the sky that never gets more than 10
+    degrees above the horizon from there, and fades the stars too faint to see.
   </p>
   <div class="globe-frame">
-    <iframe src="/misc/stars/globe/" title="Interactive sky globe with our night-sky photos placed where they were pointing" loading="lazy"></iframe>
+    <iframe src="/misc/stars/globe/" title="Interactive celestial globe showing which part of the sky, and which stars, can be seen from Los Angeles, the desert and Mauna Kea" loading="lazy"></iframe>
   </div>
-  <p class="muted"><small>A few of the photos on the globe are not shown above: second frames from the same nights, and
-    nights from Page, Arizona, Mulholland Drive, Joshua Tree in July and Lake Arrowhead.</small></p>
+  <p>
+    From <strong>Los Angeles</strong>, the city glow leaves only the stars brighter than about magnitude 4: some 450
+    of them, in 63 of the 88 constellations. Drive out to <strong>the desert</strong>, to Joshua Tree or Death
+    Valley, and the range of the sky is exactly the same, since it is the same latitude, but the count jumps to
+    about 7,400 stars. That is the difference between the Keys View and Dante's View photos and anything taken at
+    home. <strong>Mauna Kea</strong> changes the other thing. At 19.8 degrees north instead of 34, the shaded cap
+    shrinks, and twelve more constellations clear the horizon, among them Ara and Norma from the photo above, and
+    Crux, the Southern Cross.
+  </p>
 
   <h2 id="eclipse">Coda: the Moon in Earth's shadow</h2>
   <p>
@@ -288,6 +293,6 @@ const P = '/misc/stars/';
   .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
   .trip-pair .trip-fig { margin: .6em 0; }
   .globe-frame { margin: 1.2em 0; }
-  .globe-frame iframe { width: 100%; height: min(78vh, 760px); border: 0; display: block; }
+  .globe-frame iframe { width: 100%; height: min(92vh, 900px); border: 0; display: block; }
   @media (max-width: 640px) { .trip-pair { grid-template-columns: 1fr; } .globe-frame iframe { height: 82vh; } }
 </style>
