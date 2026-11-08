@@ -269,6 +269,18 @@ const posts = [
     "blurb": "A Día de Muertos weekend in Tijuana: the painted border fence where it runs into the Pacific, Catrinas and papel picado on Avenida Revolución, lunch at the hotel where the Caesar salad was born, and a slow line home through a roadside market."
   },
   {
+    "href": "/misc/cancun-2022",
+    "title": "Pyramids, Iguanas and a Sea Turtle",
+    "group": "2022",
+    "when": "Jul",
+    "where": "Cancún, Chichén Itzá, Tulum",
+    "tags": [
+      "abroad"
+    ],
+    "img": "/misc/cancun-2022/tulum-castillo.jpg",
+    "blurb": "A week on the Yucatán with friends: a sunset at Punta Cancún, Chichén Itzá under rain clouds, a cenote and a night at Coco Bongo, then Tulum's cliff-top ruins full of iguanas and a green sea turtle in the shallows."
+  },
+  {
     "href": "/misc/roadtrips-2022",
     "title": "Two Road Trips on a Brand-New License",
     "group": "2022",
@@ -299,11 +311,23 @@ const filters = [
   { id: 'abroad', label: 'Abroad' },
 ];
 const groups = ['places', ...[...new Set(posts.filter((p) => p.group !== 'places').map((p) => p.group))]];
+// Fridge-magnet cover: each box (percent of the photo) links a magnet to its trip post.
+const magnets = [{"label": "Vancouver", "post": "siggraph-2025", "x": 11.58, "y": 11.0, "w": 9.75, "h": 5.0}, {"label": "Vancouver", "post": "siggraph-2025", "x": 23.46, "y": 3.75, "w": 14.02, "h": 10.75}, {"label": "Oregon", "post": "oregon-2025", "x": 11.27, "y": 21.25, "w": 6.4, "h": 5.75}, {"label": "Springfield, Oregon", "post": "springfield-2024", "x": 8.23, "y": 27.75, "w": 15.84, "h": 7.75}, {"label": "Lake Tahoe", "post": "tahoe-2026", "x": 31.08, "y": 27.0, "w": 16.45, "h": 5.75}, {"label": "Joshua Tree", "post": "joshua-tree", "x": 16.15, "y": 36.0, "w": 5.79, "h": 7.0}, {"label": "Old Town San Diego", "post": "san-diego", "x": 9.75, "y": 49.25, "w": 8.53, "h": 9.0}, {"label": "Las Vegas", "post": "las-vegas", "x": 21.02, "y": 45.5, "w": 10.66, "h": 7.0}, {"label": "Sedona", "post": "sedona-2026", "x": 34.43, "y": 49.25, "w": 4.88, "h": 4.0}, {"label": "New Mexico", "post": "spring-break-2026", "x": 44.79, "y": 51.0, "w": 7.92, "h": 7.75}, {"label": "Colorado", "post": "spring-break-2026", "x": 41.74, "y": 43.5, "w": 10.97, "h": 6.75}, {"label": "Denver", "post": "roadtrip-2024", "x": 42.66, "y": 38.25, "w": 9.75, "h": 5.25}, {"label": "Buc-ee's, Texas", "post": "texas-2023", "x": 53.02, "y": 44.5, "w": 9.45, "h": 7.5}, {"label": "NASA, Houston", "post": "texas-2023", "x": 58.2, "y": 52.0, "w": 7.62, "h": 6.25}, {"label": "Chicago", "post": "roadtrip-2024", "x": 38.09, "y": 17.5, "w": 14.32, "h": 4.75}, {"label": "Cleveland", "post": "roadtrip-2024", "x": 53.63, "y": 17.25, "w": 10.66, "h": 6.0}, {"label": "Wisconsin and Michigan", "post": "roadtrip-2024", "x": 45.7, "y": 8.0, "w": 12.8, "h": 8.0}, {"label": "Pittsburgh", "post": "roadtrip-2024", "x": 67.34, "y": 17.0, "w": 4.27, "h": 5.0}, {"label": "West Virginia", "post": "roadtrip-2024", "x": 63.38, "y": 21.5, "w": 6.4, "h": 4.5}, {"label": "Niagara Falls", "post": "roadtrip-2024", "x": 73.13, "y": 17.25, "w": 6.09, "h": 4.75}, {"label": "Boston", "post": "roadtrip-2024", "x": 78.61, "y": 9.75, "w": 10.05, "h": 8.5}, {"label": "Yale, New Haven", "post": "roadtrip-2024", "x": 81.05, "y": 18.5, "w": 10.36, "h": 5.75}, {"label": "Rhode Island", "post": "roadtrip-2024", "x": 92.32, "y": 18.75, "w": 5.48, "h": 5.5}, {"label": "Georgia", "post": "roadtrip-2024", "x": 86.53, "y": 39.5, "w": 10.05, "h": 9.5}, {"label": "Florida", "post": "roadtrip-2024", "x": 87.75, "y": 49.75, "w": 8.53, "h": 8.75}, {"label": "Key West", "post": "roadtrip-2024", "x": 80.44, "y": 53.25, "w": 7.01, "h": 5.75}, {"label": "Portsmouth", "post": "wangcai-2025", "x": 88.97, "y": 8.25, "w": 8.84, "h": 9.5}, {"label": "Portland, Maine", "post": "wangcai-2025", "x": 89.88, "y": 2.75, "w": 7.31, "h": 5.5}, {"label": "One World Observatory", "post": "newyear-2023", "x": 82.57, "y": 24.75, "w": 14.93, "h": 4.5}, {"label": "New York", "post": "newyear-2023", "x": 81.05, "y": 29.75, "w": 16.45, "h": 4.5}, {"label": "Baltimore", "post": "july4-2026", "x": 68.56, "y": 23.5, "w": 12.8, "h": 6.5}, {"label": "Baltimore", "post": "july4-2026", "x": 85.01, "y": 33.75, "w": 11.88, "h": 6.0}, {"label": "Delaware", "post": "july4-2026", "x": 73.74, "y": 34.0, "w": 11.27, "h": 5.0}, {"label": "Oʻahu", "post": "hawaii-2026", "x": 43.57, "y": 78.25, "w": 10.36, "h": 6.25}, {"label": "The Big Island", "post": "big-island-2025", "x": 54.24, "y": 78.25, "w": 9.75, "h": 7.5}, {"label": "Australia", "post": "siggraph-asia-2023", "x": 72.21, "y": 74.25, "w": 13.41, "h": 9.5}];
 const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g);
 ---
 <BaseLayout title="Misc — Huanyu Chen" description="Travel and other writing by Huanyu Chen, outside research.">
   <h1>Misc</h1>
   <p class="muted">Things outside research: mostly road trips. {posts.length} posts.</p>
+
+  <figure class="fridge">
+    <div class="fridge-img">
+      <img src="/misc/fridge.jpg" alt="Our fridge door, covered in travel magnets: Vancouver, Seattle, Oregon, the Simpsons, Lake Tahoe, Chicago, Cleveland, Boston, New York, Delaware, two Maryland crabs, Georgia, Florida, Hawaii, Australia and more." width="1726" height="2103" />
+      {magnets.map((m) => (
+        <a class="spot" href={`/misc/${m.post}`} style={`left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%`} title={m.label} aria-label={`${m.label}: read the post`}></a>
+      ))}
+    </div>
+    <figcaption>Our fridge, where every trip leaves a magnet. Click one to read about the trip it came from.</figcaption>
+  </figure>
 
   <div class="chips" role="group" aria-label="Filter posts">
     {filters.map((f) => (
@@ -355,6 +379,12 @@ const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g);
 </script>
 
 <style>
+  .fridge { margin: 1.2em auto 1.6em; max-width: 560px; }
+  .fridge-img { position: relative; line-height: 0; }
+  .fridge-img img { width: 100%; height: auto; border-radius: 10px; display: block; }
+  .spot { position: absolute; border-radius: 8px; outline: 2px solid transparent; transition: outline-color .15s ease, background-color .15s ease; }
+  .spot:hover, .spot:focus-visible { outline-color: #e8b04b; background: rgba(232, 176, 75, .18); }
+  .fridge figcaption { font-size: .85rem; opacity: .75; text-align: center; margin-top: .5em; line-height: 1.4; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 1.2em 0 .4em; }
   .chip { font: inherit; font-size: .9rem; padding: .3em .9em; border-radius: 999px; cursor: pointer;
           border: 1px solid rgba(127, 127, 127, .45); background: transparent; color: inherit; }
