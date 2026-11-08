@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
+const P = '/misc/3d-printing/';
+---
+<BaseLayout title="Layer by Layer — Huanyu Chen"
+  description="Five years of 3D printing, from fun prints on the lab's Ultimaker S5 (Stanford's Lucy and a Bing Dwen Dwen that went from print to mould to paint) to my own Bambu Lab P1S at home from November 2024 (a rainbow Burj Khalifa, the Leaning Tower of Pisa, a high heel and Halloween pumpkins).">
+  <p class="muted"><a href="/misc">← Misc</a> · 2021–2026</p>
+  <h1>Layer by Layer</h1>
+  <p class="muted trip-sub">Five years of 3D printing, on two printers.</p>
+
+  <div class="callout trip-stats">
+    <strong>2 printers · October 2021 – October 2026</strong><br />
+    The lab's Ultimaker S5 for the odd fun print · my own Bambu Lab P1S at home, from November 2024<br />
+    First print in the photos: Lucy · tallest print: a rainbow Burj Khalifa · one slicer estimate: 1 day, 4 hours
+  </div>
+
+  <p>
+    Most of the posts on this page are about going somewhere. This one is about staying in. Going through the photos,
+    I found that one kind of picture comes back again and again between the trips: something small and plastic,
+    still sitting on a build plate, photographed the moment the printer finished.
+  </p>
+  <p>
+    The photos fall into two halves. Before I had a printer of my own, I printed the occasional fun thing on the
+    lab's printer at USC, in between real work. In November 2024 I bought a printer for home, and the fun prints
+    took over. Almost none of the designs are mine: they are models that people share online, and the fun is in
+    printing them.
+  </p>
+
+  <h2>On the lab's Ultimaker, 2021–2023</h2>
+
+  <h3>Lucy · October 2021</h3>
+  <p>
+    The lab printer was an <strong>Ultimaker S5</strong>, a big white box with a glass build plate and a print head
+    that carries two nozzles. The first fun print in my photos, on October 31, 2021, is <strong>Lucy</strong>: a
+    winged angel holding a torch over her head. Anyone in computer graphics knows her. She is a laser scan of a
+    statue from Stanford's 3D Scanning Repository and one of the classic test models of the field, so printing her
+    felt a bit like printing an old colleague.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'angel.jpg'} alt="A white printed statue of a winged woman holding a torch above her head, standing on a wooden desk." loading="lazy" /><figcaption>Lucy, November 1, 2021.</figcaption></figure>
+
+  <h3>Bing Dwen Dwen in four steps · March–April 2022</h3>
+  <p>
+    The spring of 2022 has the best sequence in the folder. It starts on March 20 with the only photo I have of the
+    whole printer.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'ultimaker-s5.jpg'} alt="The front of an Ultimaker S5 printer: a white chamber with a glass door, a glass build plate and the print head at the top." loading="lazy" /><figcaption>The Ultimaker S5, March 20, 2022.</figcaption></figure>
+  <p>
+    The next morning a small figurine came out wrapped in a block of support material. Cleaned up, it was
+    <strong>Bing Dwen Dwen</strong>, the panda in an ice-shell suit who was the mascot of the Beijing Winter
+    Olympics, which had ended a month before. He came out waving.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'panda-supports.jpg'} alt="A small cream figurine half hidden in a block of support material on the glass build plate." loading="lazy" /><figcaption>Still in its supports, March 21, 11:30 am.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'panda-cream.jpg'} alt="The cleaned cream figurine, a round panda in a hooded suit with one arm raised, on the build plate." loading="lazy" /><figcaption>Four minutes later.</figcaption></figure>
+  </div>
+  <p>
+    Two days later the printer made a mould: a white block with the same figure sunk into it, the kind of thing you
+    can pour a casting material into.
+  </p>
+  <figure class="trip-fig"><img src={P + 'panda-mould.jpg'} alt="A white printed block on the build plate with the shape of the panda figurine sunk into its top as a cavity." loading="lazy" /><figcaption>The mould, March 23.</figcaption></figure>
+  <p>
+    On April 2 a new version stood on a pair of skis, and by April 12 it had been painted black and white, with
+    black arms and a black tail. Four steps, three weeks, one Bing Dwen Dwen.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'panda-skis.jpg'} alt="A white printed panda figurine in a hooded suit standing on two skis, with one arm raised, against a green partition." loading="lazy" /><figcaption>On skis, April 2.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'panda-painted.jpg'} alt="The same panda on skis, now painted black and white with black eye patches and arms, smiling and waving." loading="lazy" /><figcaption>Painted, April 12.</figcaption></figure>
+  </div>
+
+  <h3>A cat, and an error · April 2023</h3>
+  <p>
+    The last fun print I have from the lab is a cat. A photo of the slicer, Ultimaker Cura, shows the model scaled
+    to three times its size, with an estimate of a day and four hours. Two days later, the printer's screen had
+    only this to say: "Nozzle offset probe failed. Please check the nozzles and bed and try again."
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'cura-cat.jpg'} alt="A computer screen showing the Ultimaker Cura slicer with a grey model of a standing cat on the virtual build plate, scaled to 300 percent." loading="lazy" /><figcaption>A cat in the slicer, April 17, 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'probe-failed.jpg'} alt="The printer's touchscreen showing the message: Nozzle offset probe failed. Please check the nozzles and bed and try again, with an OK button." loading="lazy" /><figcaption>April 19.</figcaption></figure>
+  </div>
+
+  <h2>A printer of my own, 2024–2026</h2>
+
+  <h3>The first two weeks · November 2024</h3>
+  <p>
+    On November 13, 2024 I brought home a <strong>Bambu Lab P1S</strong>: a closed black box with an AMS unit on
+    top that holds four spools and swaps between them, so one print can use several colors. In its phone app the
+    printer is called 腐竹, dried tofu skin; 竹 is the character for bamboo. The first print, that same evening, was
+    the usual first print: a Benchy, the little tugboat everyone uses to test a new printer.
+  </p>
+  <p>
+    Two days later the first batch was lined up on a tablecloth: a faceted yellow pineapple that is really a lamp, a
+    green Christmas tree, the orange Benchy, an orange pumpkin with wings and legs that move, and a yellow star with
+    arms and legs. A week after that, thirteen boxes of filament had arrived: plain, matte, silk and even wood-filled
+    plastic, in almost every color.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'first-batch.jpg'} alt="Printed objects on a tablecloth: a large faceted yellow pineapple, a green Christmas tree, a small orange tugboat, an orange winged pumpkin with legs and a yellow star figure." loading="lazy" /><figcaption>The first batch, November 15.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'filament-boxes.jpg'} alt="Thirteen cardboard filament boxes laid out in two rows on the floor, labelled PLA Basic, PLA Matte, PLA Silk and PLA Wood with a color dot on each." loading="lazy" /><figcaption>Thirteen boxes of filament, November 22.</figcaption></figure>
+  </div>
+
+  <h3>Landmarks</h3>
+  <p>
+    Then came the landmarks. A gold lattice sleeve over a black vase on November 24. A blue Statue of Liberty on a
+    sand-colored pedestal on the 25th. The Leaning Tower of Pisa on the 26th, leaning properly.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'vase.jpg'} alt="Inside the printer's dark chamber, a black teardrop-shaped vase with a gold lattice sleeve over its top half, under the print head." loading="lazy" /><figcaption>The gold lattice vase, November 24.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'p1s-pisa.jpg'} alt="A black Bambu Lab P1S printer on a granite counter, with its four-spool AMS unit on top and a printed Leaning Tower of Pisa inside." loading="lazy" /><figcaption>The P1S, with Pisa inside, November 26.</figcaption></figure>
+  </div>
+  <p>
+    And the tallest of them all, a <strong>Burj Khalifa</strong> printed in bands of red, orange, yellow, green,
+    blue and purple.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'burj.jpg'} alt="A tall printed Burj Khalifa in rainbow bands, red at the bottom to purple at the spire, standing alone on a wooden table." loading="lazy" /><figcaption>The Burj Khalifa, November 27.</figcaption></figure>
+  <p>
+    By that night they were all lined up on the sideboard, with the pineapple lamp and the star in between.
+  </p>
+  <figure class="trip-fig"><img src={P + 'sideboard.jpg'} alt="A sideboard lined with printed objects: the gold lattice vase, a yellow ball, the blue Statue of Liberty, the yellow pineapple, a tall rainbow-banded Burj Khalifa, a gold bell, a light-up star and plants." loading="lazy" /><figcaption>The collection on the sideboard, November 27, 11:45 pm.</figcaption></figure>
+
+  <h3>A rack, and a high heel · December 2024</h3>
+  <p>
+    By December the spools needed their own furniture, a wire rack with a rainbow row on top and the refills in
+    vacuum bags below. The print I like most from that month is a pink high heel with the Bambu Lab logo on its
+    side, standing in the printer one morning at 7:13 next to the little striped tower it builds to clean the nozzle
+    between colors.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'rack-2024.jpg'} alt="A wire rack against a wall: a rainbow row of filament spools on top, and bagged spools and coils on the shelves below." loading="lazy" /><figcaption>The filament rack, December 3.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'heel.jpg'} alt="Inside the printer, a pink printed high-heel shoe with an orange heel cup bearing the Bambu Lab logo, next to a small orange striped tower." loading="lazy" /><figcaption>A high heel, December 15, 7:13 am.</figcaption></figure>
+  </div>
+
+  <h3>Still printing · 2026</h3>
+  <p>
+    The printer never really stopped, it just stopped being news. In January 2026 the rainbow Burj Khalifa was
+    still standing on top of the filament rack. And in October 2026, for Halloween, it made two pumpkins. One is a
+    low-poly jack-o'-lantern in four colors, with yellow teeth and a blue skull in its mouth. The other is an orange
+    bowl, photographed still on the plate, standing on a forest of tree-shaped supports.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'jack.jpg'} alt="A low-poly orange jack-o'-lantern with triangular eyes, yellow teeth and a light blue skull in its mouth, on a tiled floor." loading="lazy" /><figcaption>A jack-o'-lantern in four colors, October 19, 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'pumpkin-bowl.jpg'} alt="An orange pumpkin-shaped bowl on the printer's build plate, standing on branching tree-shaped supports, with the print head behind it." loading="lazy" /><figcaption>A pumpkin bowl on tree supports, the same morning.</figcaption></figure>
+  </div>
+
+  <h2>What the photos keep</h2>
+  <p>
+    Looking at all of this together, what I notice is how few of the photos show a finished object in its place.
+    Most of them are taken through the printer's door, with the print still stuck to the plate: the moment of
+    finding out whether it worked. The sideboard on November 27 is the exception, the one night everything was
+    lined up and looked at.
+  </p>
+  <p>
+    The other thing is how the two halves differ. On the lab printer a fun print had to wait for a free printer,
+    so there are only a few, and each one got a whole series of photos. The printer at home made a skyline in two
+    weeks. Maybe that is just what happens when the printer is ten steps away instead of across campus. Either way,
+    the Burj Khalifa is still on top of the rack.
+  </p>
+  <p class="muted"><small>Built from the photos' timestamps; times are local. Photo locations have been removed from
+    the published images. The models are other people's designs, shared online.</small></p>
+  <Comments />
+</BaseLayout>
+
+<style>
+  .trip-sub { margin-top: -.4em; font-size: 1.1rem; }
+  .trip-stats { margin: 1.2em 0; line-height: 1.6; }
+  .trip-fig { margin: 1.2em 0; }
+  .trip-fig img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .trip-fig figcaption { color: var(--muted); font-size: .9rem; margin-top: .35em; text-align: center; }
+  .narrow-fig { max-width: 420px; margin-left: auto; margin-right: auto; }
+  .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  .trip-pair .trip-fig { margin: .6em 0; }
+  h3 { margin-top: 1.6em; }
+  @media (max-width: 640px) { .trip-pair { grid-template-columns: 1fr; } }
+</style>
