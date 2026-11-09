@@ -24,17 +24,23 @@ const P = '/misc/hotels/';
   <p>
     So here are the hotels we liked, out of the eighty or so we have slept in since 2022. Most of the rest were
     one-night stops on long drives, the kind of place you remember only for its waffle machine. These are the
-    ones worth a detour, sorted into three groups: one hotel a night in Waikīkī, resorts, and city hotels, where
-    the reason to stay was usually the view from a high floor. None of this is sponsored; quite a few of the city
-    nights were booked with hotel points.
+    ones worth a detour, sorted by region, each with a map. At a resort the reason to stay was usually the
+    balcony; in a city, the room I want is the one on the highest floor I can get. None of this is
+    sponsored; quite a few of the city nights were booked with hotel points.
   </p>
 
-  <h2>Waikīkī, one hotel a night</h2>
+  <p class="toc"><strong>By region:</strong> <a href="#waikiki">Waikīkī</a> · <a href="#big-island-kauai">Big Island and Kauaʻi</a> ·
+    <a href="#california">California</a> · <a href="#las-vegas-sedona">Las Vegas and Sedona</a> ·
+    <a href="#texas-colorado">Texas and Colorado</a> · <a href="#new-york-chicago">New York and Chicago</a> ·
+    <a href="#abroad">Outside the US</a></p>
+
+  <h2 id="waikiki">Waikīkī, one hotel a night</h2>
   <p>
     On Oʻahu in September 2026 we tried something we had never done before: a different hotel every night. Waikīkī
     is small, and it turned five nights into a tasting menu.
     Here they are in the order I would recommend them.
   </p>
+  <figure class="trip-fig"><img src={P + 'map-oahu.jpg'} alt="Street map of Waikīkī marking five hotels with photo pins: 1 Ka Laʻi Waikiki Beach, 2 Hilton Hawaiian Village, 3 Ambassador Waikiki, 4 Embassy Suites Waikiki Beach Walk, 5 DoubleTree by Hilton Alana." loading="lazy" /><figcaption>Hotels in Waikīkī: 1 Ka Laʻi Waikiki Beach, 2 Hilton Hawaiian Village, 3 Ambassador Waikiki, 4 Embassy Suites Waikiki Beach Walk, 5 DoubleTree by Hilton Alana. The numbers follow my ranking.</figcaption></figure>
 
   <h3>1. Ka Laʻi Waikiki Beach, LXR</h3>
   <p>
@@ -98,9 +104,11 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'alana-night.jpg'} alt="Night view from a balcony over lit hotel towers and a pool deck below." loading="lazy" /><figcaption>The same balcony, a few seconds later.</figcaption></figure>
   </div>
 
-  <h2>Resorts</h2>
+  <h2 id="big-island-kauai">The Big Island and Kauaʻi</h2>
+  <p class="region-lead">Three resorts: two on the Big Island's Kohala Coast and one on Kauaʻi's north shore.</p>
+  <figure class="trip-fig"><img src={P + 'map-big-island-kauai.jpg'} alt="Map of the Hawaiian Islands marking three resorts: 1 Mauna Lani and 3 Hilton Waikoloa Village on the Big Island, 2 Westin Princeville on Kauaʻi." loading="lazy" /><figcaption>Hotels on the Big Island and Kauaʻi: 1 Mauna Lani, 2 Westin Princeville Ocean Resort Villas, 3 Hilton Waikoloa Village.</figcaption></figure>
 
-  <h3>Mauna Lani, Auberge Resorts · Big Island, 2025</h3>
+  <h3>1. Mauna Lani, Auberge Resorts · Big Island, 2025</h3>
   <p>
     The most beautiful building on this list. The hotel is built around a huge open-air atrium filled with a
     garden, and our ocean-view balcony looked straight down the beach and over the palms to the sea. I wrote about
@@ -112,7 +120,17 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'maunalani-atrium.jpg'} alt="Looking down into the open-air atrium: terraced balconies, palms and a wooden walkway." loading="lazy" /><figcaption>The atrium.</figcaption></figure>
   </div>
 
-  <h3>Hilton Waikoloa Village · Big Island, 2026</h3>
+  <h3>2. Westin Princeville Ocean Resort Villas · Kauaʻi, 2026</h3>
+  <p>
+    On Kauaʻi's north shore, a lagoon-style pool under enormous clouds and a stream full of koi below a small
+    waterfall.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'princeville-lagoon-pool.jpg'} alt="A still lagoon-style pool reflecting palms and white clouds, with thatched cabanas and loungers beyond." loading="lazy" /><figcaption>The pool, 8:21 am.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'princeville-koi.jpg'} alt="Orange and white koi in a stream below a rock waterfall and a lawn." loading="lazy" /><figcaption>The koi stream.</figcaption></figure>
+  </div>
+
+  <h3>3. Hilton Waikoloa Village · Big Island, 2026</h3>
   <p>
     A resort big enough to need a tram and a canal boat, with a gallery of statues along its walkways and a
     balcony that looked over lawns and lagoons to the ocean. One morning a bright green gecko sat on the balcony wall.
@@ -124,18 +142,25 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'waikoloa-night.jpg'} alt="Night view from a balcony over the lit resort grounds and lagoons." loading="lazy" /><figcaption>The same view after midnight.</figcaption></figure>
   </div>
 
-  <h3>Hyatt Ziva Cancún · 2022</h3>
-  <p>
-    An all-inclusive at the tip of the Cancún hotel zone. The room looked down on
-    a stack of blue pools, a palapa and the Caribbean, and the infinity pools by the lobby seem to run straight
-    into the sea.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'ziva-room-view.jpg'} alt="High view over blue pools, a lawn and a palapa to the Caribbean." loading="lazy" /><figcaption>From the room.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'ziva-infinity.jpg'} alt="Infinity pools under a canopy, with palms and the sea beyond." loading="lazy" /><figcaption>The infinity pools.</figcaption></figure>
-  </div>
+  <h2 id="california">California</h2>
+  <p class="region-lead">From San Francisco down to Catalina, with Oxnard and the pines near Big Bear in between.</p>
+  <figure class="trip-fig"><img src={P + 'map-california.jpg'} alt="Map of California marking four hotels: 1 Hyatt Regency San Francisco, 2 Hotel St. Lauren on Catalina, 3 Zachari Dunes in Oxnard, 4 Postcard Cabins near Big Bear." loading="lazy" /><figcaption>Hotels in California: 1 Hyatt Regency San Francisco, 2 Hotel St. Lauren, 3 Zachari Dunes on Mandalay Beach, 4 Postcard Cabins.</figcaption></figure>
 
-  <h3>Zachari Dunes on Mandalay Beach · Oxnard, 2025</h3>
+  <h3>1. Hyatt Regency · San Francisco</h3>
+  <p>
+    This one earns a mention for something other than the view: the Hyatt Regency San Francisco's tiered atrium,
+    seen from the top floors at midnight.
+  </p>
+  <figure class="trip-fig"><img src={P + 'hyattsf-atrium.jpg'} alt="Looking down a tall tiered hotel atrium onto a lit bar and a large sculpture." loading="lazy" /><figcaption>Hyatt Regency San Francisco.</figcaption></figure>
+
+  <h3>2. Hotel St. Lauren · Catalina, 2024</h3>
+  <p>
+    A smaller place. The St. Lauren sits on the hill above Avalon, and its balconies look over the town's
+    rooftops to the harbor.
+  </p>
+  <figure class="trip-fig"><img src={P + 'stlauren-harbor.jpg'} alt="Avalon from the hill: white buildings and palms above the harbor, with a cruise ship anchored offshore." loading="lazy" /><figcaption>Avalon and the harbor from the hill.</figcaption></figure>
+
+  <h3>3. Zachari Dunes on Mandalay Beach · Oxnard, 2025</h3>
   <p>
     The easiest escape from Los Angeles on this list: an hour up the coast, a Spanish-style courtyard with a rock
     waterfall, and a balcony over red tile roofs to the dunes and the ocean.
@@ -145,40 +170,18 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'zachari-courtyard.jpg'} alt="A courtyard path with succulent beds and a rock waterfall between red-roofed wings." loading="lazy" /><figcaption>The courtyard.</figcaption></figure>
   </div>
 
-  <h3>Westin Princeville Ocean Resort Villas · Kauaʻi, 2026</h3>
+  <h3>4. Postcard Cabins · Big Bear</h3>
   <p>
-    On Kauaʻi's north shore, a lagoon-style pool under enormous clouds and a stream full of koi below a small
-    waterfall.
+    A tiny black cabin in the pines with a big picture window over the bed. Our
+    dog came too.
   </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'princeville-lagoon-pool.jpg'} alt="A still lagoon-style pool reflecting palms and white clouds, with thatched cabanas and loungers beyond." loading="lazy" /><figcaption>The pool, 8:21 am.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'princeville-koi.jpg'} alt="Orange and white koi in a stream below a rock waterfall and a lawn." loading="lazy" /><figcaption>The koi stream.</figcaption></figure>
-  </div>
+  <figure class="trip-fig narrow-fig"><img src={P + 'postcard-cabin.jpg'} alt="A small black cabin with a big picture window, among pine trees." loading="lazy" /><figcaption>Postcard Cabins, Big Bear.</figcaption></figure>
 
-  <h3>Hotel St. Lauren · Catalina, 2024 &nbsp;and&nbsp; The Wilde · Sedona, 2026</h3>
-  <p>
-    Two smaller places. The St. Lauren sits on the hill above Avalon, and its balconies look over the town's
-    rooftops to the harbor. The Wilde, in Sedona, is a resort of stucco wings and terraced red-walled gardens with
-    the red rocks behind.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'stlauren-harbor.jpg'} alt="Avalon from the hill: white buildings and palms above the harbor, with a cruise ship anchored offshore." loading="lazy" /><figcaption>Avalon and the harbor from the hill.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'wilde-garden.jpg'} alt="Terraced red-walled garden stairs with desert plants beside a stucco wing." loading="lazy" /><figcaption>The gardens at the Wilde.</figcaption></figure>
-  </div>
+  <h2 id="las-vegas-sedona">Las Vegas and Sedona</h2>
+  <p class="region-lead">Three hotels on the Strip, and one resort among Sedona's red rocks.</p>
+  <figure class="trip-fig"><img src={P + 'map-southwest.jpg'} alt="Map of southern Nevada and northern Arizona marking four hotels: 1 The Palazzo, 2 ARIA and 3 Caesars Palace in Las Vegas, 4 The Wilde in Sedona." loading="lazy" /><figcaption>Hotels in Las Vegas and Sedona: 1 The Palazzo, 2 ARIA, 3 Caesars Palace, 4 The Wilde.</figcaption></figure>
 
-  <h2>City hotels, high up</h2>
-  <p>
-    In a city, the room I want is the one on the highest floor I can get, and these are the ones where it paid off.
-  </p>
-
-  <h3>Hotel Edison · New York, New Year's Eve 2022</h3>
-  <p>
-    Hard to beat for location. Our window looked straight down on Times Square, so on New Year's Eve we
-    watched the crowds, the stage and the billboards from above,.
-  </p>
-  <figure class="trip-fig narrow-fig"><img src={P + 'edison-times-square.jpg'} alt="Looking straight down from a hotel window onto the billboards and stage area of Times Square at night." loading="lazy" /><figcaption>Times Square from the room, 8:42 pm on December 31.</figcaption></figure>
-
-  <h3>The Palazzo, ARIA and Caesars Palace · Las Vegas</h3>
+  <h3>1. The Palazzo · Las Vegas, 2022 and 2024</h3>
   <p>
     Las Vegas rooms are mostly about the view out of them. The Palazzo gave us a suite in 2022, with the Venetian
     tower and the Strip below the window.
@@ -188,22 +191,38 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'palazzo-suite.jpg'} alt="A suite living room with dark red curtains, a round table, a desk and a sofa in front of a large window." loading="lazy" /><figcaption>The suite.</figcaption></figure>
   </div>
   <p>
-    In 2024 we were back at the Palazzo for a night, in a room facing the Sphere, and the next night at Caesars
-    Palace, where the Garden of the Gods pools look like a Roman ruin with sun loungers.
+    In 2024 we were back at the Palazzo for a night, in a room facing the Sphere.
   </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'palazzo-sphere.jpg'} alt="The Sphere lit up at night, seen from a high hotel room, with the city lights behind." loading="lazy" /><figcaption>The Palazzo, 2024: the Sphere at midnight.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'caesars-pools.jpg'} alt="High view over the Caesars Palace pools: a domed temple, round pools, red loungers and statues." loading="lazy" /><figcaption>Caesars Palace: the Garden of the Gods.</figcaption></figure>
-  </div>
+  <figure class="trip-fig"><img src={P + 'palazzo-sphere.jpg'} alt="The Sphere lit up at night, seen from a high hotel room, with the city lights behind." loading="lazy" /><figcaption>The Palazzo, 2024: the Sphere at midnight.</figcaption></figure>
+
+  <h3>2. ARIA · Las Vegas</h3>
   <p>
-    And at ARIA, a high floor looked straight at Vdara next door and down onto the pool deck.
+    At ARIA, a high floor looked straight at Vdara next door and down onto the pool deck.
   </p>
   <div class="trip-pair">
     <figure class="trip-fig"><img src={P + 'aria-vdara.jpg'} alt="The curved blue glass Vdara tower beside the city and mountains, seen from a high room." loading="lazy" /><figcaption>ARIA: Vdara next door.</figcaption></figure>
     <figure class="trip-fig"><img src={P + 'aria-pool.jpg'} alt="Looking straight down onto a pool deck with teal umbrellas and a curved entry drive." loading="lazy" /><figcaption>ARIA's pool, from above.</figcaption></figure>
   </div>
 
-  <h3>Hyatt Regency Dallas · 2023</h3>
+  <h3>3. Caesars Palace · Las Vegas, 2024</h3>
+  <p>
+    The night after that second Palazzo stay we were at Caesars Palace, where the Garden of the Gods pools look
+    like a Roman ruin with sun loungers.
+  </p>
+  <figure class="trip-fig"><img src={P + 'caesars-pools.jpg'} alt="High view over the Caesars Palace pools: a domed temple, round pools, red loungers and statues." loading="lazy" /><figcaption>Caesars Palace: the Garden of the Gods.</figcaption></figure>
+
+  <h3>4. The Wilde · Sedona, 2026</h3>
+  <p>
+    A smaller place. The Wilde, in Sedona, is a resort of stucco wings and terraced red-walled gardens with
+    the red rocks behind.
+  </p>
+  <figure class="trip-fig"><img src={P + 'wilde-garden.jpg'} alt="Terraced red-walled garden stairs with desert plants beside a stucco wing." loading="lazy" /><figcaption>The gardens at the Wilde.</figcaption></figure>
+
+  <h2 id="texas-colorado">Texas and Colorado</h2>
+  <p class="region-lead">Dallas and Austin, and two hotels in downtown Denver.</p>
+  <figure class="trip-fig"><img src={P + 'map-texas-colorado.jpg'} alt="Map of the central United States marking four hotels: 1 Hyatt Regency Dallas, 2 Four Seasons Austin, 3 Embassy Suites Denver, 4 Art Hotel Denver." loading="lazy" /><figcaption>Hotels in Texas and Colorado: 1 Hyatt Regency Dallas, 2 Four Seasons Austin, 3 Embassy Suites Denver, 4 The Art Hotel Denver.</figcaption></figure>
+
+  <h3>1. Hyatt Regency Dallas · 2023</h3>
   <p>
     Next to Reunion Tower, and the view of the downtown skyline is the best thing about it, especially at night,
     when one tower is outlined in green.
@@ -213,7 +232,39 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'dallas-day.jpg'} alt="Downtown Dallas towers in morning light from a high room." loading="lazy" /><figcaption>The next morning.</figcaption></figure>
   </div>
 
-  <h3>Sable at Navy Pier · Chicago, 2024</h3>
+  <h3>2. Four Seasons · Austin</h3>
+  <p>
+    Another one that earns a mention for something other than the view: the Four Seasons Austin's quiet courtyard
+    of old trees.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'fsaustin-courtyard.jpg'} alt="A courtyard of large trees below hotel towers in Austin." loading="lazy" /><figcaption>Four Seasons Austin.</figcaption></figure>
+
+  <h3>3. Embassy Suites Denver · 2024</h3>
+  <p>
+    A conference hotel with a good window: the Embassy Suites by the convention center had the downtown
+    towers.
+  </p>
+  <figure class="trip-fig"><img src={P + 'denver-embassy.jpg'} alt="Downtown Denver towers and rooftops in morning light." loading="lazy" /><figcaption>Embassy Suites Denver, 2024.</figcaption></figure>
+
+  <h3>4. The Art Hotel Denver · 2026</h3>
+  <p>
+    Two years later, on a spring-break drive, the Art Hotel Denver looked over the art museum's roof garden to the
+    Rocky Mountains.
+  </p>
+  <figure class="trip-fig"><img src={P + 'arthotel-mountains.jpg'} alt="A museum roof garden and city buildings with the Rocky Mountains on the horizon." loading="lazy" /><figcaption>The Art Hotel Denver, 2026.</figcaption></figure>
+
+  <h2 id="new-york-chicago">New York and Chicago</h2>
+  <p class="region-lead">Times Square from above, and the Chicago skyline across the water.</p>
+  <figure class="trip-fig"><img src={P + 'map-new-york-chicago.jpg'} alt="Map of the Great Lakes and the Northeast marking two hotels: 1 Hotel Edison in New York, 2 Sable at Navy Pier in Chicago." loading="lazy" /><figcaption>Hotels in New York and Chicago: 1 Hotel Edison, 2 Sable at Navy Pier.</figcaption></figure>
+
+  <h3>1. Hotel Edison · New York, New Year's Eve 2022</h3>
+  <p>
+    Hard to beat for location. Our window looked straight down on Times Square, so on New Year's Eve we
+    watched the crowds, the stage and the billboards from above.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'edison-times-square.jpg'} alt="Looking straight down from a hotel window onto the billboards and stage area of Times Square at night." loading="lazy" /><figcaption>Times Square from the room, 8:42 pm on December 31.</figcaption></figure>
+
+  <h3>2. Sable at Navy Pier · Chicago, 2024</h3>
   <p>
     The one I would recommend most from our <a href="/misc/roadtrip-2024">2024 road trip</a>. Most nights on that
     trip were in budget hotels along the highway, to save money for the drive. For Chicago we redeemed points for
@@ -226,7 +277,22 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'sable-bath.jpg'} alt="A hotel bathroom with two backlit round-cornered mirrors and a wood-tiled glass shower." loading="lazy" /><figcaption>The bathroom.</figcaption></figure>
   </div>
 
-  <h3>Hilton Sydney · 2023</h3>
+  <h2 id="abroad">Outside the US</h2>
+  <p class="region-lead">Cancún, Sydney and Vancouver.</p>
+  <figure class="trip-fig"><img src={P + 'map-abroad.jpg'} alt="Map of the Pacific marking three hotels: 1 Hyatt Ziva Cancún, 2 Hilton Sydney, 3 Hilton Vancouver Downtown." loading="lazy" /><figcaption>Hotels outside the US: 1 Hyatt Ziva Cancún, 2 Hilton Sydney, 3 Hilton Vancouver Downtown.</figcaption></figure>
+
+  <h3>1. Hyatt Ziva Cancún · 2022</h3>
+  <p>
+    An all-inclusive at the tip of the Cancún hotel zone. The room looked down on
+    a stack of blue pools, a palapa and the Caribbean, and the infinity pools by the lobby seem to run straight
+    into the sea.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'ziva-room-view.jpg'} alt="High view over blue pools, a lawn and a palapa to the Caribbean." loading="lazy" /><figcaption>From the room.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'ziva-infinity.jpg'} alt="Infinity pools under a canopy, with palms and the sea beyond." loading="lazy" /><figcaption>The infinity pools.</figcaption></figure>
+  </div>
+
+  <h3>2. Hilton Sydney · 2023</h3>
   <p>
     The highest room on this list: the 43rd floor, in the middle of the city. At sunset the towers lit up below us,
     and at six in the morning there was a window seat to sit in and watch them wake up. (The four nights before
@@ -238,36 +304,12 @@ const P = '/misc/hotels/';
     <figure class="trip-fig"><img src={P + 'sydney-nook.jpg'} alt="A deep window seat framing city towers in morning light." loading="lazy" /><figcaption>The window seat, 6:39 am.</figcaption></figure>
   </div>
 
-  <h3>Vancouver and Denver</h3>
+  <h3>3. Hilton Vancouver Downtown · 2025</h3>
   <p>
-    Two conference cities, three good windows. In Vancouver, the Hilton downtown looked down a street of glass
-    towers to the white roof of BC Place. In Denver, the Embassy Suites by the convention center had the downtown
-    towers.
+    A conference hotel with a good window: the Hilton downtown looked down a street of glass
+    towers to the white roof of BC Place.
   </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'vancouver-bcplace.jpg'} alt="High view over Vancouver towers to the white roof of BC Place." loading="lazy" /><figcaption>Hilton Vancouver Downtown, 2025.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'denver-embassy.jpg'} alt="Downtown Denver towers and rooftops in morning light." loading="lazy" /><figcaption>Embassy Suites Denver, 2024.</figcaption></figure>
-  </div>
-  <p>
-    Two years later, on a spring-break drive, the Art Hotel Denver looked over the art museum's roof garden to the
-    Rocky Mountains.
-  </p>
-  <figure class="trip-fig"><img src={P + 'arthotel-mountains.jpg'} alt="A museum roof garden and city buildings with the Rocky Mountains on the horizon." loading="lazy" /><figcaption>The Art Hotel Denver, 2026.</figcaption></figure>
-
-  <h2>With character</h2>
-  <p>
-    A few places earn a mention for something other than the view: the Hyatt Regency San Francisco's tiered atrium,
-    seen from the top floors at midnight, and the Four Seasons Austin's quiet courtyard of old trees.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'hyattsf-atrium.jpg'} alt="Looking down a tall tiered hotel atrium onto a lit bar and a large sculpture." loading="lazy" /><figcaption>Hyatt Regency San Francisco.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'fsaustin-courtyard.jpg'} alt="A courtyard of large trees below hotel towers in Austin." loading="lazy" /><figcaption>Four Seasons Austin.</figcaption></figure>
-  </div>
-  <p>
-    And Postcard Cabins near Big Bear: a tiny black cabin in the pines with a big picture window over the bed. Our
-    dog came too.
-  </p>
-  <figure class="trip-fig narrow-fig"><img src={P + 'postcard-cabin.jpg'} alt="A small black cabin with a big picture window, among pine trees." loading="lazy" /><figcaption>Postcard Cabins, Big Bear.</figcaption></figure>
+  <figure class="trip-fig"><img src={P + 'vancouver-bcplace.jpg'} alt="High view over Vancouver towers to the white roof of BC Place." loading="lazy" /><figcaption>Hilton Vancouver Downtown, 2025.</figcaption></figure>
 
   <h2>What I look for now</h2>
   <p>
@@ -276,6 +318,7 @@ const P = '/misc/hotels/';
   </p>
   <p class="muted"><small>Hotels listed from my own photos, booking records and notes; times are local. Photo
     locations have been removed from the published images. No hotel paid for or asked for this post.</small></p>
+  <p class="muted"><small>Maps: © OpenStreetMap contributors; hotel locations are approximate.</small></p>
   <p class="muted"><small>Some photos in this post are my wife's.</small></p>
   <Comments />
 </BaseLayout>
@@ -292,5 +335,8 @@ const P = '/misc/hotels/';
   .trip-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
   .trip-trio .trip-fig { margin: .6em 0; }
   h3 { margin-top: 1.6em; }
+  h2 { scroll-margin-top: 1em; }
+  .toc { line-height: 1.7; }
+  .region-lead { color: var(--muted); }
   @media (max-width: 640px) { .trip-pair, .trip-trio { grid-template-columns: 1fr; } }
 </style>
