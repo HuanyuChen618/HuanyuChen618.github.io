@@ -4,29 +4,59 @@ import Comments from '../../components/Comments.astro';
 import WangcaiSeries from '../../components/WangcaiSeries.astro';
 const P = 'https://media.huanyuchen.com/misc/coast-weekends/';
 ---
-<BaseLayout title="Three Short Trips to the Coast — Huanyu Chen"
-  description="Three short getaways near Los Angeles: a weekend in Avalon on Catalina Island, a June afternoon in Santa Barbara, and a Santa Barbara weekend with Wangcai that ended on the dunes at Mandalay Beach and a lunch in Malibu.">
-  <p class="muted"><a href="/misc">← Misc</a> · April 2024 – June 2025</p>
-  <h1>Three Short Trips to the Coast</h1>
-  <p class="muted trip-sub">An island weekend, an afternoon in Santa Barbara, and a night by the dunes with Wangcai.</p>
+<BaseLayout title="Four Short Trips to the Coast — Huanyu Chen"
+  description="Four short getaways near Los Angeles: a day in Santa Barbara and Solvang, a weekend in Avalon on Catalina Island, a June afternoon in Santa Barbara, and a Santa Barbara weekend with Wangcai that ended on the dunes at Mandalay Beach and a lunch in Malibu.">
+  <p class="muted"><a href="/misc">← Misc</a> · March 2023 – June 2025</p>
+  <h1>Four Short Trips to the Coast</h1>
+  <p class="muted trip-sub">Danish pastries in Solvang, an island weekend, an afternoon in Santa Barbara, and a night by the dunes with Wangcai.</p>
 
   <div class="callout trip-stats">
-    <strong>3 trips · April 2024, June 2024, June 2025</strong><br />
+    <strong>4 trips · March 2023, April 2024, June 2024, June 2025</strong><br />
+    Santa Barbara and Solvang for a day (March 26, 2023) ·
     Avalon on Catalina Island, by ferry (April 20–21, 2024) ·
     Santa Barbara for an afternoon and evening (June 5, 2024) ·
     Santa Barbara, Zachari Dunes on Mandalay Beach in Oxnard, and lunch in Malibu (June 28–29, 2025)<br />
-    One Casino that was never a casino · one semi-submersible over a kelp forest · one sand mermaid ·
+    One windmill · one heart-shaped Danish · one Casino that was never a casino · one semi-submersible over a kelp forest · one sand mermaid ·
     one cup of rolled ice cream · and Wangcai on the last one
   </div>
 
   <p>
-    Not every trip from Los Angeles has to be a ten-hour drive. These three were short, close to home, and all by the
-    sea: one weekend on an island, one afternoon up the coast, and one weekend from Santa Barbara down
+    Not every trip from Los Angeles has to be a ten-hour drive. These four were short, close to home, and all by the
+    sea: one day up the coast to Santa Barbara and Solvang, one weekend on an island, one afternoon up the coast, and one weekend from Santa Barbara down
     to the dunes at Oxnard. None of them had enough photos for a post of its own, so here they are together.
   </p>
   <p>
     As with the other posts here, everything below is reconstructed from the camera roll: what was photographed,
-    where, and at what minute. For these three trips most of the photos are my wife's. I took very few.
+    where, and at what minute. For these four trips most of the photos are my wife's. I took very few.
+  </p>
+
+  <h2 id="sb-solvang-2023">Santa Barbara and Solvang · March 2023</h2>
+  <p>
+    The earliest of these was a day trip, on Sunday, March 26, 2023. We drove up the 101 along the coast and were in
+    downtown <strong>Santa Barbara</strong> by 1:27, where a white Moorish-style building on State Street was trimmed
+    with colored tile and a green bay window. After lunch we went down to the water by <strong>Stearns Wharf</strong>,
+    and at 2:56 the city and the Santa Ynez Mountains stood across the water. Just before four we stopped at the lagoon
+    at UCSB.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'sb2023-wharf-view.webp'} alt="Santa Barbara along the shore across blue water, with the Santa Ynez Mountains rising behind the town under a blue sky." loading="lazy" /><figcaption>Santa Barbara and the mountains from the water, 2:56 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'sb2023-state-st.webp'} alt="A white Moorish-style building with colored tile trim, a green bay window and a yellow door, with cactus and flowers in front." loading="lazy" /><figcaption>On State Street, 1:27 pm.</figcaption></figure>
+  </div>
+  <p>
+    Then we drove inland to <strong>Solvang</strong>, a town founded by Danish immigrants, with a windmill standing
+    over a café patio.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'solvang-windmill.webp'} alt="A white windmill with a dark cap and red lattice sails above a café patio with umbrellas, under a blue sky." loading="lazy" /><figcaption>The windmill, 5:08 pm.</figcaption></figure>
+  <p>
+    By five we had a box of pastries, and at 5:21 a heart-shaped Danish with two jams. At 5:30 a pergola walkway was
+    hung with wisteria in bloom.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'solvang-danish.webp'} alt="A heart-shaped Danish pastry with red and orange jam on a sheet of white paper, in front of a bakery case." loading="lazy" /><figcaption>A Danish, 5:21 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'solvang-wisteria.webp'} alt="A white pergola over a shaded walkway, hung with purple wisteria, with a hedge and a sunlit path." loading="lazy" /><figcaption>Wisteria over the walkway, 5:30 pm.</figcaption></figure>
+  </div>
+  <p>
+    We drove home down the 101, and at 7:09 the sun was setting in the side mirror.
   </p>
 
   <h2 id="avalon-2024">Avalon, Catalina Island · April 2024</h2>
@@ -149,8 +179,8 @@ const P = 'https://media.huanyuchen.com/misc/coast-weekends/';
 
   <h2 id="sb-2024">An afternoon in Santa Barbara · June 2024</h2>
   <p>
-    I had been to Santa Barbara before: the first of the
-    <a href="/misc/roadtrips-2022">2022 road trips</a> ended with an evening on Stearns Wharf. This visit, on Wednesday,
+    We had been to Santa Barbara together once before, in March 2023, on the way to Solvang; my first visit was at the
+    end of the first of the <a href="/misc/roadtrips-2022">2022 road trips</a>, an evening on Stearns Wharf. This visit, on Wednesday,
     June 5, was short, from mid-afternoon to evening, and only a handful of photos survive. The first, at 2:44, is of
     an angel's trumpet in full bloom beside a building in town, hung all over with long yellow flowers like bells.
     At 3:07 we stopped for a pair of steamed bao.
@@ -213,7 +243,7 @@ const P = 'https://media.huanyuchen.com/misc/coast-weekends/';
   </p>
   <figure class="trip-fig"><img src={P + 'geoffreys-terrace.webp'} alt="View from a restaurant terrace between two canvas umbrellas: beach-house roofs, pink bougainvillea and potted flowers above a calm blue ocean." loading="lazy" /><figcaption>The terrace at Geoffrey's Malibu, 1:29 pm.</figcaption></figure>
   <p>
-    By evening we were back home. Three trips, none longer than one night away: an island, an afternoon on the beach, and a weekend with the dog, all within easy reach of Los Angeles.
+    By evening we were back home. Four trips, none longer than one night away: a day of pastries in Solvang, an island, an afternoon on the beach, and a weekend with the dog, all within easy reach of Los Angeles.
   </p>
 
   <p class="muted"><small>Maps built from the trips' photo timestamps and locations. Photo locations have been removed
