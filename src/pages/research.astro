@@ -4,7 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const topics = [
   {
     title: 'Thin shells that keep their thickness',
-    img: '/img/gshells.jpg',
+    img: '/img/gshells-balloons.webp',
+    video: '/img/gshells-balloons.mp4',
+    href: 'https://viterbi-web.usc.edu/~jbarbic/gshells/',
     text: `Classical Kirchhoff–Love shells fix the thickness, so a thin silicone sheet pressed over a bolt hides the bolt,
       while the real sheet thins and reveals it. Treating the thickness as the third principal stretch gives a shell
       model that supports any isotropic material and matches volumetric FEM at a fraction of the cost.`,
@@ -52,7 +54,9 @@ const topics = [
 
   {topics.map((t) => (
     <article class="project">
-      <img src={t.img} alt="" loading="lazy" />
+      {t.video
+        ? <a href={t.href} class="project-media-link" title="Project page"><video class="project-media" src={t.video} poster={t.img} autoplay muted loop playsinline preload="metadata" aria-label="Animation: four thin-shell balloons inflating and deflating"></video></a>
+        : <img src={t.img} alt="" loading="lazy" />}
       <div>
         <h2>{t.title}</h2>
         <p>{t.text}</p>
@@ -75,8 +79,20 @@ const topics = [
 
   <h2>Open source</h2>
   <p>
-    <a href="https://huanyuchen618.github.io/isotropic-energies-tutorial/">Isotropic Distortion Energies</a>: one Python
+    <a href="https://huanyuchen.com/isotropic-energies-tutorial/">Isotropic Distortion Energies</a>: one Python
     solver core (batched SVD, closed-form Hessian eigensystems, projected Newton, implicit Euler with IPC contact) for
     parameterization, deformation and elastodynamics in 2D and 3D, with the slides of my UCLA lecture.
   </p>
 </BaseLayout>
+
+<style>
+  .project-media-link { flex: none; line-height: 0; }
+  .project-media { width: 200px; height: 130px; object-fit: contain; border-radius: 8px; border: 1px solid var(--line); flex: none; background: #0c121c; }
+  @media (max-width: 560px) { .project-media-link, .project-media { width: 100%; } .project-media { height: auto; aspect-ratio: 800 / 588; } }
+</style>
+
+<script is:inline>
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('video.project-media').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+  }
+</script>
