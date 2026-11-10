@@ -4,15 +4,15 @@ import Comments from '../../components/Comments.astro';
 const P = 'https://media.huanyuchen.com/misc/cats/';
 ---
 <BaseLayout title="Dana and Nina — Huanyu Chen"
-  description="Our two cats, Dana and Nina, from October 2022 to the end of 2023: a grey tabby kitten in a Shin Ramyun box, a white longhair on the keyboard, the two of them on the bed and the bath mat, and one Stitch hoodie for both.">
+  description="Our two cats, Dana and Nina, from October 2022 to the end of 2023: a grey tabby kitten in a Shin Ramyun box, a white longhair on the keyboard, the two of them on the bed and the bath mat, one Stitch hoodie for both, a photo of each for every month, and a few from their new home with friends.">
   <p class="muted"><a href="/misc">← Misc</a> · October 2022 – end of 2023</p>
   <h1>Dana and Nina</h1>
   <p class="muted trip-sub">Our two cats, through my wife's camera.</p>
 
   <div class="callout trip-stats">
-    <strong>two cats · October 2022 – end of 2023</strong><br />
+    <strong>two cats · with us October 2022 – end of 2023</strong><br />
     a grey tabby and a white longhair · a car door pocket, a Shin Ramyun box and the top of a computer · the bed, the
-    bath mat, the back of the sofa and a pink keyboard · one blue Stitch hoodie, worn by both
+    bath mat, the back of the sofa and a pink keyboard · one blue Stitch hoodie, worn by both · a photo of each for every month, and a few from their new home
   </div>
 
   <p>
@@ -69,9 +69,60 @@ const P = 'https://media.huanyuchen.com/misc/cats/';
     <figure class="trip-fig"><img src={P + 'cat-dana-stitch.webp'} alt="A grey tabby in a blue Stitch hoodie sitting on a white counter, looking up." loading="lazy" /><figcaption>Dana as Stitch, October 30, 2023, 11:17 pm.</figcaption></figure>
     <figure class="trip-fig"><img src={P + 'cat-nina-stitch.webp'} alt="A white longhaired cat in a blue Stitch hoodie sitting on a white counter." loading="lazy" /><figcaption>Nina, eight minutes later.</figcaption></figure>
   </div>
+  <h2 id="months">Month by month</h2>
   <p>
-    At the start of 2024, Dana and Nina went to live with friends.
+    One photo of each of them for every month they lived with us. Dana, from October 2022 to December 2023:
   </p>
+  <figure class="trip-fig">
+    <div class="month-grid">
+      <div class="mcell"><img src={P + 'm-dana-2022-10.webp'} alt="Dana, a grey tabby, Oct 2022." loading="lazy" /><span>Oct 2022</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2022-11.webp'} alt="Dana, a grey tabby, Nov 2022." loading="lazy" /><span>Nov 2022</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2022-12.webp'} alt="Dana, a grey tabby, Dec 2022." loading="lazy" /><span>Dec 2022</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-01.webp'} alt="Dana, a grey tabby, Jan 2023." loading="lazy" /><span>Jan 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-02.webp'} alt="Dana, a grey tabby, Feb 2023." loading="lazy" /><span>Feb 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-03.webp'} alt="Dana, a grey tabby, Mar 2023." loading="lazy" /><span>Mar 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-04.webp'} alt="Dana, a grey tabby, Apr 2023." loading="lazy" /><span>Apr 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-05.webp'} alt="Dana, a grey tabby, May 2023." loading="lazy" /><span>May 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-06.webp'} alt="Dana, a grey tabby, Jun 2023." loading="lazy" /><span>Jun 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-07.webp'} alt="Dana, a grey tabby, Jul 2023." loading="lazy" /><span>Jul 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-08.webp'} alt="Dana, a grey tabby, Aug 2023." loading="lazy" /><span>Aug 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-09.webp'} alt="Dana, a grey tabby, Sep 2023." loading="lazy" /><span>Sep 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-10.webp'} alt="Dana, a grey tabby, Oct 2023." loading="lazy" /><span>Oct 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-11.webp'} alt="Dana, a grey tabby, Nov 2023." loading="lazy" /><span>Nov 2023</span></div>
+      <div class="mcell"><img src={P + 'm-dana-2023-12.webp'} alt="Dana, a grey tabby, Dec 2023." loading="lazy" /><span>Dec 2023</span></div>
+    </div>
+  </figure>
+  <p>
+    And Nina, from April 2023:
+  </p>
+  <figure class="trip-fig">
+    <div class="month-grid">
+      <div class="mcell"><img src={P + 'm-nina-2023-04.webp'} alt="Nina, a white longhaired cat, Apr 2023." loading="lazy" /><span>Apr 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-05.webp'} alt="Nina, a white longhaired cat, May 2023." loading="lazy" /><span>May 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-06.webp'} alt="Nina, a white longhaired cat, Jun 2023." loading="lazy" /><span>Jun 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-07.webp'} alt="Nina, a white longhaired cat, Jul 2023." loading="lazy" /><span>Jul 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-08.webp'} alt="Nina, a white longhaired cat, Aug 2023." loading="lazy" /><span>Aug 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-09.webp'} alt="Nina, a white longhaired cat, Sep 2023." loading="lazy" /><span>Sep 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-10.webp'} alt="Nina, a white longhaired cat, Oct 2023." loading="lazy" /><span>Oct 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-11.webp'} alt="Nina, a white longhaired cat, Nov 2023." loading="lazy" /><span>Nov 2023</span></div>
+      <div class="mcell"><img src={P + 'm-nina-2023-12.webp'} alt="Nina, a white longhaired cat, Dec 2023." loading="lazy" /><span>Dec 2023</span></div>
+    </div>
+  </figure>
+  <h2 id="after">With our friends</h2>
+  <p>
+    At the start of 2024, Dana and Nina went to live with friends, and they are doing well there. A few photos
+    from visits since then:
+  </p>
+  <figure class="trip-fig">
+    <div class="month-grid">
+      <div class="mcell"><img src={P + 'later-dana-2024-01.webp'} alt="Dana, a grey tabby, Jan 2024." loading="lazy" /><span>Jan 2024 · Dana</span></div>
+      <div class="mcell"><img src={P + 'later-nina-2024-09.webp'} alt="Nina, a white longhaired cat, Sep 2024." loading="lazy" /><span>Sep 2024 · Nina</span></div>
+      <div class="mcell"><img src={P + 'later-dana-2024-10.webp'} alt="Dana, a grey tabby, Oct 2024." loading="lazy" /><span>Oct 2024 · Dana</span></div>
+      <div class="mcell"><img src={P + 'later-dana-2024-12.webp'} alt="Dana, a grey tabby, Dec 2024." loading="lazy" /><span>Dec 2024 · Dana</span></div>
+      <div class="mcell"><img src={P + 'later-nina-2024-12.webp'} alt="Nina, a white longhaired cat, Dec 2024." loading="lazy" /><span>Dec 2024 · Nina</span></div>
+      <div class="mcell"><img src={P + 'later-nina-2025-08.webp'} alt="Nina, a white longhaired cat, Aug 2025." loading="lazy" /><span>Aug 2025 · Nina</span></div>
+    </div>
+  </figure>
 
   <p class="muted"><small>Photo locations have been removed from the published images, and where we live is never
     shown or named.</small></p>
