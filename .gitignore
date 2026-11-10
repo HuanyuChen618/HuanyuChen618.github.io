@@ -4,3 +4,10 @@ dist/
 .DS_Store
 *.log
 _source/
+
+# /misc photos live on Cloudflare R2 (media.huanyuchen.com); local copies stay here for tools. Upload: python scripts/r2_sync.py
+public/misc/**/*.webp
+public/misc/**/*.jpg
+public/misc/**/*.jpeg
+public/misc/**/*.png
+public/misc/**/*.gif

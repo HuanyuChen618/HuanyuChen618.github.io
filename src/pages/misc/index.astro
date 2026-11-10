@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import YearTimeline from '../../components/YearTimeline.astro';
 import timelineAll from '../../data/misc-timeline.json';
+import { MEDIA } from '../../data/media.js';
 
 // One entry per post. group: 'places' or a year (trips are listed newest first within each year).
 // tags drive the filter chips; blurb shows as a hover tooltip.
@@ -563,7 +564,7 @@ const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g =
 
   <figure class="fridge">
     <div class="fridge-img">
-      <img src="/misc/fridge.webp" alt="Our fridge door, covered in travel magnets: Vancouver, Seattle, Oregon, the Simpsons, Lake Tahoe, Chicago, Cleveland, Boston, New York, Delaware, two Maryland crabs, Georgia, Florida, Hawaii, Australia and more." width="1726" height="2103" />
+      <img src={MEDIA + "/misc/fridge.webp"} alt="Our fridge door, covered in travel magnets: Vancouver, Seattle, Oregon, the Simpsons, Lake Tahoe, Chicago, Cleveland, Boston, New York, Delaware, two Maryland crabs, Georgia, Florida, Hawaii, Australia and more." width="1726" height="2103" />
       {magnets.map((m) => (
         <a class="spot" href={`/misc/${m.post}`} style={`left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%`} title={m.label} aria-label={`${m.label}: read the post`}></a>
       ))}
@@ -589,7 +590,7 @@ const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g =
         {posts.filter((p) => p.group === g).map((p) => (
           <li class="card" data-tags={p.tags.join(' ')}>
             <a href={p.href} title={p.blurb}>
-              <img src={p.img} alt="" loading="lazy" />
+              <img src={MEDIA + p.img} alt="" loading="lazy" />
               <span class="card-title">{p.title}{p.tags.includes('wangcai') && <span class="dog" title="With Wangcai" aria-label="with Wangcai"> 🐕</span>}</span>
               <span class="card-meta">{p.when} · {p.where}</span>
             </a>

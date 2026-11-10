@@ -1,4 +1,5 @@
 ---
+import { MEDIA } from '../data/media.js';
 // A one-year strip: month ticks, and a round thumbnail for every outing that year, placed by date.
 // Multi-day outings also get a bar along the axis. Thumbnails that would overlap stack into lanes.
 interface Entry { start: string; end?: string; title: string; href: string; img: string; approx?: boolean }
@@ -41,7 +42,7 @@ const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
       <a class="tl-pin" role="listitem" href={it.href} style={`left:${it.x}%;--lane:${it.lane}`}
          title={`${it.title} · ${it.when}`} aria-label={`${it.title}, ${it.when}`}>
         <span class="tl-stem" aria-hidden="true"></span>
-        <img src={it.img} alt="" loading="lazy" width="40" height="40" />
+        <img src={MEDIA + it.img} alt="" loading="lazy" width="40" height="40" />
       </a>
     ))}
   </div>
