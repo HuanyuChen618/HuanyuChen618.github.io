@@ -90,7 +90,7 @@ const pubs = [
 
   <h2>Thesis</h2>
   <article class="pub">
-    <img src="/spherical/img/gallery_2x4.jpg" alt="Eight meshes textured with a checkerboard through their bijective spherical maps" loading="lazy" style="object-fit:contain;background:#fff" />
+    <picture><source media="(max-width: 560px)" srcset="/spherical/img/gallery_2x6.jpg" /><img src="/spherical/img/gallery_2x4.jpg" alt="Meshes textured with a checkerboard through their bijective spherical maps" loading="lazy" style="object-fit:contain;background:#fff" /></picture>
     <div>
       <h3>Efficient Bijective Spherical Parameterizations (高效无翻转球面参数化)</h3>
       <p class="authors"><strong>Huanyu Chen</strong>; advisor: Ligang Liu</p>
@@ -119,6 +119,8 @@ const pubs = [
 <style>
   .pub-media { width: 200px; height: 112px; object-fit: contain; border-radius: 6px; border: 1px solid var(--line); flex: none; background: #0c121c; }
   @media (max-width: 560px) { .pub-media { width: 100%; height: auto; aspect-ratio: 800 / 588; } }
+  .pub picture { flex: none; line-height: 0; }
+  @media (max-width: 560px) { .pub picture { width: 100%; } }
   .pub-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .5em; }
   .pub-btn { font-size: .8rem; line-height: 1; padding: .38em .75em; border-radius: 999px; text-decoration: none;
              border: 1px solid rgba(127, 127, 127, .45); color: inherit; white-space: nowrap;
