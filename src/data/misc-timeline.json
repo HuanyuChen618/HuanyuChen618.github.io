@@ -74,6 +74,13 @@
     "post": "fireworks"
   },
   {
+    "start": "2022-07-06",
+    "title": "An evening at the Ford",
+    "href": "/misc/live-music#ford-2022",
+    "img": "/misc/live-music/ford-2022-stage.webp",
+    "post": "live-music"
+  },
+  {
     "start": "2022-07-08",
     "title": "Zedd In The Park",
     "href": "/misc/live-music#zedd-2022",
@@ -92,6 +99,13 @@
     "title": "SLANDER in Long Beach",
     "href": "/misc/live-music#slander-2022",
     "img": "/misc/live-music/slander-anime.webp",
+    "post": "live-music"
+  },
+  {
+    "start": "2022-07-20",
+    "title": "Orchestra and dancers at the Hollywood Bowl",
+    "href": "/misc/live-music#bowl-dance-2022",
+    "img": "/misc/live-music/bowl-2022-dancers.webp",
     "post": "live-music"
   },
   {

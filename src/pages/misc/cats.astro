@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
+const P = 'https://media.huanyuchen.com/misc/cats/';
+---
+<BaseLayout title="Dana and Nina — Huanyu Chen"
+  description="Our two cats, Dana and Nina, from October 2022 to the end of 2023: a grey tabby kitten in a Shin Ramyun box, a white longhair on the keyboard, the two of them on the bed and the bath mat, and one Stitch hoodie for both.">
+  <p class="muted"><a href="/misc">← Misc</a> · October 2022 – end of 2023</p>
+  <h1>Dana and Nina</h1>
+  <p class="muted trip-sub">Our two cats, through my wife's camera.</p>
+
+  <div class="callout trip-stats">
+    <strong>two cats · October 2022 – end of 2023</strong><br />
+    a grey tabby and a white longhair · a car door pocket, a Shin Ramyun box and the top of a computer · the bed, the
+    bath mat, the back of the sofa and a pink keyboard · one blue Stitch hoodie, worn by both
+  </div>
+
+  <p>
+    Before our dog, <a href="/misc/wangcai">Wangcai</a>, there were two cats, <strong>Dana</strong> and
+    <strong>Nina</strong>, who lived with us from October 2022 to the end of 2023. The photos here are my wife's.
+  </p>
+
+  <h2 id="dana">Dana</h2>
+  <p>
+    Dana came first. She is a grey tabby, and on the morning of October 23, 2022 she was small enough to sit in the
+    door pocket of a car. That afternoon she had her first drink at our place, from a bowl nearly as big as she was.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'cat-dana-door.webp'} alt="A grey tabby kitten sitting in the door pocket of a car." loading="lazy" /><figcaption>Dana's first day, October 23, 2022, 10:02 am.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'cat-dana-bowl.webp'} alt="A grey kitten drinking from a large white bowl on a wooden table." loading="lazy" /><figcaption>The same afternoon, 3:38 pm.</figcaption></figure>
+  </div>
+  <p>
+    The next day she found the box a case of Shin Ramyun had come in and lay down in it.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'cat-dana-box.webp'} alt="A grey tabby kitten lying in a cardboard Shin Ramyun box." loading="lazy" /><figcaption>October 24, 2022.</figcaption></figure>
+  <p>
+    By December she had found a spot on top of the computer under the desk, between the RGB light strip and a
+    glowing lamp.
+  </p>
+  <figure class="trip-fig"><img src={P + 'cat-dana-rgb.webp'} alt="A grey tabby cat lying on top of a computer under a desk, lit by purple and blue LED lights." loading="lazy" /><figcaption>December 18, 2022.</figcaption></figure>
+  <h2 id="nina">Nina</h2>
+  <p>
+    Nina joined her in late April 2023. She is a white longhaired cat with a flat face and a lot of fur, and this is her
+    on our bed a little after one in the morning on May 5.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'cat-nina-bed.webp'} alt="A white longhaired cat lying on a green-and-white bedspread, looking at the camera." loading="lazy" /><figcaption>Nina, May 5, 2023, 1:19 am.</figcaption></figure>
+  <h2 id="pair">The two of them</h2>
+  <p>
+    By the summer they were a pair. On a July night they were stretched out side by side on the bed, and on August 1
+    Nina had folded herself into a white ball against Dana on the bath mat.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'cat-both-bed.webp'} alt="A white longhaired cat and a grey tabby lying together on a grey quilt." loading="lazy" /><figcaption>July 27, 2023, 1:01 am.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'cat-both-mat.webp'} alt="A white longhaired cat curled up against a grey tabby on a grey bath mat." loading="lazy" /><figcaption>August 1, 2023.</figcaption></figure>
+  </div>
+  <p>
+    Each had her spots. Dana's was the back of the brown leather sofa, where she lay along the top. Nina's was the keyboard: on the afternoon of October 15, 2023 she was asleep across the pink keyboard, in
+    front of the screen.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'cat-dana-sofa.webp'} alt="A grey tabby lying along the top of a brown leather sofa." loading="lazy" /><figcaption>Dana, October 7, 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'cat-nina-keyboard.webp'} alt="A white longhaired cat asleep across a pink keyboard in front of a computer screen." loading="lazy" /><figcaption>Nina, October 15, 2023, 2:38 pm.</figcaption></figure>
+  </div>
+  <h2 id="stitch">Dressing up</h2>
+  <p>
+    The night before Halloween 2023 both cats were put in the same blue Stitch hoodie, one after the other, on the kitchen counter. Dana looked up at the camera.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'cat-dana-stitch.webp'} alt="A grey tabby in a blue Stitch hoodie sitting on a white counter, looking up." loading="lazy" /><figcaption>Dana as Stitch, October 30, 2023, 11:17 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'cat-nina-stitch.webp'} alt="A white longhaired cat in a blue Stitch hoodie sitting on a white counter." loading="lazy" /><figcaption>Nina, eight minutes later.</figcaption></figure>
+  </div>
+  <p>
+    At the start of 2024, Dana and Nina went to live with friends.
+  </p>
+
+  <p class="muted"><small>Photo locations have been removed from the published images, and where we live is never
+    shown or named.</small></p>
+  <p class="muted"><small>The photos in this post are my wife's.</small></p>
+  <Comments />
+</BaseLayout>
+
+<style>
+  .trip-sub { margin-top: -.4em; font-size: 1.1rem; }
+  .trip-stats { margin: 1.2em 0; line-height: 1.6; }
+  .trip-fig { margin: 1.2em 0; }
+  .trip-fig img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .trip-fig figcaption { color: var(--muted); font-size: .9rem; margin-top: .35em; text-align: center; }
+  .narrow-fig { max-width: 420px; margin-left: auto; margin-right: auto; }
+  .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  .trip-pair .trip-fig { margin: .6em 0; }
+  .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .month-grid .mcell { margin: 0; }
+  .month-grid img { aspect-ratio: 1 / 1; object-fit: cover; border-radius: 6px; }
+  .month-grid span { display: block; text-align: center; font-size: .78rem; color: var(--muted); margin-top: .2em; }
+  @media (max-width: 640px) {
+    .trip-pair { grid-template-columns: 1fr; }
+    .month-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
