@@ -8,6 +8,22 @@ interface Props {
   description?: string;
 }
 const { title, description = 'Huanyu Chen — Ph.D. candidate in Computer Science at USC. Computational mechanics and interpretable physical AI: shells, rods, nonlinear materials, contact and material measurement.' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const isHome = Astro.url.pathname === '/';
+// Structured data so search engines know this is Huanyu Chen's personal site.
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Huanyu Chen',
+  url: 'https://huanyuchen.com/',
+  image: 'https://huanyuchen.com/profile.jpg',
+  jobTitle: 'Ph.D. Candidate in Computer Science',
+  email: 'mailto:huanyuc@usc.edu',
+  affiliation: { '@type': 'CollegeOrUniversity', name: 'University of Southern California', url: 'https://www.usc.edu/' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Science and Technology of China' },
+  knowsAbout: ['computational mechanics', 'physics-based simulation', 'thin shells', 'elastic rods', 'nonlinear elasticity', 'physical AI'],
+  sameAs: ['https://github.com/HuanyuChen618', 'https://sites.google.com/usc.edu/huanyu-chen'],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -16,6 +32,15 @@ const { title, description = 'Huanyu Chen — Ph.D. candidate in Computer Scienc
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Huanyu Chen" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/profile.jpg', Astro.site).href} />
+    <meta name="twitter:card" content="summary" />
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
