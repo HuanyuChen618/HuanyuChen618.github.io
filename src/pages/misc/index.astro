@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import YearTimeline from '../../components/YearTimeline.astro';
+import timelineAll from '../../data/misc-timeline.json';
 
 // One entry per post. group: 'places' or a year (trips are listed newest first within each year).
 // tags drive the filter chips; blurb shows as a hover tooltip.
@@ -454,7 +456,17 @@ const filters = [
   { id: 'holidays', label: 'Holidays' },
   { id: 'abroad', label: 'Abroad' },
 ];
-const groups = ['places', 'collections', ...[...new Set(posts.filter((p) => p.group !== 'places' && p.group !== 'collections').map((p) => p.group))]];
+// Timeline entries only for posts that are listed (published) here.
+const timeline = timelineAll.filter((e) => posts.some((p) => p.href === '/misc/' + e.post));
+// Year sections: every year that has a trip post or a timeline entry, newest first.
+const inYear = (e, y) => e.start.slice(0, 4) <= y && (e.end || e.start).slice(0, 4) >= y;
+const tlYears = timeline.flatMap((e) => {
+  const a = Number(e.start.slice(0, 4)), b = Number((e.end || e.start).slice(0, 4));
+  return Array.from({ length: b - a + 1 }, (_, i) => String(a + i));
+});
+const years = [...new Set([...posts.map((p) => p.group).filter((g) => /^\d{4}$/.test(g)), ...tlYears])].sort().reverse();
+const groups = ['places', 'collections', ...years];
+const isYear = (g) => /^\d{4}$/.test(g);
 // Fridge-magnet cover: each box (percent of the photo) links a magnet to its trip post.
 const magnets = [{"label": "Vancouver", "post": "siggraph-2025", "x": 11.58, "y": 11.0, "w": 9.75, "h": 5.0}, {"label": "Vancouver", "post": "siggraph-2025", "x": 23.46, "y": 3.75, "w": 14.02, "h": 10.75}, {"label": "Oregon", "post": "oregon-2025", "x": 11.27, "y": 21.25, "w": 6.4, "h": 5.75}, {"label": "Springfield, Oregon", "post": "springfield-2024", "x": 8.23, "y": 27.75, "w": 15.84, "h": 7.75}, {"label": "Lake Tahoe", "post": "tahoe-2026", "x": 31.08, "y": 27.0, "w": 16.45, "h": 5.75}, {"label": "Joshua Tree", "post": "joshua-tree", "x": 16.15, "y": 36.0, "w": 5.79, "h": 7.0}, {"label": "Old Town San Diego", "post": "san-diego", "x": 9.75, "y": 49.25, "w": 8.53, "h": 9.0}, {"label": "Las Vegas", "post": "las-vegas", "x": 21.02, "y": 45.5, "w": 10.66, "h": 7.0}, {"label": "Sedona", "post": "sedona-2026", "x": 34.43, "y": 49.25, "w": 4.88, "h": 4.0}, {"label": "New Mexico", "post": "spring-break-2026", "x": 44.79, "y": 51.0, "w": 7.92, "h": 7.75}, {"label": "Colorado", "post": "spring-break-2026", "x": 41.74, "y": 43.5, "w": 10.97, "h": 6.75}, {"label": "Denver", "post": "roadtrip-2024", "x": 42.66, "y": 38.25, "w": 9.75, "h": 5.25}, {"label": "Buc-ee's, Texas", "post": "texas-2023", "x": 53.02, "y": 44.5, "w": 9.45, "h": 7.5}, {"label": "NASA, Houston", "post": "texas-2023", "x": 58.2, "y": 52.0, "w": 7.62, "h": 6.25}, {"label": "Chicago", "post": "roadtrip-2024", "x": 38.09, "y": 17.5, "w": 14.32, "h": 4.75}, {"label": "Cleveland", "post": "roadtrip-2024", "x": 53.63, "y": 17.25, "w": 10.66, "h": 6.0}, {"label": "Wisconsin and Michigan", "post": "roadtrip-2024", "x": 45.7, "y": 8.0, "w": 12.8, "h": 8.0}, {"label": "Pittsburgh", "post": "roadtrip-2024", "x": 67.34, "y": 17.0, "w": 4.27, "h": 5.0}, {"label": "West Virginia", "post": "roadtrip-2024", "x": 63.38, "y": 21.5, "w": 6.4, "h": 4.5}, {"label": "Niagara Falls", "post": "roadtrip-2024", "x": 73.13, "y": 17.25, "w": 6.09, "h": 4.75}, {"label": "Boston", "post": "roadtrip-2024", "x": 78.61, "y": 9.75, "w": 10.05, "h": 8.5}, {"label": "Yale, New Haven", "post": "roadtrip-2024", "x": 81.05, "y": 18.5, "w": 10.36, "h": 5.75}, {"label": "Rhode Island", "post": "roadtrip-2024", "x": 92.32, "y": 18.75, "w": 5.48, "h": 5.5}, {"label": "Georgia", "post": "roadtrip-2024", "x": 86.53, "y": 39.5, "w": 10.05, "h": 9.5}, {"label": "Florida", "post": "roadtrip-2024", "x": 87.75, "y": 49.75, "w": 8.53, "h": 8.75}, {"label": "Key West", "post": "roadtrip-2024", "x": 80.44, "y": 53.25, "w": 7.01, "h": 5.75}, {"label": "Portsmouth", "post": "wangcai-2025", "x": 88.97, "y": 8.25, "w": 8.84, "h": 9.5}, {"label": "Portland, Maine", "post": "wangcai-2025", "x": 89.88, "y": 2.75, "w": 7.31, "h": 5.5}, {"label": "One World Observatory", "post": "newyear-2023", "x": 82.57, "y": 24.75, "w": 14.93, "h": 4.5}, {"label": "New York", "post": "newyear-2023", "x": 81.05, "y": 29.75, "w": 16.45, "h": 4.5}, {"label": "Baltimore", "post": "july4-2026", "x": 68.56, "y": 23.5, "w": 12.8, "h": 6.5}, {"label": "Baltimore", "post": "july4-2026", "x": 85.01, "y": 33.75, "w": 11.88, "h": 6.0}, {"label": "Delaware", "post": "july4-2026", "x": 73.74, "y": 34.0, "w": 11.27, "h": 5.0}, {"label": "Oʻahu", "post": "hawaii-2026", "x": 43.57, "y": 78.25, "w": 10.36, "h": 6.25}, {"label": "The Big Island", "post": "big-island-2025", "x": 54.24, "y": 78.25, "w": 9.75, "h": 7.5}, {"label": "Australia", "post": "siggraph-asia-2023", "x": 72.21, "y": 74.25, "w": 13.41, "h": 9.5}];
 const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g === 'collections' ? 'Collections' : g);
@@ -481,7 +493,12 @@ const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g =
 
   {groups.map((g) => (
     <section class="misc-group" data-group={g}>
-      <h2>{groupTitle(g)}</h2>
+      {isYear(g) ? (
+        <Fragment>
+          <h2>{g} <span class="tl-count">· {timeline.filter((e) => inYear(e, g)).length} trips and outings</span></h2>
+          <YearTimeline year={g} entries={timeline.filter((e) => inYear(e, g))} />
+        </Fragment>
+      ) : <h2>{groupTitle(g)}</h2>}
       <ul class="cards">
         {posts.filter((p) => p.group === g).map((p) => (
           <li class="card" data-tags={p.tags.join(' ')}>
@@ -507,8 +524,11 @@ const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g =
         var tags = card.dataset.tags.split(' ');
         card.hidden = !(id === 'all' || tags.indexOf(id) !== -1);
       });
+      // timelines show only in the unfiltered view; a year with no cards still shows its timeline there
+      document.querySelectorAll('[data-timeline]').forEach(function (t) { t.hidden = id !== 'all'; });
       document.querySelectorAll('.misc-group').forEach(function (g) {
-        g.hidden = !g.querySelector('.card:not([hidden])');
+        var hasCard = !!g.querySelector('.card:not([hidden])');
+        g.hidden = !(hasCard || (id === 'all' && g.querySelector('[data-timeline]')));
       });
     }
     chips.forEach(function (c) {
@@ -534,6 +554,8 @@ const groupTitle = (g) => (g === 'places' ? 'Places we keep going back to' : g =
           border: 1px solid rgba(127, 127, 127, .45); background: transparent; color: inherit; }
   .chip[aria-pressed="true"] { color: inherit; background: rgba(127, 127, 127, .22); border-color: rgba(127, 127, 127, .8); font-weight: 600; }
   .misc-group h2 { font-size: 1.15rem; margin: 1.6em 0 .6em; }
+  .tl-count { font-weight: 400; font-size: .85rem; opacity: .65; }
+  .cards:empty { display: none; }
   .cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px;
            grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); }
   .card a { display: block; color: inherit; text-decoration: none; }

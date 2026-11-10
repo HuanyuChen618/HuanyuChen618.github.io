@@ -1,0 +1,81 @@
+---
+// A one-year strip: month ticks, and a round thumbnail for every outing that year, placed by date.
+// Multi-day outings also get a bar along the axis. Thumbnails that would overlap stack into lanes.
+interface Entry { start: string; end?: string; title: string; href: string; img: string; approx?: boolean }
+const { year, entries } = Astro.props as { year: string; entries: Entry[] };
+
+const y = Number(year);
+const t0 = Date.UTC(y, 0, 1), span = Date.UTC(y + 1, 0, 1) - t0;
+const pos = (d: string) => {
+  const [a, b, c] = d.split('-').map(Number);
+  return Math.min(100, Math.max(0, ((Date.UTC(a, b - 1, c) - t0) / span) * 100));
+};
+const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const GAP = 6.6; // % of the track a thumbnail needs (track is at least 640 px wide)
+const laneEnd: number[] = [];
+const items = [...entries]
+  .sort((a, b) => a.start.localeCompare(b.start))
+  .map((e) => {
+    // clip to this year (a trip may cross New Year)
+    const s = e.start.startsWith(year) ? e.start : `${year}-01-01`;
+    const en = e.end && e.end.startsWith(year) ? e.end : e.end ? `${year}-12-31` : undefined;
+    const x0 = pos(s), x1 = en ? pos(en) : x0, x = (x0 + x1) / 2;
+    let lane = laneEnd.findIndex((r) => x - r >= GAP);
+    if (lane === -1) { lane = laneEnd.length; laneEnd.push(x); } else laneEnd[lane] = x;
+    const when = e.approx ? new Date(s + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' })
+      : en && en !== s ? `${fmt(s)} – ${fmt(en)}` : fmt(s);
+    return { ...e, x, x0, x1, lane, when };
+  });
+const lanes = Math.max(1, laneEnd.length);
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+---
+<div class="tl-wrap" data-timeline>
+  <div class="tl" style={`--lanes:${lanes}`} role="list" aria-label={`${year}: ${items.length} trips and outings`}>
+    <div class="tl-axis" aria-hidden="true">
+      {months.map((m, i) => <span class="tl-month" style={`left:${(i / 12) * 100}%`}>{m}</span>)}
+      {items.filter((it) => it.x1 - it.x0 > 0.3).map((it) => (
+        <span class="tl-bar" style={`left:${it.x0}%;width:${it.x1 - it.x0}%`}></span>
+      ))}
+    </div>
+    {items.map((it) => (
+      <a class="tl-pin" role="listitem" href={it.href} style={`left:${it.x}%;--lane:${it.lane}`}
+         title={`${it.title} · ${it.when}`} aria-label={`${it.title}, ${it.when}`}>
+        <span class="tl-stem" aria-hidden="true"></span>
+        <img src={it.img} alt="" loading="lazy" width="40" height="40" />
+      </a>
+    ))}
+  </div>
+  <p class="tl-caption" aria-hidden="true" data-default="Point at a photo to see the trip; click to open its post.">Point at a photo to see the trip; click to open its post.</p>
+</div>
+
+<script is:inline>
+  document.querySelectorAll('[data-timeline]').forEach(function (w) {
+    if (w.dataset.ready) return; w.dataset.ready = '1';
+    var cap = w.querySelector('.tl-caption');
+    function show(e) { var a = e.target.closest('.tl-pin'); if (a) cap.textContent = a.getAttribute('title'); }
+    function reset() { cap.textContent = cap.dataset.default; }
+    w.addEventListener('mouseover', show); w.addEventListener('focusin', show);
+    w.addEventListener('mouseleave', reset); w.addEventListener('focusout', reset);
+  });
+</script>
+
+<style>
+  .tl-wrap { overflow-x: auto; overflow-y: hidden; margin: .2em 0 1.1em; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .tl { position: relative; min-width: 640px; height: calc(30px + var(--lanes) * 46px); margin: 0 22px; }
+  .tl-axis { position: absolute; left: 0; right: 0; top: 18px; height: 2px; background: rgba(127, 127, 127, .35); border-radius: 1px; }
+  .tl-month { position: absolute; top: -18px; font-size: .72rem; opacity: .6; padding-left: 3px;
+              border-left: 1px solid rgba(127, 127, 127, .35); line-height: 1; height: 22px; }
+  .tl-bar { position: absolute; top: -2px; height: 6px; border-radius: 3px; background: #e8b04b; opacity: .85; }
+  .tl-pin { position: absolute; top: calc(26px + var(--lane) * 46px); width: 40px; height: 40px; margin-left: -20px;
+            border-radius: 50%; display: block; z-index: 1; }
+  .tl-pin img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; display: block;
+                box-shadow: 0 0 0 2px var(--tl-ring, #fff), 0 1px 4px rgba(0, 0, 0, .3);
+                transition: transform .12s ease; }
+  .tl-stem { position: absolute; left: 19px; width: 1px; bottom: 100%; height: calc(8px + var(--lane) * 46px);
+             background: rgba(127, 127, 127, .45); }
+  .tl-pin:hover, .tl-pin:focus-visible { z-index: 3; }
+  .tl-caption { position: sticky; left: 0; margin: .3em 0 0; font-size: .82rem; opacity: .75; min-height: 1.3em; white-space: nowrap; }
+  .tl-pin:hover img, .tl-pin:focus-visible img { transform: scale(1.6); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tl-pin { --tl-ring: #222; } }
+  :root[data-theme="dark"] .tl-pin { --tl-ring: #222; }
+</style>
