@@ -1,0 +1,92 @@
+---
+// Shuffling photo album: plays `list` (file names without .webp, named a-YYYYMMDD-HHMMSS) from `base` in a random order.
+interface Props { base: string; list: string[]; subject: string; }
+const { base, list, subject } = Astro.props;
+---
+<div class="album" data-base={base} data-list={JSON.stringify(list)} data-subject={subject}>
+  <div class="album-frame">
+    <img class="album-img" alt={`A random photo of ${subject}.`} />
+    <img class="album-img album-next" alt="" aria-hidden="true" />
+  </div>
+  <div class="album-bar">
+    <button type="button" class="album-btn" data-act="prev" aria-label="Previous photo">&#8592;</button>
+    <button type="button" class="album-btn" data-act="play" aria-label="Pause slideshow">&#10074;&#10074;</button>
+    <button type="button" class="album-btn" data-act="next" aria-label="Next photo">&#8594;</button>
+    <button type="button" class="album-btn" data-act="shuffle" aria-label="Shuffle again">shuffle</button>
+    <span class="album-cap muted"></span>
+  </div>
+</div>
+
+<script>
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const label = (n: string) => { const d = n.slice(2, 10); return MONTHS[+d.slice(4, 6) - 1] + ' ' + (+d.slice(6, 8)) + ', ' + d.slice(0, 4); };
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('.album').forEach((box) => {
+    const base = box.dataset.base!;
+    const subject = box.dataset.subject!;
+    const list: string[] = JSON.parse(box.dataset.list!);
+    const [img, nxt] = Array.from(box.querySelectorAll<HTMLImageElement>('.album-img'));
+    const cap = box.querySelector('.album-cap')!;
+    const playBtn = box.querySelector<HTMLButtonElement>('[data-act="play"]')!;
+    let order: string[] = [], i = 0, playing = !reduce, timer: number | undefined;
+    const shuffle = () => {
+      order = list.slice();
+      for (let k = order.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [order[k], order[j]] = [order[j], order[k]]; }
+      i = 0;
+    };
+    const show = () => {
+      const n = order[i];
+      img.classList.add('fading');
+      const pre = new Image();
+      pre.onload = pre.onerror = () => {
+        img.src = base + n + '.webp';
+        img.alt = subject + ', ' + label(n) + '.';
+        img.classList.remove('fading');
+        cap.textContent = label(n) + ' · ' + (i + 1) + ' / ' + order.length;
+        nxt.src = base + order[(i + 1) % order.length] + '.webp';
+      };
+      pre.src = base + n + '.webp';
+    };
+    const restart = () => { clearInterval(timer); if (playing) timer = window.setInterval(() => { i = (i + 1) % order.length; show(); }, 4000); };
+    const step = (d: number) => { i = (i + d + order.length) % order.length; show(); restart(); };
+    const setPlay = (v: boolean) => {
+      playing = v;
+      playBtn.innerHTML = v ? '&#10074;&#10074;' : '&#9654;';
+      playBtn.setAttribute('aria-label', v ? 'Pause slideshow' : 'Play slideshow');
+      restart();
+    };
+    box.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const a = t.closest<HTMLElement>('[data-act]');
+      if (a) {
+        const act = a.dataset.act;
+        if (act === 'prev') step(-1);
+        else if (act === 'next') step(1);
+        else if (act === 'play') setPlay(!playing);
+        else if (act === 'shuffle') { shuffle(); show(); restart(); }
+      } else if (t.closest('.album-frame')) step(1);
+    });
+    let x0: number | null = null;
+    box.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    box.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) clearInterval(timer); else restart(); });
+    shuffle(); show(); setPlay(playing);
+  });
+</script>
+
+<style>
+  .album { margin: 1em 0 1.6em; }
+  .album-frame { position: relative; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; cursor: pointer;
+    background: color-mix(in srgb, var(--muted) 12%, transparent); }
+  .album-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .35s ease; }
+  .album-img.fading { opacity: .25; }
+  .album-next { opacity: 0; pointer-events: none; }
+  .album-bar { display: flex; align-items: center; gap: 8px; margin-top: .5em; flex-wrap: wrap; }
+  .album-btn { font: inherit; font-size: .9rem; padding: .25em .7em; border-radius: 6px; cursor: pointer;
+    border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); background: transparent; color: inherit; }
+  .album-cap { font-size: .85rem; margin-left: auto; }
+</style>
