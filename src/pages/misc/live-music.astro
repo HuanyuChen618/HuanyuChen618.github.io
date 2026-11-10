@@ -74,6 +74,10 @@ const P = 'https://media.huanyuchen.com/misc/live-music/';
   </p>
   <figure class="trip-fig"><img src={P + 'wcs-2021-fireworks.webp'} alt="Pink and gold fireworks bursting over the Hollywood Bowl at night, smoke drifting over the dark trees, the shell lit purple below and the audience glowing with small lights." loading="lazy" /><figcaption>"A Sky Full of Stars," 10:20 pm.</figcaption></figure>
   <p>
+    Here are twenty-five seconds of it: the fireworks going up behind the shell of the Bowl while the song played.
+  </p>
+  <figure class="trip-fig"><video src={P + 'coldplay-sky-full-of-stars.mp4'} poster={P + 'coldplay-sky-full-of-stars-poster.webp'} controls playsinline preload="none"></video><figcaption>“A Sky Full of Stars,” about 10:20 pm (video).</figcaption></figure>
+  <p>
     It stayed with me. By the next afternoon I had painted it: the gold shell, the dark green hill, the rows of
     seats, and the sky above it full of red, pink and gold bursts.
   </p>
@@ -394,6 +398,7 @@ const P = 'https://media.huanyuchen.com/misc/live-music/';
   .trip-stats { margin: 1.2em 0; line-height: 1.6; }
   .trip-fig { margin: 1.2em 0; }
   .trip-fig img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .trip-fig video { width: 100%; height: auto; border-radius: 8px; display: block; background: #000; }
   .trip-fig figcaption { color: var(--muted); font-size: .9rem; margin-top: .35em; text-align: center; }
   .narrow-fig { max-width: 420px; margin-left: auto; margin-right: auto; }
   .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }

@@ -65,6 +65,10 @@ const P = 'https://media.huanyuchen.com/misc/fireworks/';
   </p>
   <figure class="trip-fig"><img src={P + 'drone-lawn.webp'} alt="A bouquet of flowers drawn in the dusk sky by lit drones, above trees and a park lawn glowing with rows of small candles, with a crowd watching." loading="lazy" /><figcaption>Flowers over the lawn, 6:30 pm.</figcaption></figure>
   <p>
+    Drones don't burst; they assemble. In the video, a loose scatter of lights pulls together into one flower above the lawn.
+  </p>
+  <figure class="trip-fig"><video src={P + 'drone-show-lotus-silent.mp4'} poster={P + 'drone-show-lotus-poster.webp'} controls playsinline preload="none" muted></video><figcaption>A flower assembling, 6:29 pm (video).</figcaption></figure>
+  <p>
     It is quieter than fireworks, and stranger, and nobody needs to sweep up afterwards.
   </p>
   <div class="trip-pair">
@@ -139,6 +143,7 @@ const P = 'https://media.huanyuchen.com/misc/fireworks/';
   .trip-stats { margin: 1.2em 0; line-height: 1.6; }
   .trip-fig { margin: 1.2em 0; }
   .trip-fig img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .trip-fig video { width: 100%; height: auto; border-radius: 8px; display: block; background: #000; }
   .trip-fig figcaption { color: var(--muted); font-size: .9rem; margin-top: .35em; text-align: center; }
   .narrow-fig { max-width: 420px; margin-left: auto; margin-right: auto; }
   .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
