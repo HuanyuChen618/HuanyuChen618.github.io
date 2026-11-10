@@ -7,13 +7,6 @@
     "post": "live-music"
   },
   {
-    "start": "2021-10-09",
-    "title": "Pacific Park on the pier",
-    "href": "/misc/amusement-parks#pacific-park-2021",
-    "img": "/misc/amusement-parks/pp-arch.webp",
-    "post": "amusement-parks"
-  },
-  {
     "start": "2021-10-14",
     "title": "Halloween Horror Nights",
     "href": "/misc/amusement-parks#hhn-2021",
@@ -26,13 +19,6 @@
     "href": "/misc/live-music#wcs-2021",
     "img": "/misc/live-music/wcs-2021-fireworks.webp",
     "post": "live-music"
-  },
-  {
-    "start": "2021-12-22",
-    "title": "Caltech",
-    "href": "/misc/campuses#caltech",
-    "img": "/misc/campuses/caltech.webp",
-    "post": "campuses"
   },
   {
     "start": "2021-12-31",
@@ -55,20 +41,6 @@
     "href": "/misc/desert-2022",
     "img": "/misc/desert-2022/horseshoe-bend.webp",
     "post": "desert-2022"
-  },
-  {
-    "start": "2022-03-18",
-    "title": "Griffith Observatory at night",
-    "href": "/misc/views-from-above#griffith",
-    "img": "/misc/views-from-above/griffith-2022.webp",
-    "post": "views-from-above"
-  },
-  {
-    "start": "2022-04-09",
-    "title": "Sunset from 71Above",
-    "href": "/misc/views-from-above#71above",
-    "img": "/misc/views-from-above/71above.webp",
-    "post": "views-from-above"
   },
   {
     "start": "2022-05-17",
@@ -129,13 +101,6 @@
     "href": "/misc/cancun-2022",
     "img": "/misc/cancun-2022/el-castillo.webp",
     "post": "cancun-2022"
-  },
-  {
-    "start": "2022-08-06",
-    "title": "Griffith Observatory at sunset",
-    "href": "/misc/views-from-above#griffith",
-    "img": "/misc/views-from-above/griffith-2022-aug.webp",
-    "post": "views-from-above"
   },
   {
     "start": "2022-09-02",
@@ -202,13 +167,6 @@
     "href": "/misc/live-music#kroq-2022",
     "img": "/misc/live-music/kroq-stage.webp",
     "post": "live-music"
-  },
-  {
-    "start": "2022-12-11",
-    "title": "Spire 73 above downtown LA",
-    "href": "/misc/views-from-above#spire-73",
-    "img": "/misc/views-from-above/spire-73.webp",
-    "post": "views-from-above"
   },
   {
     "start": "2022-12-29",
@@ -318,26 +276,12 @@
     "post": "siggraph-asia-2023"
   },
   {
-    "start": "2024-01-28",
-    "title": "Griffith Observatory sunset",
-    "href": "/misc/views-from-above#griffith",
-    "img": "/misc/views-from-above/griffith-2024.webp",
-    "post": "views-from-above"
-  },
-  {
     "start": "2024-02-03",
     "end": "2024-02-04",
     "title": "La Jolla seals",
     "href": "/misc/san-diego#feb-2024",
     "img": "/misc/san-diego/seals-day.webp",
     "post": "san-diego"
-  },
-  {
-    "start": "2024-02-10",
-    "title": "Pepperdine",
-    "href": "/misc/campuses#pepperdine",
-    "img": "/misc/campuses/pepperdine.webp",
-    "post": "campuses"
   },
   {
     "start": "2024-04-20",
