@@ -61,7 +61,7 @@ figcaption{color:var(--muted);font-size:.92rem;margin-top:.4em}
   .project{flex-direction:column}
   .project img{width:100%;height:auto}
   .pub{flex-direction:column}
-  .pub img{width:100%}
+  .pub img{width:100%;height:auto;aspect-ratio:200/112}
   .news li{flex-direction:column;gap:0}
 }
 @media (prefers-color-scheme: dark){
