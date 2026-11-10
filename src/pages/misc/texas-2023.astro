@@ -15,10 +15,16 @@ const P = '/misc/texas-2023/';
     roughly 750 miles driven · four nights in three cities · one tray of brisket and one table of dim sum · one bright red Dodge Charger · one space shuttle named <em>Independence</em>, visited on Independence Day
   </div>
 
-  <figure class="trip-fig wide-fig">
-    <a href={P + 'daymap-triangle.webp'}><img src={P + 'daymap-triangle.webp'} alt="Map of the trip: Austin, a round trip to San Antonio, then north to Fort Worth and Dallas, and south to Houston and its airport." loading="lazy" /></a>
-    <figcaption>The whole loop: Austin and San Antonio, up to Fort Worth and Dallas, down to Houston.</figcaption>
-  </figure>
+  <div class="trip-pair triangle-pair">
+    <figure class="trip-fig">
+      <a href={P + 'daymap-triangle.webp'}><img src={P + 'daymap-triangle.webp'} alt="Map of the trip: Austin, a round trip to San Antonio, then north to Fort Worth and Dallas, and south to Houston and its airport." loading="lazy" /></a>
+      <figcaption>The whole loop: Austin and San Antonio, up to Fort Worth and Dallas, down to Houston.</figcaption>
+    </figure>
+    <figure class="trip-fig">
+      <img src={P + 'card-napkin.webp'} alt="A white paper napkin printed with a hand-drawn triangle joining Dallas, San Antonio and Houston, under the line: Taking care of you since we were born on a napkin in 1971." loading="lazy" />
+      <figcaption>The same triangle, on a Southwest napkin from my flight down from Seattle that morning.</figcaption>
+    </figure>
+  </div>
 
   <p>
     Geographers have a name for the part of Texas where most Texans live: the <strong>Texas Triangle</strong>. Its
@@ -498,6 +504,7 @@ const P = '/misc/texas-2023/';
   .narrow-fig { max-width: 420px; margin-left: auto; margin-right: auto; }
   .trip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
   .trip-pair .trip-fig { margin: .6em 0; }
+  .triangle-pair { grid-template-columns: 1.33fr 1fr; }
   .trip-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
   .trip-trio .trip-fig { margin: .6em 0; }
   h3 { margin-top: 1.6em; }
