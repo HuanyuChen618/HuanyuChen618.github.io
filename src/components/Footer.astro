@@ -4,5 +4,20 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="container">
     <p>© {year} Huanyu Chen · <a href="mailto:huanyuc@usc.edu">huanyuc@usc.edu</a></p>
+    <p class="visit-line" id="visit-line" hidden><span id="visit-count"></span> visits since <span id="visit-since">Nov 2026</span> · <a href="/visitors">see where from</a></p>
   </div>
 </footer>
+<script is:inline>
+  // Footer visit total (aggregate only; see /visitors).
+  (function () {
+    fetch('https://stats.huanyuchen.com/stats').then(function (r) { return r.ok ? r.json() : null; }).then(function (s) {
+      if (!s || !s.total) return;
+      document.getElementById('visit-count').textContent = s.total.toLocaleString('en-US');
+      if (s.since) {
+        var d = new Date(s.since + 'T00:00:00Z');
+        document.getElementById('visit-since').textContent = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+      }
+      document.getElementById('visit-line').hidden = false;
+    }).catch(function () {});
+  })();
+</script>

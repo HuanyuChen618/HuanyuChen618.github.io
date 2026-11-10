@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Visitors — Huanyu Chen" description="Where visitors to huanyuchen.com come from, shown as city-level totals on a globe.">
+  <h1>Visitors</h1>
+  <p class="vis-total"><strong id="vis-total">–</strong> <span class="muted">visits since <span id="vis-since">Nov 2026</span>, from <span id="vis-ncities">–</span> places</span></p>
+
+  <div class="globe-wrap">
+    <canvas id="globe" aria-label="Rotating globe with a dot for each visitor city. Drag to turn it." role="img"></canvas>
+    <div id="globe-tip" class="globe-tip" hidden></div>
+  </div>
+  <p class="muted globe-hint">Drag to turn the globe. Dot size follows the number of visits.</p>
+
+  <h2>Top countries</h2>
+  <ol id="vis-countries" class="vis-countries"><li class="muted">Loading…</li></ol>
+
+  <p class="muted vis-privacy">Privacy: each visit is placed at city level from its internet address, so locations are approximate; only running totals per city, page and day are kept, and nothing personal (no IP address, browser details, cookies or per-visit records) is stored.</p>
+
+  <style>
+    .vis-total { font-size: 1.15rem; margin-top: .2em; }
+    .vis-total strong { font-size: 1.6rem; }
+    .globe-wrap { position: relative; width: min(100%, 560px); margin: 1.2em auto .2em; aspect-ratio: 1 / 1; }
+    #globe { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+    #globe.dragging { cursor: grabbing; }
+    .globe-hint { text-align: center; font-size: .88rem; margin-top: .2em; }
+    .globe-tip { position: absolute; pointer-events: none; background: var(--bg); color: var(--ink);
+      border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; font-size: .85rem; white-space: nowrap;
+      transform: translate(-50%, calc(-100% - 10px)); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+    .vis-countries { padding-left: 1.4em; columns: 2; column-gap: 2em; }
+    .vis-countries li { margin: .2em 0; break-inside: avoid; }
+    .vis-countries .n { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .vis-privacy { font-size: .9rem; margin-top: 1.6em; }
+    @media (max-width: 480px) { .vis-countries { columns: 1; } }
+  </style>
+
+  <script is:inline src="https://cdn.jsdelivr.net/npm/d3-array@3.2.4/dist/d3-array.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/dist/d3-geo.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+  <script is:inline>
+  (function () {
+    var STATS = 'https://stats.huanyuchen.com/stats';
+    var LAND = 'https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-110m.json';
+    var canvas = document.getElementById('globe');
+    var tip = document.getElementById('globe-tip');
+    var ctx = canvas.getContext('2d');
+    var names = null;
+    try { names = new Intl.DisplayNames(['en'], { type: 'region' }); } catch (e) {}
+    var countryName = function (c) { try { return (names && c && c !== 'XX' && names.of(c)) || c || 'Unknown'; } catch (e) { return c; } };
+
+    var land = null, cities = [], maxV = 1;
+    var rot = [100, -20]; // start over the Pacific/Americas-ish; lambda, phi
+    var projection = d3.geoOrthographic().clipAngle(90).precision(0.5);
+    var path = d3.geoPath(projection, ctx);
+    var sphere = { type: 'Sphere' };
+    var size = 0, dpr = 1;
+
+    function colors() {
+      var cs = getComputedStyle(document.documentElement);
+      var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return {
+        ocean: dark ? '#1c1c1c' : '#f6f6f6',
+        land: dark ? '#3a3a3a' : '#d9d9d9',
+        rim: cs.getPropertyValue('--line').trim() || '#ccc',
+        dot: cs.getPropertyValue('--link').trim() || '#8b1a1a',
+        halo: dark ? 'rgba(20,20,20,.85)' : 'rgba(255,255,255,.9)'
+      };
+    }
+    var C = colors();
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      var upd = function () { C = colors(); draw(); };
+      if (mq.addEventListener) mq.addEventListener('change', upd); else if (mq.addListener) mq.addListener(upd);
+    }
+
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      dpr = window.devicePixelRatio || 1;
+      size = r.width;
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.width * dpr);
+      projection.translate([size / 2, size / 2]).scale(size / 2 - 2);
+      draw();
+    }
+
+    function radius(v) { return 2.2 + 9 * Math.sqrt(v / maxV); }
+
+    function draw() {
+      if (!size) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, size, size);
+      projection.rotate([rot[0], rot[1]]);
+      ctx.beginPath(); path(sphere); ctx.fillStyle = C.ocean; ctx.fill();
+      if (land) { ctx.beginPath(); path(land); ctx.fillStyle = C.land; ctx.fill(); }
+      ctx.beginPath(); path(sphere); ctx.strokeStyle = C.rim; ctx.lineWidth = 1; ctx.stroke();
+      var center = [-rot[0], -rot[1]];
+      for (var i = cities.length - 1; i >= 0; i--) { // small dots on top (list is sorted by visits desc)
+        var c = cities[i];
+        if (d3.geoDistance([c.lon, c.lat], center) > Math.PI / 2 - 0.02) { c._xy = null; continue; }
+        var p = projection([c.lon, c.lat]);
+        c._xy = p;
+        var r = radius(c.visits);
+        ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, 2 * Math.PI);
+        ctx.globalAlpha = 0.55; ctx.fillStyle = C.dot; ctx.fill();
+        ctx.globalAlpha = 1; ctx.lineWidth = 1; ctx.strokeStyle = C.dot; ctx.stroke();
+      }
+    }
+
+    // Slow rotation, paused while dragging or hovering a city, and for reduced-motion users.
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var dragging = false, hovering = false, last = null, idleUntil = 0;
+    function tick(t) {
+      if (last !== null && !dragging && !hovering && !reduce && t > idleUntil) {
+        rot[0] += (t - last) * 0.006; draw();
+      }
+      last = t; requestAnimationFrame(tick);
+    }
+
+    var start = null;
+    canvas.addEventListener('pointerdown', function (e) {
+      dragging = true; canvas.classList.add('dragging'); canvas.setPointerCapture(e.pointerId);
+      start = { x: e.clientX, y: e.clientY, r: rot.slice() }; tip.hidden = true;
+    });
+    canvas.addEventListener('pointermove', function (e) {
+      if (dragging && start) {
+        var k = 180 / (size || 1) * 0.9;
+        rot[0] = start.r[0] + (e.clientX - start.x) * k;
+        rot[1] = Math.max(-80, Math.min(80, start.r[1] - (e.clientY - start.y) * k));
+        draw(); return;
+      }
+      pick(e);
+    });
+    function endDrag(e) {
+      if (!dragging) return;
+      var moved = start && Math.abs(e.clientX - start.x) + Math.abs(e.clientY - start.y) > 4;
+      dragging = false; canvas.classList.remove('dragging'); start = null; idleUntil = performance.now() + 2500;
+      if (!moved) pick(e); // a tap shows the nearest city
+    }
+    canvas.addEventListener('pointerup', endDrag);
+    canvas.addEventListener('pointercancel', endDrag);
+    canvas.addEventListener('pointerleave', function () { hovering = false; tip.hidden = true; });
+
+    function pick(e) {
+      var b = canvas.getBoundingClientRect();
+      var x = e.clientX - b.left, y = e.clientY - b.top, best = null, bd = 1e9;
+      for (var i = 0; i < cities.length; i++) {
+        var c = cities[i]; if (!c._xy) continue;
+        var d = Math.hypot(c._xy[0] - x, c._xy[1] - y);
+        if (d < Math.max(radius(c.visits) + 4, 10) && d < bd) { bd = d; best = c; }
+      }
+      hovering = !!best;
+      if (!best) { tip.hidden = true; return; }
+      var place = [best.city, best.region && best.region !== best.city ? best.region : '', countryName(best.country)].filter(Boolean).join(', ');
+      tip.textContent = place + ' · ' + best.visits.toLocaleString('en-US') + (best.visits === 1 ? ' visit' : ' visits');
+      tip.style.left = best._xy[0] + 'px'; tip.style.top = (best._xy[1] - radius(best.visits)) + 'px';
+      tip.hidden = false;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(tick);
+
+    fetch(LAND).then(function (r) { return r.json(); }).then(function (topo) {
+      land = topojson.feature(topo, topo.objects.land); draw();
+    }).catch(function () {});
+
+    fetch(STATS).then(function (r) { return r.json(); }).then(function (s) {
+      document.getElementById('vis-total').textContent = (s.total || 0).toLocaleString('en-US');
+      if (s.since) {
+        var d = new Date(s.since + 'T00:00:00Z');
+        document.getElementById('vis-since').textContent = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+      }
+      cities = (s.cities || []).filter(function (c) { return c.lat != null && c.lon != null; });
+      maxV = cities.reduce(function (m, c) { return Math.max(m, c.visits); }, 1);
+      document.getElementById('vis-ncities').textContent = cities.length.toLocaleString('en-US');
+      if (cities.length) rot = [-cities[0].lon + 30, Math.max(-45, Math.min(45, -cities[0].lat * 0.6))];
+      var ol = document.getElementById('vis-countries');
+      ol.innerHTML = '';
+      (s.top_countries || []).forEach(function (c) {
+        var li = document.createElement('li');
+        li.textContent = countryName(c.country) + ' ';
+        var n = document.createElement('span'); n.className = 'n'; n.textContent = c.visits.toLocaleString('en-US');
+        li.appendChild(n); ol.appendChild(li);
+      });
+      if (!ol.children.length) ol.innerHTML = '<li class="muted">No visits yet.</li>';
+      draw();
+    }).catch(function () {
+      document.getElementById('vis-countries').innerHTML = '<li class="muted">Could not load visitor data right now.</li>';
+    });
+  })();
+  </script>
+</BaseLayout>

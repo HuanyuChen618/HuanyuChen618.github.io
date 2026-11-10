@@ -7,7 +7,13 @@ const pubs = [
     authors: '<strong>Huanyu Chen</strong>, Yumeng He, Jernej Barbič',
     venue: 'ACM Transactions on Graphics 45(6) (SIGGRAPH Asia 2026)',
     img: '/img/gshells.jpg',
-    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/gshells/']],
+    links: [
+      ['Project page', 'https://viterbi-web.usc.edu/~jbarbic/gshells/'],
+      ['Paper', 'https://viterbi-web.usc.edu/~jbarbic/gshells/ChenHeBarbic-SIGGRAPH-Asia-2026.pdf'],
+      ['Video', 'https://viterbi-web.usc.edu/~jbarbic/gshells/ChenHeBarbic-SIGGRAPH-Asia-2026.mp4'],
+      ['Supplemental', 'https://viterbi-web.usc.edu/~jbarbic/gshells/ChenHeBarbic-SupplementaryMaterial-SIGGRAPH-Asia-2026.pdf'],
+      ['BibTeX', 'https://viterbi-web.usc.edu/~jbarbic/gshells/bibtex.txt'],
+    ],
   },
   {
     title: 'Weak Nonlinearity and Linear Equalization for Isotropic Hyperelastic Materials',
@@ -15,27 +21,52 @@ const pubs = [
     venue: 'Computer Graphics Forum (Symposium on Computer Animation 2026)',
     award: 'Best Presentation Award',
     img: '/img/solids.jpg',
-    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/materialFiltering/']],
+    links: [
+      ['Project page', 'https://viterbi-web.usc.edu/~jbarbic/materialFiltering/'],
+      ['Paper', 'https://viterbi-web.usc.edu/~jbarbic/materialFiltering/ChenBarbicSCA2026.pdf'],
+      ['Video', 'https://viterbi-web.usc.edu/~jbarbic/materialFiltering/ChenBarbicSCA2026.mp4'],
+      ['Slides', 'https://viterbi-web.usc.edu/~jbarbic/materialFiltering/ChenBarbic-SCA2026-presentation.pdf'],
+      ['BibTeX', 'https://viterbi-web.usc.edu/~jbarbic/materialFiltering/bibtex.txt'],
+    ],
   },
   {
     title: 'ANIME-Rod: Adjustable Nonlinear Isotropic Materials for Elastic Rods',
     authors: '<strong>Huanyu Chen</strong>, Jiahao Wen, Jernej Barbič',
     venue: 'ACM Transactions on Graphics 44(4) (SIGGRAPH 2025)',
     img: '/img/animerod.jpg',
-    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/fcurves/']],
+    links: [
+      ['Project page', 'https://viterbi-web.usc.edu/~jbarbic/fcurves/'],
+      ['Paper', 'https://viterbi-web.usc.edu/~jbarbic/fcurves/ChenWenBarbic-SIGGRAPH2025.pdf'],
+      ['Video', 'https://viterbi-web.usc.edu/~jbarbic/fcurves/ChenWenBarbic-SIGGRAPH2025-main-video.mp4'],
+      ['Supplemental', 'https://viterbi-web.usc.edu/~jbarbic/fcurves/ChenWenBarbic-SIGGRAPH2025-supplementary.pdf'],
+      ['BibTeX', 'https://viterbi-web.usc.edu/~jbarbic/fcurves/bibtex.txt'],
+    ],
   },
   {
     title: 'Capturing Animation-Ready Isotropic Materials Using Systematic Poking',
     authors: '<strong>Huanyu Chen</strong>, Danyong Zhao, Jernej Barbič',
     venue: 'ACM Transactions on Graphics 42(6) (SIGGRAPH Asia 2023)',
     img: '/img/poking.jpg',
-    links: [['Project page', 'https://viterbi-web.usc.edu/~jbarbic/materialFitting/']],
+    links: [
+      ['Project page', 'https://viterbi-web.usc.edu/~jbarbic/materialFitting/'],
+      ['Paper', 'https://viterbi-web.usc.edu/~jbarbic/materialFitting/ChenZhaoBarbic-SystematicPoking-SIGGRAPHAsia-2023.pdf'],
+      ['Video', 'https://viterbi-web.usc.edu/~jbarbic/materialFitting/ChenZhaoBarbic-SystematicPoking-SIGGRAPHAsia-2023.mp4'],
+      ['Slides', 'https://docs.google.com/presentation/d/1XfpbqF5CEhe9vI8NmbED-TDb7rL41zHy/edit?usp=sharing'],
+      ['Supplemental', 'https://viterbi-web.usc.edu/~jbarbic/materialFitting/ChenZhaoBarbic-SystematicPoking-SIGGRAPHAsia-2023-supplementaryMaterials.zip'],
+      ['BibTeX', 'https://viterbi-web.usc.edu/~jbarbic/materialFitting/bibtex.txt'],
+      ['ACM DL', 'https://dl.acm.org/doi/10.1145/3618406'],
+    ],
   },
   {
     title: 'ArticulateArena: A Metric for Articulated Kinematics',
     authors: 'Yumeng He, Yongfei She, <strong>Huanyu Chen</strong>, Chun Yuan, Peihao Li, Joseph Masterjohn, Yin Yang, Ying Jiang, Chenfanfu Jiang',
     venue: 'arXiv preprint 2609.33931, 2026 (under review)',
-    links: [['arXiv', 'https://arxiv.org/abs/2609.33931']],
+    img: '/img/articulatearena.jpg',
+    links: [
+      ['Project page', 'https://heyumeng.com/ArticulateArena-web/'],
+      ['arXiv', 'https://arxiv.org/abs/2609.33931'],
+      ['Code', 'https://github.com/YumengHe/ArticulateArena'],
+    ],
   },
 ];
 ---
@@ -49,7 +80,7 @@ const pubs = [
         <p class="authors" set:html={p.authors} />
         <p class="venue">{p.venue}</p>
         {p.award && <p class="award">{p.award}</p>}
-        <p>{p.links.map(([label, href], i) => (<>{i > 0 && ' · '}<a href={href}>{label}</a></>))}</p>
+        <p class="pub-links">{p.links.map(([label, href]) => <a class="pub-btn" href={href}>{label}</a>)}</p>
       </div>
     </article>
   ))}
@@ -61,8 +92,7 @@ const pubs = [
       <h3>Efficient Bijective Spherical Parameterizations (高效无翻转球面参数化)</h3>
       <p class="authors"><strong>Huanyu Chen</strong>; advisor: Ligang Liu</p>
       <p class="venue">B.Sc. thesis, University of Science and Technology of China, 2021</p>
-      <p><a href="/spherical">Project page</a> · <a href="/spherical/Chen2021_thesis_en.pdf">English translation</a> ·
-        <a href="/spherical/Chen2021_thesis_zh.pdf">Chinese original</a></p>
+      <p class="pub-links"><a class="pub-btn" href="/spherical">Project page</a><a class="pub-btn" href="/spherical/Chen2021_thesis_en.pdf">English translation</a><a class="pub-btn" href="/spherical/Chen2021_thesis_zh.pdf">Chinese original</a></p>
     </div>
   </article>
 
@@ -71,7 +101,7 @@ const pubs = [
     <li>
       <em>Isotropic Distortion Energies: One Machine for Parameterization, Deformation, and Dynamics.</em>
       Guest lecture, MATH 285J, UCLA, Oct. 2026.
-      <a href="https://huanyuchen618.github.io/isotropic-energies-tutorial/">Slides &amp; code</a>
+      <a href="https://huanyuchen.com/isotropic-energies-tutorial/">Slides &amp; code</a>
     </li>
   </ul>
 
@@ -82,3 +112,11 @@ const pubs = [
     CSCI 570 Analysis of Algorithms (Fall 2025), CSCI 350 Operating Systems (Fall 2024), CSCI 677 Advanced Computer
     Vision (Fall 2023).</p>
 </BaseLayout>
+
+<style>
+  .pub-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .5em; }
+  .pub-btn { font-size: .8rem; line-height: 1; padding: .38em .75em; border-radius: 999px; text-decoration: none;
+             border: 1px solid rgba(127, 127, 127, .45); color: inherit; white-space: nowrap;
+             transition: background-color .12s ease, border-color .12s ease; }
+  .pub-btn:hover, .pub-btn:focus-visible { background: rgba(127, 127, 127, .15); border-color: rgba(127, 127, 127, .8); }
+</style>

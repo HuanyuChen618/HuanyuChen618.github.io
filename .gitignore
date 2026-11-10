@@ -11,3 +11,8 @@ public/misc/**/*.jpg
 public/misc/**/*.jpeg
 public/misc/**/*.png
 public/misc/**/*.gif
+public/misc/**/*.mp4
+
+# Cloudflare Worker local state
+worker/**/.wrangler/
+__pycache__/

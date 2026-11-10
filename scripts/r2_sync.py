@@ -8,7 +8,7 @@ SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUB = os.path.join(SITE, "public")
 BUCKET = "huanyu-site-media"
 MAN = os.path.join(SITE, "scripts", "r2-manifest.json")
-TYPES = {".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".gif": "image/gif"}
+TYPES = {".mp4": "video/mp4", ".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".gif": "image/gif"}
 NPX = "npx.cmd" if os.name == "nt" else "npx"
 
 def files():

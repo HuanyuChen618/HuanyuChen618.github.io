@@ -1,0 +1,10 @@
+name = "huanyu-visits"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+routes = [{ pattern = "stats.huanyuchen.com", custom_domain = true }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "huanyu-visits"
+database_id = "72b8aee5-e592-4c14-9d48-33a7001fddc9"
