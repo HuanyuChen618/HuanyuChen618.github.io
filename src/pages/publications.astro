@@ -6,7 +6,8 @@ const pubs = [
     title: 'Beyond Kirchhoff–Love: A Volumetric Approach to Thin-Shell Mechanics',
     authors: '<strong>Huanyu Chen</strong>, Yumeng He, Jernej Barbič',
     venue: 'ACM Transactions on Graphics 45(6) (SIGGRAPH Asia 2026)',
-    img: '/img/gshells.jpg',
+    img: '/img/gshells-balloons.webp',
+    video: '/img/gshells-balloons.mp4',
     links: [
       ['Project page', 'https://viterbi-web.usc.edu/~jbarbic/gshells/'],
       ['Paper', 'https://viterbi-web.usc.edu/~jbarbic/gshells/ChenHeBarbic-SIGGRAPH-Asia-2026.pdf'],
@@ -74,7 +75,9 @@ const pubs = [
   <h1>Publications</h1>
   {pubs.map((p) => (
     <article class="pub">
-      {p.img && <img src={p.img} alt="" loading="lazy" />}
+      {p.video
+        ? <video class="pub-media" src={p.video} poster={p.img} autoplay muted loop playsinline preload="metadata" aria-label="Animation: four thin-shell balloons inflating"></video>
+        : p.img && <img src={p.img} alt="" loading="lazy" />}
       <div>
         <h3>{p.title}</h3>
         <p class="authors" set:html={p.authors} />
@@ -114,9 +117,18 @@ const pubs = [
 </BaseLayout>
 
 <style>
+  .pub-media { width: 200px; height: 112px; object-fit: contain; border-radius: 6px; border: 1px solid var(--line); flex: none; background: #0c121c; }
+  @media (max-width: 560px) { .pub-media { width: 100%; height: auto; aspect-ratio: 800 / 588; } }
   .pub-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .5em; }
   .pub-btn { font-size: .8rem; line-height: 1; padding: .38em .75em; border-radius: 999px; text-decoration: none;
              border: 1px solid rgba(127, 127, 127, .45); color: inherit; white-space: nowrap;
              transition: background-color .12s ease, border-color .12s ease; }
   .pub-btn:hover, .pub-btn:focus-visible { background: rgba(127, 127, 127, .15); border-color: rgba(127, 127, 127, .8); }
 </style>
+
+<script is:inline>
+  // respect reduced-motion: show the still frame instead of looping
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('video.pub-media').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+  }
+</script>
