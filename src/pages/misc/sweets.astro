@@ -17,6 +17,13 @@ const SGV = [
   { name: 'Yu Cake', locs: [L('San Gabriel', 34.08018, -118.10417)] },
   { name: 'Fika Fika', locs: [L('Arcadia', 34.13131, -118.06662)] },
 ];
+const EAST = [
+  { name: 'Chayan', locs: [L('Rowland Heights', 33.9888, -117.9031)] },
+  { name: 'Lelecha', locs: [L('Rowland Heights', 33.9927, -117.8909)] },
+  { name: 'Makkee', locs: [L('Rowland Heights', 33.9936, -117.9042)] },
+  { name: 'Torotea', locs: [L('Diamond Bar', 33.99694, -117.81402)] },
+  { name: 'The Alley', locs: [L('Brea', 33.915, -117.8869)] },
+];
 const LA = [
   { name: 'HEYTEA', locs: [L('Century City', 34.05903, -118.41874)] },
   { name: 'Chamberlain Coffee', locs: [L('Century City', 34.05856, -118.41817)] },
@@ -127,6 +134,40 @@ const AWAY = [
   <div class="trip-pair">
     <figure class="trip-fig"><img src={P + 'molly-queue.webp'} alt="A line of people outside a lit tea shop at night, seen from behind." loading="lazy" /><figcaption>The line at Molly Tea, May 4, 2025, 10:20 pm.</figcaption></figure>
     <figure class="trip-fig"><img src={P + 'yu-cake.webp'} alt="A slice of layered crêpe cake on a white plate." loading="lazy" /><figcaption>Yu Cake, October 2025.</figcaption></figure>
+  </div>
+  <h2 id="east">Rowland Heights and around</h2>
+  <p>
+    East of the San Gabriel Valley, in Rowland Heights and on into Diamond Bar and Brea, is the newer habit: most of
+    these shops only show up in the records from 2025.
+  </p>
+  <RegionMap stores={EAST} region="Rowland Heights, Diamond Bar and Brea" />
+  <p>
+    <strong>Chayan</strong> (茶宴) in Rowland Heights is the one we go back to, four times by the card records: milk teas
+    in black cups with gold lettering, and in April 2026 a matcha drink with a ladyfinger on top.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'chayan-cup.webp'} alt="A black Chayan cup with gold characters in front of a matching olive paper bag." loading="lazy" /><figcaption>Chayan, Rowland Heights, August 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'chayan-matcha.webp'} alt="A matcha milk drink topped with a ladyfinger and crumbs in a Chayan cup." loading="lazy" /><figcaption>Matcha with a ladyfinger, April 2026.</figcaption></figure>
+  </div>
+  <p>
+    Nearby is <strong>Lelecha</strong> (乐乐茶). Out in Diamond Bar, <strong>Torotea</strong> puts its milk
+    teas with jelly in a paper carrier.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'lelecha.webp'} alt="Two hands holding up a pair of Lelecha milk teas in a sunny plaza." loading="lazy" /><figcaption>Lelecha, Rowland Heights, July 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'torotea.webp'} alt="A hand holding a paper carrier with two milk teas with jelly." loading="lazy" /><figcaption>Torotea, Diamond Bar, September 2025.</figcaption></figure>
+  </div>
+  <p>
+    In Brea, <strong>The Alley</strong> had a <em>Demon Slayer</em> cup in October 2025, and Wangcai came along.
+  </p>
+  <figure class="trip-fig"><img src={P + 'alley-wangcai.webp'} alt="A hand holding a Demon Slayer-themed drink cup, with a smiling white dog sitting below." loading="lazy" /><figcaption>The Alley, Brea, October 2025.</figcaption></figure>
+  <p>
+    <strong>Makkee</strong> is the Hong Kong dessert shop, a regular since November 2025, with ten visits in the card records: sweet soups with taro balls, red beans and lotus seeds, watermelon on
+    the side, or honeydew melon with a scoop of ice cream.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'makkee-bowls.webp'} alt="Two white bowls of dessert, one with taro balls and diced watermelon, one with lotus seeds and red beans in syrup." loading="lazy" /><figcaption>Makkee, Rowland Heights, November 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'makkee-melon.webp'} alt="A scalloped white bowl of honeydew melon, crushed nuts and a scoop of ice cream." loading="lazy" /><figcaption>Melon and ice cream, April 2026.</figcaption></figure>
   </div>
 
   <h2 id="la">Los Angeles</h2>

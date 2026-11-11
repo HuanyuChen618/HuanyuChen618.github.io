@@ -13,8 +13,15 @@ const SGV = [
   { name: 'Tai Er', locs: [L('Arcadia', 34.13369, -118.05238)] },
   { name: 'Auntie Qiu Kitchen', locs: [L('Arcadia', 34.12439, -118.05923)] },
   { name: 'Lunasia', locs: [L('Pasadena', 34.14615, -118.14551)] },
-  { name: 'Guangfa Grassland Mongolian', locs: [L('Rowland Heights', 33.9948, -117.89049)] },
+  { name: 'Chengdu Taste', locs: [L('Alhambra', 34.07782, -118.13244)] },
   { name: "Dolan's Uyghur Cuisine", locs: [L('Alhambra', 34.07788, -118.13154)] },
+  { name: 'Garden Cafe', locs: [L('Alhambra', 34.07832, -118.12445), L('Arcadia', 34.13017, -118.05434)] },
+];
+const RH = [
+  { name: 'Guangfa Grassland Mongolian', locs: [L('Rowland Heights', 33.9948, -117.89049)] },
+  { name: 'Lao Ma Tou Hot Pot', locs: [L('Rowland Heights', 33.9926, -117.8909)] },
+  { name: 'Duo-Pot', locs: [L('Rowland Heights', 33.98626, -117.90308)] },
+  { name: 'Aipapa Hot Burger', locs: [L('Rowland Heights', 33.9884, -117.9016)] },
 ];
 const LA = [
   { name: 'Urth Caffé', locs: [L('Arts District', 34.04198, -118.23545)] },
@@ -27,6 +34,9 @@ const LA = [
   { name: 'Nobu', locs: [L('La Cienega', 34.0862, -118.3765)] },
   { name: 'Tesla Diner', locs: [L('Hollywood', 34.09095, -118.34188)] },
   { name: "Geoffrey's", locs: [L('Malibu', 34.02521, -118.7699)] },
+  { name: 'NIKU X', locs: [L('Downtown', 34.05015, -118.26038)] },
+  { name: 'Camphor', locs: [L('Arts District', 34.04628, -118.23414)] },
+  { name: 'Bluewater Grill', locs: [L('Avalon, Catalina', 33.34433, -118.32614)] },
 ];
 const OC = [
   { name: 'Shake Shack', locs: [L('Crystal Cove', 33.57396, -117.83947)] },
@@ -40,12 +50,14 @@ const OC = [
   { name: 'King Chops', locs: [L('Irvine', 33.68095, -117.77887)] },
   { name: 'Mendocino Farms', locs: [L('Irvine', 33.65083, -117.83915)] },
   { name: 'Postino', locs: [L('Irvine', 33.67294, -117.84662)] },
+  { name: 'Manpuku', locs: [L('Costa Mesa', 33.67986, -117.89355)] },
+  { name: 'Ootoro Bar', locs: [L('Tustin', 33.71321, -117.81683)] },
   { name: 'Prime Hot Pot', locs: [L('Irvine', 33.69808, -117.82856)] },
   { name: 'Agora Churrascaria', locs: [L('Irvine', 33.68536, -117.85619)] },
 ];
 ---
 <BaseLayout title="Eating Out — Huanyu Chen"
-  description="Restaurants, 2022–2026, region by region: sizzling pots and Shanghainese in the San Gabriel Valley, brunch and Thai Town in Los Angeles, burgers at sunset and Lao food in Orange County, and a few big dinners, each with a map.">
+  description="Restaurants, 2022–2026, region by region: Sichuan, clay pot rice and Shanghainese in the San Gabriel Valley, brunch and Thai Town in Los Angeles, burgers at sunset and Lao food in Orange County, and big dinners from 71Above to Camphor, each with a map.">
   <p class="muted"><a href="/misc">← Misc</a> · 2022 – 2026</p>
   <h1>Eating Out</h1>
   <p class="muted trip-sub">The restaurants we keep going back to, and a few dinners we only had once.</p>
@@ -53,7 +65,7 @@ const OC = [
   <div class="callout trip-stats">
     <strong>4 years · April 2022 – November 2026</strong><br />
     clay pot rice and red-braised pork · Mongolian lamb in a painted pot · eggs and salad on the Urth patio ·
-    burgers over the ocean at sunset · snails on a sizzling plate · s'mores on a yakiniku grill · octopus on the
+    burgers over the ocean at sunset · snails on a sizzling plate · s'mores on a yakiniku grill · a tomahawk carved at the table · octopus on the
     71st floor · paella on a Malibu cliff
   </div>
 
@@ -110,7 +122,43 @@ const OC = [
     <figure class="trip-fig"><img src={P + 'lunasia.webp'} alt="Dumplings topped with orange fish roe in black shell-shaped dishes in a steamer." loading="lazy" /><figcaption>Lunasia, Pasadena, March 2023.</figcaption></figure>
   </div>
   <p>
-    Further east in Rowland Heights, <strong>Guangfa Grassland</strong> serves Inner Mongolian food: lamb and sausage
+    On Valley Boulevard in Alhambra is one of my favorites, <strong>Chengdu Taste</strong>, with ten visits
+    in the card records: Sichuan food, heavy on the chili. The clear jelly noodles come buried in chili
+    sauce and peanuts, and the skewers come in a bundle, soaking in a dish of red broth.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'chengdu-jelly-noodles.webp'} alt="Clear wide jelly noodles in a white bowl under chili sauce, minced meat, peanuts and green onion." loading="lazy" /><figcaption>Jelly noodles, Chengdu Taste, Alhambra, September 2022.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'chengdu-skewers.webp'} alt="A bundle of skewers standing in a square dish of broth, beside glass noodles and a stir-fry of green peppers." loading="lazy" /><figcaption>Skewers in broth, November 2022.</figcaption></figure>
+  </div>
+  <p>
+    And a big plate of spicy chicken with potatoes, in April 2024.
+  </p>
+  <figure class="trip-fig"><img src={P + 'chengdu-chicken.webp'} alt="A large bowl of spicy chicken and potatoes in red sauce, with a dish of skewers and a stir-fry behind it." loading="lazy" /><figcaption>Chengdu Taste, April 2024.</figcaption></figure>
+  <p>
+    A block away, <strong>Dolan's Uyghur Cuisine</strong> roasts a whole leg of lamb; this one was in July 2022.
+  </p>
+  <figure class="trip-fig"><img src={P + 'lamb-leg.webp'} alt="A whole roast leg of lamb on a foil-lined tray, topped with cilantro and carrots." loading="lazy" /><figcaption>Roast lamb leg, Dolan's Uyghur Cuisine, Alhambra, July 16, 2022.</figcaption></figure>
+  <p>
+    Further down Valley Boulevard, <strong>Garden Cafe</strong> is a Hong Kong-style café, with twelve visits in the
+    card records across its two shops: beef chow fun and curry, or a pork chop over rice with a fried egg.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'garden-chow-fun.webp'} alt="Stir-fried beef chow fun on a square plate next to a bowl of curry." loading="lazy" /><figcaption>Chow fun and curry, Garden Cafe, Alhambra, April 2022.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'garden-pork-chop.webp'} alt="A fried pork chop with mixed vegetables beside a bowl of rice topped with a fried egg." loading="lazy" /><figcaption>Pork chop rice, June 2022.</figcaption></figure>
+  </div>
+  <p>
+    In 2025 we started going to its second shop too, on Baldwin Avenue in Arcadia.
+  </p>
+  <figure class="trip-fig"><img src={P + 'garden-arcadia-noodles.webp'} alt="Stir-fried flat noodles topped with a fried egg on a square plate." loading="lazy" /><figcaption>Fried noodles, Garden Cafe, Arcadia, March 2025.</figcaption></figure>
+
+  <h2 id="rowland">Rowland Heights</h2>
+  <p>
+    Further east, past the 605, Rowland Heights has a Chinese food scene of its own, mostly in the strip malls along
+    Colima Road and Gale Avenue.
+  </p>
+  <RegionMap stores={RH} region="Rowland Heights" />
+  <p>
+    <strong>Guangfa Grassland</strong> serves Inner Mongolian food: lamb and sausage
     simmered in a pot painted with yurts, and a plate that is more dried chili than anything else.
   </p>
   <div class="trip-pair">
@@ -118,10 +166,29 @@ const OC = [
     <figure class="trip-fig"><img src={P + 'guangfa-chili.webp'} alt="A plate piled with dried red chilies and fried meat." loading="lazy" /><figcaption>The chili plate.</figcaption></figure>
   </div>
   <p>
-    And back west on Valley Boulevard, <strong>Dolan's Uyghur Cuisine</strong> in Alhambra roasts a whole leg of lamb;
-    this one was in July 2022.
+    <strong>Lao Ma Tou</strong> is Chongqing hot pot, with the pot split between a red mala broth and a milder
+    one.
   </p>
-  <figure class="trip-fig"><img src={P + 'lamb-leg.webp'} alt="A whole roast leg of lamb on a foil-lined tray, topped with cilantro and carrots." loading="lazy" /><figcaption>Roast lamb leg, Dolan's Uyghur Cuisine, Alhambra, July 16, 2022.</figcaption></figure>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'laomatou-pot.webp'} alt="A divided hot pot with red chili broth on one side, being stirred with a ladle." loading="lazy" /><figcaption>Lao Ma Tou, Rowland Heights, November 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'laomatou-table.webp'} alt="A hot pot table with a divided pot, plates of sliced beef, meatballs, tofu skin and sauces." loading="lazy" /><figcaption>Back in June 2025.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Duo-Pot</strong> is coconut chicken hot pot: chicken simmered in a clear coconut broth, with plates of
+    sliced lamb and beef to cook in it afterwards.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'duopot-coconut.webp'} alt="A pot of clear coconut broth with chicken pieces and a ladle." loading="lazy" /><figcaption>Coconut chicken, Duo-Pot, Rowland Heights, March 2022.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'duopot-table.webp'} alt="A table set with the coconut pot in the middle and plates of thinly sliced lamb and beef around it." loading="lazy" /><figcaption>The sliced meat.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Aipapa Hot Burger</strong> is Xi'an-style street food. The "hot burger" is roujiamo, chopped braised pork in a
+    flatbread, and the noodles are wide, hand-pulled and covered in chili oil.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'aipapa-burger.webp'} alt="A flatbread sandwich stuffed with chopped braised pork in a red basket." loading="lazy" /><figcaption>The hot burger, Aipapa, Rowland Heights, October 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'aipapa-noodles.webp'} alt="Wide hand-pulled noodles in red chili oil with sesame, cilantro and minced pork." loading="lazy" /><figcaption>The noodles.</figcaption></figure>
+  </div>
 
   <h2 id="la">Los Angeles</h2>
   <p>
@@ -256,14 +323,31 @@ const OC = [
     <figure class="trip-fig"><img src={P + 'bestia-pasta-r.webp'} alt="A swirl of pasta with herbs in a wide white bowl." loading="lazy" /><figcaption>The pasta.</figcaption></figure>
   </div>
   <p>
-    <strong>Nobu</strong> on La Cienega, in April 2024: yellowtail with jalapeño, shishito peppers and wagyu tacos.
+    In April 2024, on a weekend on Catalina Island, dinner was at <strong>Bluewater Grill</strong> on the Avalon
+    waterfront: seared scallops in a red pepper sauce.
+  </p>
+  <figure class="trip-fig"><img src={P + 'bluewater-scallops.webp'} alt="Three seared scallops on a long plate with red pepper sauce and a drizzle of cream." loading="lazy" /><figcaption>Scallops, Bluewater Grill, Avalon, April 20, 2024.</figcaption></figure>
+  <p>
+    Three days later, <strong>Nobu</strong> on La Cienega: yellowtail with jalapeño, shishito peppers and wagyu tacos.
   </p>
   <div class="trip-pair">
     <figure class="trip-fig"><img src={P + 'nobu-yellowtail-r.webp'} alt="Thin slices of yellowtail with jalapeño in ponzu, arranged in a star." loading="lazy" /><figcaption>Yellowtail jalapeño, Nobu, April 23, 2024.</figcaption></figure>
     <figure class="trip-fig"><img src={P + 'nobu-tacos-r.webp'} alt="Blistered shishito peppers above a slate of small tacos." loading="lazy" /><figcaption>Shishitos and wagyu tacos.</figcaption></figure>
   </div>
   <p>
-    In 2025 there were three more. <strong>Agora Churrascaria</strong> in Irvine in May, where the waiters keep bringing
+    April 2025 was beef twice in one week. <strong>NIKU X</strong>, on the second floor of the Wilshire Grand
+    downtown, brings out a tomahawk and carves it at the table.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'nikux-tomahawk.webp'} alt="A whole grilled tomahawk steak with its long bone on a wooden board." loading="lazy" /><figcaption>The tomahawk, NIKU X, April 19, 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'nikux-sliced.webp'} alt="Sliced steak and the carved bone on a round black plate." loading="lazy" /><figcaption>Carved.</figcaption></figure>
+  </div>
+  <p>
+    Four days later, <strong>Manpuku</strong> in Costa Mesa was Japanese yakiniku: marbled wagyu on a charcoal grill.
+  </p>
+  <figure class="trip-fig"><img src={P + 'manpuku-grill.webp'} alt="Slices of marbled wagyu on a round grill over glowing charcoal." loading="lazy" /><figcaption>Manpuku, Costa Mesa, April 23, 2025.</figcaption></figure>
+  <p>
+    Then three more that summer. <strong>Agora Churrascaria</strong> in Irvine in May, where the waiters keep bringing
     meat on skewers until you turn your card over. <strong>Splashes</strong>, at the Surf &amp; Sand in Laguna Beach, in
     June.
   </p>
@@ -279,10 +363,23 @@ const OC = [
     <figure class="trip-fig"><img src={P + 'geoffreys-view.webp'} alt="The ocean seen between two umbrellas over a terrace with flowers and cliffside houses." loading="lazy" /><figcaption>The terrace.</figcaption></figure>
   </div>
   <p>
-    Last, the <strong>Tesla Diner</strong> in Hollywood, two days after it opened in July 2025: a chrome drive-in with
+    And the <strong>Tesla Diner</strong> in Hollywood, two days after it opened in July 2025: a chrome drive-in with
     movie screens, where the food is ordered from the car.
   </p>
   <figure class="trip-fig"><img src={P + 'tesla-diner.webp'} alt="A round, chrome, two-story diner building under a blue sky." loading="lazy" /><figcaption>The Tesla Diner, Hollywood, July 23, 2025.</figcaption></figure>
+  <p>
+    In 2026 there were two. <strong>Ootoro Bar</strong> in Tustin is a Japanese counter; in February it served
+    shrimp and crab over noodles under a tangle of nori.
+  </p>
+  <figure class="trip-fig"><img src={P + 'ootoro-shrimp.webp'} alt="Whole shrimp and crab over noodles topped with shredded nori on a white plate." loading="lazy" /><figcaption>Ootoro Bar, Tustin, February 2026.</figcaption></figure>
+  <p>
+    And in September, <strong>Camphor</strong> in the Arts District, French cooking with Indian spices: shellfish in a
+    curry sauce, and a pie under a golden pastry dome.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'camphor-langoustine.webp'} alt="Shellfish tails in an orange curry sauce on an oval plate." loading="lazy" /><figcaption>Camphor, September 5, 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'camphor-dish.webp'} alt="A round golden pastry dome in a pool of brown sauce." loading="lazy" /><figcaption>Under the pastry.</figcaption></figure>
+  </div>
 
   <p class="muted"><small>Photo locations have been removed from the published images. Map pins mark the restaurants
     themselves, mostly from OpenStreetMap. Visit counts come from our own records and only count the times we paid by
