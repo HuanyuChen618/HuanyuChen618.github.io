@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
+import RegionMap from '../../components/RegionMap.astro';
+const P = 'https://media.huanyuchen.com/misc/meals/';
+const L = (label, lat, lon) => ({ label, lat, lon });
+const SGV = [
+  { name: 'Ikka Sizzling Pot', locs: [L('San Gabriel', 34.07994, -118.10394)] },
+  { name: 'Dong Ting Chun', locs: [L('San Gabriel', 34.08062, -118.09149)] },
+  { name: 'Mo-Mo Paradise', locs: [L('Arcadia', 34.12975, -118.02836)] },
+  { name: 'Hodori BBQ', locs: [L('Arcadia', 34.13381, -118.05229)] },
+  { name: 'Tai Er', locs: [L('Arcadia', 34.13369, -118.05238)] },
+  { name: 'Auntie Qiu Kitchen', locs: [L('Arcadia', 34.12439, -118.05923)] },
+  { name: 'Lunasia', locs: [L('Pasadena', 34.14615, -118.14551)] },
+  { name: 'Guangfa Grassland Mongolian', locs: [L('Rowland Heights', 33.9948, -117.89049)] },
+];
+const LA = [
+  { name: 'Urth Caffé', locs: [L('Arts District', 34.04198, -118.23545)] },
+  { name: 'Gracias Madre', locs: [L('West Hollywood', 34.08096, -118.38695)] },
+  { name: 'République', locs: [L('La Brea', 34.06416, -118.34377)] },
+  { name: 'Ruen Pair', locs: [L('Thai Town', 34.10206, -118.3055)] },
+  { name: 'NAM Kitchen', locs: [L('Gardena', 33.87261, -118.30354)] },
+  { name: '71Above', locs: [L('Downtown', 34.05115, -118.25455)] },
+  { name: 'Bestia', locs: [L('Arts District', 34.03371, -118.22921)] },
+  { name: 'Nobu', locs: [L('La Cienega', 34.0862, -118.3765)] },
+  { name: 'Tesla Diner', locs: [L('Hollywood', 34.09095, -118.34188)] },
+  { name: "Geoffrey's", locs: [L('Malibu', 34.02521, -118.7699)] },
+];
+const OC = [
+  { name: 'Shake Shack', locs: [L('Crystal Cove', 33.57396, -117.83947)] },
+  { name: 'Urth Caffé', locs: [L('Laguna Beach', 33.54421, -117.78843)] },
+  { name: 'Splashes', locs: [L('Laguna Beach', 33.53024, -117.77387)] },
+  { name: 'Circle Hook Fish Co.', locs: [L('Newport Beach', 33.61904, -117.9284)] },
+  { name: 'OC & Lau', locs: [L('Garden Grove', 33.77324, -117.95609)] },
+  { name: 'Gyu-Kaku', locs: [L('Tustin', 33.73469, -117.82596)] },
+  { name: 'Northern Cafe', locs: [L('Irvine', 33.68336, -117.81314)] },
+  { name: 'Hako', locs: [L('Irvine', 33.71236, -117.7613)] },
+  { name: 'King Chops', locs: [L('Irvine', 33.68095, -117.77887)] },
+  { name: 'Mendocino Farms', locs: [L('Irvine', 33.65083, -117.83915)] },
+  { name: 'Postino', locs: [L('Irvine', 33.67294, -117.84662)] },
+  { name: 'Prime Hot Pot', locs: [L('Irvine', 33.69808, -117.82856)] },
+  { name: 'Agora Churrascaria', locs: [L('Irvine', 33.68536, -117.85619)] },
+];
+---
+<BaseLayout title="Eating Out — Huanyu Chen"
+  description="Restaurants, 2022–2026, region by region: sizzling pots and Shanghainese in the San Gabriel Valley, brunch and Thai Town in Los Angeles, burgers at sunset and Lao food in Orange County, and a few big dinners, each with a map.">
+  <p class="muted"><a href="/misc">← Misc</a> · 2022 – 2026</p>
+  <h1>Eating Out</h1>
+  <p class="muted trip-sub">The restaurants we keep going back to, and a few dinners we only had once.</p>
+
+  <div class="callout trip-stats">
+    <strong>4 years · April 2022 – November 2026</strong><br />
+    sizzling pots and red-braised pork · Mongolian lamb in a painted pot · eggs and salad on the Urth patio ·
+    burgers over the ocean at sunset · snails on a sizzling plate · s'mores on a yakiniku grill · octopus on the
+    71st floor · paella on a Malibu cliff
+  </div>
+
+  <p>
+    This is the savory half of the sweets post. It is shorter, because a meal is a bigger decision than a drink:
+    the places below are the ones that show up again and again in the photos, plus a handful of dinners that were
+    worth the occasion.
+  </p>
+  <p>
+    The post goes region by region, each with a map. Most of the photos are from my wife's camera roll, taken before
+    anyone picked up a fork; the special dinners at the end are mostly from mine.
+  </p>
+
+  <h2 id="sgv">San Gabriel Valley</h2>
+  <p>
+    The Chinese food is here, along Valley Boulevard in San Gabriel and up Baldwin Avenue in Arcadia.
+  </p>
+  <RegionMap stores={SGV} region="the San Gabriel Valley" />
+  <p>
+    <strong>Ikka Sizzling Pot</strong> in San Gabriel is the one we keep coming back to, six times since 2023: stews in
+    clay pots, and lately set meals in red-rimmed bowls with rice and pickles on the side. The plaza it sits in is also
+    where most of the boba in the sweets post comes from.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'ikka-stew.webp'} alt="A clay pot of braised beef with broccoli and peppers." loading="lazy" /><figcaption>Ikka Sizzling Pot, San Gabriel, March 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'ikka-table.webp'} alt="A red-rimmed noodle bowl with a bowl of rice and a side of pickled vegetables." loading="lazy" /><figcaption>Ikka again, June 2026.</figcaption></figure>
+  </div>
+  <p>
+    In Arcadia, <strong>Auntie Qiu Kitchen</strong> does Shanghainese food: red-braised pork belly with eggs, and a pot
+    of noodles with seaweed and tofu skin.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'auntie-qiu-pork.webp'} alt="Glossy red-braised pork belly with braised eggs on a white plate." loading="lazy" /><figcaption>Red-braised pork, Auntie Qiu Kitchen, Arcadia, July 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'auntie-qiu-noodles.webp'} alt="An enamel pot of noodles in broth with seaweed, greens and tofu skin." loading="lazy" /><figcaption>Noodles in the pot, April 2026.</figcaption></figure>
+  </div>
+  <p>
+    A few blocks east, <strong>Mo-Mo Paradise</strong> is shabu-shabu, with a pot for each person.
+  </p>
+  <figure class="trip-fig"><img src={P + 'mo-mo.webp'} alt="Two shabu-shabu pots on a table with plates of sliced meat, greens and dipping sauces." loading="lazy" /><figcaption>Mo-Mo Paradise, Arcadia, February 2023.</figcaption></figure>
+  <p>
+    Two doors apart on Baldwin Avenue are <strong>Hodori BBQ</strong>, Korean barbecue with a grill in the middle of the
+    table, and <strong>Tai Er</strong>, whose pickled-cabbage fish comes in a bowl the size of a steering wheel.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'hodori.webp'} alt="A Korean barbecue table with a round grill, spicy pork in a skillet and small side dishes." loading="lazy" /><figcaption>Hodori BBQ, Arcadia, September 2024.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'tai-er.webp'} alt="A large white bowl of fish in yellow pickled-cabbage broth with chilies, next to a plate of stir-fried greens." loading="lazy" /><figcaption>Tai Er, Arcadia, October 2024.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Dong Ting Chun</strong> on Valley Boulevard is Hunan food, heavy on the peppers.
+    <strong>Lunasia</strong> in Pasadena is the dim sum: har gow topped with fish roe in black dishes.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'dong-ting-chun.webp'} alt="A dark plate of stir-fried pork with green and red peppers." loading="lazy" /><figcaption>Dong Ting Chun, San Gabriel, December 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'lunasia.webp'} alt="Dumplings topped with orange fish roe in black shell-shaped dishes in a steamer." loading="lazy" /><figcaption>Lunasia, Pasadena, March 2023.</figcaption></figure>
+  </div>
+  <p>
+    Further east in Rowland Heights, <strong>Guangfa Grassland</strong> serves Inner Mongolian food: lamb and sausage
+    simmered in a pot painted with yurts, and a plate that is more dried chili than anything else.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'guangfa-pot.webp'} alt="A metal pot painted blue with white yurts, full of lamb and greens in broth." loading="lazy" /><figcaption>The yurt pot, Guangfa Grassland, Rowland Heights, April 2024.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'guangfa-chili.webp'} alt="A plate piled with dried red chilies and fried meat." loading="lazy" /><figcaption>The chili plate.</figcaption></figure>
+  </div>
+  <p>
+    And one we never learned the name of: a whole roast leg of lamb, Xinjiang style, in a plaza in Alhambra in July 2022.
+  </p>
+  <figure class="trip-fig"><img src={P + 'lamb-leg.webp'} alt="A whole roast leg of lamb on a foil-lined tray, topped with cilantro and carrots." loading="lazy" /><figcaption>Roast lamb leg, Alhambra, July 16, 2022.</figcaption></figure>
+
+  <h2 id="la">Los Angeles</h2>
+  <p>
+    In the rest of Los Angeles the regulars are brunch places, and Thai Town.
+  </p>
+  <RegionMap stores={LA} region="Los Angeles" />
+  <p>
+    <strong>Urth Caffé</strong> in the Arts District is the one we go to most (the card records show about ten
+    visits to Urth across its shops): eggs, salad and a slab of bread on the patio.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'urth-dtla.webp'} alt="Baked eggs in tomato sauce with salad and bread, a slice of cake behind." loading="lazy" /><figcaption>Urth Caffé, Arts District, July 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'urth-dtla-eggs.webp'} alt="Scrambled eggs with tomato, a salad and a round of bread on an outdoor table." loading="lazy" /><figcaption>Back in October 2023.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Gracias Madre</strong> in West Hollywood is plant-based Mexican food, served on long tables in the
+    afternoon sun.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'gracias-madre.webp'} alt="A bowl of avocado and hearts of palm ceviche with chilies." loading="lazy" /><figcaption>Gracias Madre, West Hollywood, June 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'gracias-madre-table.webp'} alt="A table covered in plates in afternoon sun, with a flatbread in front." loading="lazy" /><figcaption>The whole table, July 2023.</figcaption></figure>
+  </div>
+  <p>
+    <strong>République</strong> on La Brea is the brunch for an occasion. The first visit, in September 2022, was eggs
+    Benedict and a berry cake from the pastry case.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'republique-benedict.webp'} alt="Eggs Benedict on thick toast with hollandaise and avocado." loading="lazy" /><figcaption>République, September 20, 2022.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'republique-cake.webp'} alt="A layered cake with cream and fresh berries on a gold board." loading="lazy" /><figcaption>The berry cake.</figcaption></figure>
+  </div>
+  <p>
+    Later visits were a thick brioche French toast and a stew with a baguette for dipping.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'republique-toast.webp'} alt="A thick caramelized slice of French toast with a small pitcher of syrup and a bowl of fruit." loading="lazy" /><figcaption>French toast, January 2024.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'republique-stew.webp'} alt="A cast-iron pan of stew with two halves of baguette." loading="lazy" /><figcaption>Stew and baguette, June 2023.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Ruen Pair</strong> in Thai Town, open late, is crispy pork over rice with a dish of chili sauce. Down in
+    Gardena, <strong>NAM Kitchen</strong> makes Vietnamese noodle soups.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'ruen-pair.webp'} alt="Crispy pork with cilantro over rice, with a small bowl of chili sauce." loading="lazy" /><figcaption>Ruen Pair, Thai Town, January 2024.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'nam.webp'} alt="Two bowls of noodle soup with herbs on a metal mesh table." loading="lazy" /><figcaption>NAM Kitchen, Gardena, February 2025.</figcaption></figure>
+  </div>
+
+  <h2 id="oc">Orange County</h2>
+  <p>
+    In Orange County it is the coast, a stretch of Irvine shopping centers, and Garden Grove.
+  </p>
+  <RegionMap stores={OC} region="Orange County" />
+  <p>
+    The <strong>Shake Shack</strong> at Crystal Cove sits on the bluff above the Pacific Coast Highway, and the best
+    tables face the ocean. It is the same burger as anywhere else, eaten at sunset.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'shake-shack.webp'} alt="A burger and fries in paper on a wooden ledge with the ocean behind in late sun." loading="lazy" /><figcaption>Shake Shack, Crystal Cove, November 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'shake-shack-sunset.webp'} alt="The sun setting over the ocean behind a headland, with burger wrappers on the ledge." loading="lazy" /><figcaption>Sunset from the same ledge, May 2026.</figcaption></figure>
+  </div>
+  <p>
+    Wangcai comes to the patio places. At the <strong>Urth Caffé</strong> in Laguna Beach and at
+    <strong>Circle Hook Fish Co.</strong> in Newport Beach, he gets a seat with a view of the fish tacos.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'urth-laguna.webp'} alt="A white dog sitting by an outdoor table with a plate of salad and a wrap." loading="lazy" /><figcaption>Urth Caffé, Laguna Beach, May 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'circle-hook.webp'} alt="A white dog behind a tray of fish tacos on a waterfront table." loading="lazy" /><figcaption>Circle Hook Fish Co., Newport Beach, January 2026.</figcaption></figure>
+  </div>
+  <p>
+    <strong>OC &amp; Lau</strong> in Garden Grove is Lao and Thai food on sizzling iron plates: snails with herbs, and a
+    seafood hot pot on a burner.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'oc-lau-snails.webp'} alt="Snails on a sizzling iron plate topped with sprigs of herbs." loading="lazy" /><figcaption>OC &amp; Lau, Garden Grove, March 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'oc-lau-pot.webp'} alt="A metal pot of seafood in red broth over a blue gas flame." loading="lazy" /><figcaption>The hot pot, September 2024.</figcaption></figure>
+  </div>
+  <p>
+    In Irvine the short list starts with <strong>Northern Cafe</strong> for lamb skewers and <strong>Hako</strong>
+    for katsu.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'northern-cafe.webp'} alt="A wooden tray of grilled skewers: lamb, green beans and a sausage." loading="lazy" /><figcaption>Skewers, Northern Cafe, Irvine, July 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'hako-katsu.webp'} alt="A pork katsu set with shredded cabbage, rice, curry and pickles." loading="lazy" /><figcaption>Katsu, Hako, Irvine, November 2024.</figcaption></figure>
+  </div>
+  <p>
+    Hako's stir-fried udon is the other order. <strong>King Chops</strong> does Taiwanese pork chop rice.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'hako-udon.webp'} alt="A plate of stir-fried udon with beef and green onion." loading="lazy" /><figcaption>Stir-fried udon at Hako, May 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'king-chops.webp'} alt="A bowl of rice with minced pork, cabbage, broccoli and an egg, next to a fried pork chop and a soup." loading="lazy" /><figcaption>King Chops, Irvine, May 2025.</figcaption></figure>
+  </div>
+  <p>
+    And <strong>Mendocino Farms</strong> is for the days that call for a salad.
+  </p>
+  <figure class="trip-fig"><img src={P + 'mendocino.webp'} alt="A salad with roasted vegetables, fruit and a soft cheese in a dark bowl." loading="lazy" /><figcaption>Mendocino Farms, Irvine, July 2025.</figcaption></figure>
+  <p>
+    For an evening out there is <strong>Postino</strong>, a wine bar with boards of bread, cheese and olives.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'postino-board.webp'} alt="A wooden board of flatbread, olives, cheese and cured meat beside glasses of white wine." loading="lazy" /><figcaption>Postino, Irvine, April 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'postino-dates.webp'} alt="A small dish of stuffed dates in red pepper sauce." loading="lazy" /><figcaption>Postino, December 2025.</figcaption></figure>
+  </div>
+  <p>
+    At <strong>Gyu-Kaku</strong> in Tustin you grill the beef yourself and finish by toasting marshmallows over the
+    same grill.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'gyu-kaku.webp'} alt="Beef sizzling on a round charcoal grill with shishito peppers beside it." loading="lazy" /><figcaption>Gyu-Kaku, Tustin, March 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'gyu-kaku-smores.webp'} alt="A marshmallow on a skewer toasting over a round grill." loading="lazy" /><figcaption>S'mores on the same grill.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Prime Hot Pot</strong> in Irvine is the hot pot.
+  </p>
+  <figure class="trip-fig"><img src={P + 'prime-hot-pot.webp'} alt="Trays of thinly sliced beef next to a divided hot pot." loading="lazy" /><figcaption>Prime Hot Pot, Irvine, September 2025.</figcaption></figure>
+
+  <h2 id="occasions">Big dinners</h2>
+  <p>
+    And the meals that were an occasion. They are on the maps above too.
+  </p>
+  <p>
+    <strong>71Above</strong> is on the 71st floor of the U.S. Bank Tower downtown. In April 2022 dinner started at sunset,
+    with grilled octopus, and the city below turned gold as the sun went down.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'above71-octopus.webp'} alt="Grilled octopus with purple potatoes and carrots on a white plate." loading="lazy" /><figcaption>Octopus, 71Above, April 9, 2022.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'above71-view.webp'} alt="Looking down on downtown Los Angeles towers from a high window at sunset." loading="lazy" /><figcaption>The view from the table.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Bestia</strong>, in the Arts District, in August 2023: a blistered Neapolitan pizza and a plate of pasta.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'bestia-pizza.webp'} alt="A Neapolitan pizza with charred crust, tomato and mozzarella." loading="lazy" /><figcaption>Bestia, August 21, 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'bestia-pasta.webp'} alt="A swirl of pasta with herbs in a wide white bowl." loading="lazy" /><figcaption>The pasta.</figcaption></figure>
+  </div>
+  <p>
+    <strong>Nobu</strong> on La Cienega, in April 2024: yellowtail with jalapeño, shishito peppers and wagyu tacos.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'nobu-yellowtail.webp'} alt="Thin slices of yellowtail with jalapeño in ponzu, arranged in a star." loading="lazy" /><figcaption>Yellowtail jalapeño, Nobu, April 23, 2024.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'nobu-tacos.webp'} alt="Blistered shishito peppers above a slate of small tacos." loading="lazy" /><figcaption>Shishitos and wagyu tacos.</figcaption></figure>
+  </div>
+  <p>
+    In 2025 there were three more. <strong>Agora Churrascaria</strong> in Irvine in May, where the waiters keep bringing
+    meat on skewers until you turn your card over. <strong>Splashes</strong>, at the Surf &amp; Sand in Laguna Beach, in
+    June.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'agora.webp'} alt="A plate of carved steak, sausage and sides with a basket of cheese bread." loading="lazy" /><figcaption>Agora Churrascaria, Irvine, May 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'splashes.webp'} alt="Four small plated courses on a white tablecloth." loading="lazy" /><figcaption>Splashes, Laguna Beach, June 18, 2025.</figcaption></figure>
+  </div>
+  <p>
+    And <strong>Geoffrey's</strong> in Malibu at the end of June: paella on a terrace above the Pacific Coast Highway.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'geoffreys-paella.webp'} alt="A plate of seafood paella with shrimp and mussels." loading="lazy" /><figcaption>Paella, Geoffrey's, Malibu, June 29, 2025.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'geoffreys-view.webp'} alt="The ocean seen between two umbrellas over a terrace with flowers and cliffside houses." loading="lazy" /><figcaption>The terrace.</figcaption></figure>
+  </div>
+  <p>
+    Last, the <strong>Tesla Diner</strong> in Hollywood, two days after it opened in July 2025: a chrome drive-in with
+    movie screens, where the food is ordered from the car.
+  </p>
+  <figure class="trip-fig"><img src={P + 'tesla-diner.webp'} alt="A round, chrome, two-story diner building under a blue sky." loading="lazy" /><figcaption>The Tesla Diner, Hollywood, July 23, 2025.</figcaption></figure>
+
+  <p class="muted"><small>Photo locations have been removed from the published images. Map pins mark the restaurants
+    themselves, mostly from OpenStreetMap. Visit counts come from our own records and only count the times we paid by
+    card.</small></p>
+  <Comments />
+</BaseLayout>
