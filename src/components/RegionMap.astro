@@ -47,10 +47,24 @@ const unpinned = stores.filter((s) => !s.locs.length);
     const L = await loadLeaflet();
     const stores: Store[] = JSON.parse(box.dataset.stores!);
     const map = L.map(box.querySelector('.rmap-canvas'), { scrollWheelZoom: false, zoomSnap: 0.25 });
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    // OpenStreetMap tiles first; if they fail or never arrive (blocked by a network or an extension), use Esri's.
+    const SOURCES = [
+      ['https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'],
+      ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+        'Tiles &copy; Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'],
+    ];
+    let src = 0, layer: any, ok = false, errs = 0, timer: number | undefined;
+    const useSource = (k: number) => {
+      if (layer) map.removeLayer(layer);
+      src = k; ok = false; errs = 0;
+      layer = L.tileLayer(SOURCES[k][0], { maxZoom: 19, attribution: SOURCES[k][1] }).addTo(map);
+      layer.on('tileload', () => { ok = true; });
+      layer.on('tileerror', () => { if (!ok && ++errs >= 2 && src < SOURCES.length - 1) useSource(src + 1); });
+      clearTimeout(timer);
+      timer = window.setTimeout(() => { if (!ok && src < SOURCES.length - 1) useSource(src + 1); }, 5000);
+    };
+    useSource(0);
     const pins: any[][] = [];
     const all: [number, number][] = [];
     stores.forEach((s, i) => {
