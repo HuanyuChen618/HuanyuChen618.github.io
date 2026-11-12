@@ -1,0 +1,173 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
+import RegionMap from '../../components/RegionMap.astro';
+const P = 'https://media.huanyuchen.com/misc/zoos/';
+const CANCUN = 'https://media.huanyuchen.com/misc/cancun-2022/';
+const L = (label, lat, lon) => ({ label, lat, lon });
+const AMERICAS = [
+  { name: 'California Academy of Sciences', locs: [L('San Francisco', 37.7699, -122.4661)] },
+  { name: 'A dolphin lagoon', locs: [], note: 'Cancún, July 2022' },
+  { name: 'Fort Worth Stockyards', locs: [L('Fort Worth', 32.7892, -97.345)] },
+  { name: 'SeaWorld Orlando', locs: [L('Orlando', 28.4114, -81.4612)] },
+  { name: 'San Diego Zoo', locs: [L('Balboa Park', 32.7353, -117.149)] },
+  { name: 'San Diego Zoo Safari Park', locs: [L('Escondido', 33.0975, -116.9956)] },
+];
+const AUSTRALIA = [
+  { name: 'Taronga Zoo', locs: [L('Sydney', -33.8434, 151.2412)] },
+  { name: 'National Zoo & Aquarium', locs: [L('Canberra', -35.3005, 149.0693)] },
+];
+---
+<BaseLayout title="Zoo Days — Huanyu Chen"
+  description="The other animals, 2022–2025: a butterfly in the rainforest dome of the California Academy of Sciences, dolphins in Cancún, sheep and goats in the Fort Worth Stockyards, lemurs, lions and an alpaca at Taronga Zoo in Sydney, a koala and a wallaby in Canberra, and rhinos and giraffes at the San Diego Zoo Safari Park, with maps.">
+  <p class="muted"><a href="/misc">← Misc</a> · 2022 – 2025</p>
+  <h1>Zoo Days</h1>
+  <p class="muted trip-sub">Zoos, an aquarium, a dolphin lagoon and a livestock pen: the animals that were not ours.</p>
+
+  <div class="callout trip-stats">
+    <strong>4 years · May 2022 – April 2025</strong><br />
+    a butterfly on the boardwalk · two dolphins in the air · a black horse in Cowtown · sheep and goats at feeding time ·
+    a ring-tailed lemur · a lion asleep on the grass · an alpaca in the farmyard · a koala in Canberra · a deer lying
+    down · two giraffes on a hill · two rhinos grazing
+  </div>
+
+  <p>
+    Our own animals have their pages (<a href="/misc/cats">Dana and Nina</a>, <a href="/misc/wangcai">Wangcai</a>),
+    and so do <a href="/misc/cat-cafes">the cats we met in passing</a>. This one is for everything else: the zoos,
+    aquariums and pens we walked through, mostly on trips. Most of the photos are from my wife's camera roll, a few
+    are mine, and they run in date order. Each stop links to the trip it was part of.
+  </p>
+
+  <RegionMap stores={AMERICAS} region="North America" />
+
+  <h2 id="cal-academy">California Academy of Sciences, May 2022</h2>
+  <p>
+    On the 2022 road trip, the first stop in San Francisco was the <strong>California Academy of Sciences</strong> in
+    Golden Gate Park: a natural history museum, aquarium and planetarium under one living roof. Inside its glass
+    rainforest dome, two blue-and-gold macaws sat near the top (they are in <a href="/misc/roadtrips-2022">the road
+    trip post</a>), and a black-and-red butterfly landed on the boardwalk at our feet.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'cal-butterfly.webp'} alt="A black butterfly with red and white spots resting on the wooden boardwalk inside the rainforest dome." loading="lazy" /><figcaption>On the boardwalk, May 20, 2022.</figcaption></figure>
+
+  <h2 id="cancun">A dolphin lagoon, Cancún, July 2022</h2>
+  <p>
+    Two months later in Cancún, the resort had a dolphin lagoon by the beach, and we went in with the trainers. The
+    best of the professional photos is the moment two dolphins came up out of the water together
+    (<a href="/misc/cancun-2022">Cancún, 2022</a>).
+  </p>
+  <figure class="trip-fig"><img src={CANCUN + 'dolphins-leap.webp'} alt="Two bottlenose dolphins leaping out of the water side by side in a lagoon, with palm trees and a beach cabana behind." loading="lazy" /><figcaption>Two dolphins, one leap.</figcaption></figure>
+
+  <h2 id="fort-worth">Fort Worth Stockyards, July 2023</h2>
+  <p>
+    On the second evening of the <a href="/misc/texas-2023">Texas trip</a> we reached the <strong>Fort Worth
+    Stockyards</strong>, the old cattle market that gave the city the name Cowtown. The animals there now are mostly for
+    show. Carriage horses waited on the brick streets, and a black horse with a long mane and a beaded breast collar
+    stood for photos.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'fw-black-horse.webp'} alt="A black horse with a long flowing mane and a red-and-white beaded breast collar, standing on a brick street with its rider mostly hidden behind its head." loading="lazy" /><figcaption>Dressed up, 7:13 pm.</figcaption></figure>
+  <p>
+    In the evening light we found a big tent of pens full of sheep and goats, and a handful of feed brought every
+    head through the bars at once.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'fw-feeding-sheep.webp'} alt="A white sheep and a dark goat pushing their heads through metal bars toward a hand holding out feed." loading="lazy" /><figcaption>Feeding time, 7:19 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'fw-feeding-goat.webp'} alt="A brown-and-white goat taking feed from an outstretched hand through the bars of a pen." loading="lazy" /><figcaption>Straight from the hand.</figcaption></figure>
+  </div>
+
+  <h2 id="taronga">Taronga Zoo, Sydney, December 2023</h2>
+  <p>
+    The morning after we landed for <a href="/misc/siggraph-asia-2023">SIGGRAPH Asia</a>, we went to
+    <strong>Taronga Zoo</strong>, on the north shore of the harbour. The trip post has the giraffes with the city behind them, the elephant,
+    the penguin and the koalas. These are the rest. A ring-tailed lemur kept watch from a post, and a white ibis, the
+    bird Sydney locals call the bin chicken, walked the boardwalk like it owned it.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'taronga-lemur.webp'} alt="A ring-tailed lemur sitting on top of a wooden post among tropical plants, its striped tail hanging down." loading="lazy" /><figcaption>A ring-tailed lemur, 10:59 am.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'taronga-ibis.webp'} alt="An Australian white ibis with a black head and long curved bill walking across a wooden boardwalk." loading="lazy" /><figcaption>A white ibis, off duty from the bins.</figcaption></figure>
+  </div>
+  <p>
+    The lions had given up on the day by eleven: the male flat out on the grass, the lionesses piled against the warm
+    rocks.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'taronga-lion.webp'} alt="A male lion with a dark mane lying on the grass beside a rock, eyes half closed." loading="lazy" /><figcaption>The male, 11:16 am.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'taronga-lionesses.webp'} alt="Two lionesses asleep against a rock face, one with her head tipped back and her eyes shut." loading="lazy" /><figcaption>The lionesses, asleep on the rocks.</figcaption></figure>
+  </div>
+  <p>
+    Around noon, an ape sat on its platform with its back to the crowd, and a kangaroo lay stretched out in the dust
+    as if the sign beside it were about someone else.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'taronga-ape.webp'} alt="A dark ape sitting on a wooden feeding platform in a rocky enclosure with trees." loading="lazy" /><figcaption>On the platform, 11:57 am.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'taronga-kangaroo.webp'} alt="A kangaroo lying on its side in the dappled shade of a dusty yard, next to a green sign." loading="lazy" /><figcaption>A kangaroo, horizontal.</figcaption></figure>
+  </div>
+  <p>
+    Near the end there was a little farmyard: a black-and-white goat up on the fence rail, and a white alpaca sitting
+    in its stall like a lawn ornament.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'taronga-goat.webp'} alt="A white goat with black patches standing on a wooden fence rail in front of a barn wall." loading="lazy" /><figcaption>Up on the rail, 12:20 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'taronga-alpaca.webp'} alt="A white alpaca sitting upright on the floor of a wooden stall." loading="lazy" /><figcaption>An alpaca, sitting.</figcaption></figure>
+  </div>
+
+  <h2 id="canberra">National Zoo &amp; Aquarium, Canberra, December 2023</h2>
+  <p>
+    Four days later, on the side trip to Canberra, we spent an afternoon at the <strong>National Zoo &amp;
+    Aquarium</strong> by Lake Burley Griffin. The python, the leopard, the Tasmanian devil and the meerkats are in
+    <a href="/misc/siggraph-asia-2023">the trip post</a>. Here, a small orange animal sat on a high perch among the
+    palms, and a koala was wedged in its tree.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'canberra-perch.webp'} alt="A small reddish-orange furry animal sitting on a high wooden perch among palm fronds, under a shade roof." loading="lazy" /><figcaption>Up on a perch, 3:04 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'canberra-koala.webp'} alt="A grey koala holding onto a eucalyptus branch among leaves." loading="lazy" /><figcaption>A koala, 4:31 pm.</figcaption></figure>
+  </div>
+  <p>
+    Out on the grass, a deer with antlers lay in the shade, and a wallaby grazed along the fence.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'canberra-deer.webp'} alt="A brown deer with antlers lying on the grass under pine trees." loading="lazy" /><figcaption>A deer, lying down.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'canberra-wallaby.webp'} alt="A dark-furred wallaby bent over grazing on a green lawn beside a log." loading="lazy" /><figcaption>A wallaby, grazing.</figcaption></figure>
+  </div>
+  <p>
+    And a pale antelope picked over the dry ground at the edge of its yard.
+  </p>
+  <figure class="trip-fig"><img src={P + 'canberra-antelope.webp'} alt="A pale cream antelope lowering its head to the dusty ground in dappled shade." loading="lazy" /><figcaption>A pale antelope, 4:15 pm.</figcaption></figure>
+  <RegionMap stores={AUSTRALIA} region="Australia" />
+
+  <h2 id="seaworld-sd-zoo">SeaWorld and the San Diego Zoo, 2024</h2>
+  <p>
+    Two zoo days in 2024 left almost nothing behind. At <strong>SeaWorld Orlando</strong>, on the 2024 road trip, the
+    camera roll has only a few blurry videos through the underwater windows (<a href="/misc/roadtrip-2024">the road
+    trip post</a> says why). At the <strong>San Diego Zoo</strong> on Halloween, the stars were the giant pandas, and
+    they are in <a href="/misc/san-diego">the San Diego post</a>.
+  </p>
+
+  <h2 id="safari-park">San Diego Zoo Safari Park, April 2025</h2>
+  <p>
+    On Easter Sunday 2025 we went to the <strong>Safari Park</strong> near Escondido, the San Diego Zoo's big
+    open-country sister. The balloon ride over it is in <a href="/misc/san-diego">the San Diego post</a>. Back on the
+    ground in the late afternoon, the animals were closer than the specks we had seen from the air. Two giraffes
+    crossed a hill, and two rhinos grazed side by side.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'safari-giraffes.webp'} alt="Two giraffes walking across a sandy yard below a green hill under a clear blue sky." loading="lazy" /><figcaption>Two giraffes, 4:54 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'safari-rhinos.webp'} alt="Two rhinos grazing side by side on a grassy slope, with trees and hills behind." loading="lazy" /><figcaption>Two rhinos, 5:03 pm.</figcaption></figure>
+  </div>
+  <p>
+    Out on the plains, a horse grazed on the slope and an antelope lay in the grass, unbothered by the passing
+    visitors.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'safari-horse.webp'} alt="A sand-colored horse with a dark mane grazing on a grassy slope." loading="lazy" /><figcaption>Grazing, 4:43 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'safari-antelope.webp'} alt="A brown antelope lying in the green grass in the sun, ears up." loading="lazy" /><figcaption>An antelope, lying in the grass.</figcaption></figure>
+  </div>
+
+  <p>
+    Some wild ones are in the trip posts too: the sea lions at Pier 39 (<a href="/misc/roadtrips-2022">2022</a>) and
+    the harbor seals of La Jolla (<a href="/misc/san-diego">San Diego</a>).
+  </p>
+
+  <p class="muted"><small>Photo locations have been removed from the published images. Some photos are stills from
+    our videos.</small></p>
+  <Comments />
+</BaseLayout>
