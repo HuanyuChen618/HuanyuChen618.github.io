@@ -1,0 +1,235 @@
+---
+// Card body for /notes/autodiff-removable-singularities. Rendered on its own page and inside every series that uses it.
+import Tex from '../components/Tex.astro';
+---
+  <h2 id="program">The program, not the function</h2>
+  <p>
+    The <a href="/notes/removable-singularities">previous note</a> fixed formulas with removable singularities so that
+    they return accurate values near and at the bad point. Now hand the fixed code to an automatic differentiation tool.
+    It does not know what function your code computes. It sees a sequence of operations, takes whichever branch the input
+    selects, and applies the chain rule along that path. If the operations are right but their derivatives are not, you
+    get a right value and a wrong gradient, with no warning. Symbolic differentiation of the code has the same blind spot:
+    it differentiates the formula you give it, branch by branch.
+  </p>
+
+  <h2 id="rod">A real example: the twisting stiffness of a rod</h2>
+  <p>
+    In the elastic-rod paper (<em>ANIME-Rod</em>), the twisting energy of a rod made of any isotropic material contains
+  </p>
+  <Tex block tex={String.raw`K_2=\frac{\rho\,\partial_1\psi-\lambda\,\partial_2\psi}{\lambda^2-\rho^2},`} />
+  <p>
+    where <Tex tex={String.raw`\lambda`} /> is the stretch along the rod, <Tex tex={String.raw`\rho`} /> is the scaling of the
+    cross-section, and <Tex tex={String.raw`\psi(\lambda,\rho,\rho)`} /> is the 3D material in principal stretches. It is
+    <Tex tex={String.raw`0/0`} /> at <Tex tex={String.raw`\lambda=\rho`} />, which includes the rest shape
+    <Tex tex={String.raw`\lambda=\rho=1`} />, where <Tex tex={String.raw`K_2`} /> equals the shear modulus. Appendix G
+    switches to a second-order formula below <Tex tex={String.raw`|\lambda-\rho|=10^{-3}`} />:
+  </p>
+  <Tex block tex={String.raw`K_2\approx\frac12\left(\frac{\partial_{11}\psi+\partial_{22}\psi}{2}-\partial_{12}\psi-\frac{\partial_1\psi+\partial_2\psi}{\lambda+\rho}\right)+O(|\lambda-\rho|^2).`} />
+  <p>
+    The rod's energy Hessian needs the first and second derivatives of <Tex tex={String.raw`K_2`} /> with respect to
+    <Tex tex={String.raw`\lambda`} /> and <Tex tex={String.raw`\rho`} />. To have exact answers to compare against, take a
+    compressible Neo-Hookean material; then the singularity cancels by hand and
+  </p>
+  <Tex block tex={String.raw`K_2=\frac{\mu-\Lambda\log J}{\lambda\rho},\qquad J=\lambda\rho^2,`} />
+  <p>
+    with Lamé parameters <Tex tex={String.raw`\mu=1,\ \Lambda=1.5`} />. At rest that gives
+    <Tex tex={String.raw`K_2=1`} />, <Tex tex={String.raw`\partial K_2/\partial\lambda=-2.5`} /> and
+    <Tex tex={String.raw`\partial^2K_2/\partial\lambda^2=6.5`} />. Here is what automatic differentiation reports for
+    three programs that all compute <Tex tex={String.raw`K_2`} /> correctly:
+  </p>
+  <ul>
+    <li><strong>The formula as written</strong> returns <code>NaN</code> at rest. Near rest it is worse than it looks: its
+      value keeps about ten digits at <Tex tex={String.raw`\lambda-\rho=10^{-6}`} />, but its second derivative there is
+      off by a factor of about ten, because differentiating the quotient twice turns a rounding error of roughly
+      <Tex tex={String.raw`\varepsilon/d`} /> into one of roughly <Tex tex={String.raw`\varepsilon/d^3`} />.</li>
+    <li><strong>A guard that returns the rest value as a constant</strong> when <Tex tex={String.raw`\lambda=\rho`} /> gives the
+      right <Tex tex={String.raw`K_2`} /> and derivatives of exactly zero.</li>
+    <li><strong>The paper's switch formula, differentiated by autodiff,</strong> is the interesting one. (The paper uses it
+      to evaluate values; this is what happens if you differentiate it twice.) Its value is accurate to
+      <Tex tex={String.raw`6\times10^{-7}`} /> at the threshold, and its first derivative to about
+      <Tex tex={String.raw`5\times10^{-4}`} />. Its second derivative at rest is <Tex tex={String.raw`7.75`} /> instead of
+      <Tex tex={String.raw`6.5`} />, about 20% off, everywhere inside the band, including exactly at rest.</li>
+  </ul>
+  <p>
+    The last one is a general rule, not a quirk. A formula that is off by <Tex tex={String.raw`c\,d^2`} /> is off by
+    <Tex tex={String.raw`2c\,d`} /> in its first derivative and by <Tex tex={String.raw`2c`} />, a constant that does not
+    shrink, in its second. <strong>Every derivative costs one order of accuracy</strong>, so a switch tuned for the value is
+    not good enough for a Hessian. You need a formula one or two orders better than the value alone requires, like the
+    fourth-order coefficients in the shell paper, or a derivative rule of your own (below).
+  </p>
+
+  <h2 id="demo">Try it: forward mode</h2>
+  <p>
+    A small forward-mode AD engine (truncated Taylor arithmetic carrying a value and its first two derivatives) runs each
+    program. The plot shows the relative error of the derivative autodiff returns; the table shows what each program
+    reports exactly at the singular point. The second function in the menu is the classic one-variable case
+    <Tex tex={String.raw`(e^x-1)/x`} />, for comparison.
+  </p>
+  <figure class="note-fig ad-demo">
+    <div class="ad-controls">
+      <label>Function <select id="ad-fn"><option value="rod">K₂ of a Neo-Hookean rod (ANIME-Rod)</option><option value="expm1">(eˣ − 1)/x</option></select></label>
+      <label><input type="radio" name="ad-k" value="1" checked /> first derivative</label>
+      <label><input type="radio" name="ad-k" value="2" /> second derivative</label>
+    </div>
+    <canvas id="ad-canvas" width="880" height="460" aria-label="Log-log plot of the relative error of autodiff derivatives for several programs computing the same function."></canvas>
+    <div class="ad-legend" id="ad-legend"></div>
+    <div id="ad-table"></div>
+    <figcaption>All programs compute the same function away from the singular point; the switch threshold is
+      τ = 10⁻³. Errors at full double precision are drawn at the floor; missing or infinite values are drawn at the top.</figcaption>
+  </figure>
+  <p>
+    Switch to the second derivative for the rod and look at the dashed switch curve: flat at about
+    <Tex tex={String.raw`0.2`} /> all the way down to <Tex tex={String.raw`10^{-12}`} />. Then look at
+    <Tex tex={String.raw`(e^x-1)/x`} />: there, even the "stable" program built on <code>expm1</code> loses its derivatives,
+    because the quotient rule creates a brand-new cancellation, <Tex tex={String.raw`(x\,e^x-\mathrm{expm1}(x))/x^2`} />. A
+    formula that is stable in value can be unstable in its derivative.
+  </p>
+
+  <h2 id="tape">Try it: where the NaN comes from</h2>
+  <p>
+    Vectorized code cannot branch per element, so guards are written as <code>where(cond, a, b)</code>, which computes
+    both branches and picks one. In the backward pass the unpicked branch receives a zero cotangent, and that zero is then
+    multiplied by the local derivatives of the masked division. If those are infinite, IEEE arithmetic makes
+    <Tex tex={String.raw`0\times\infty=\text{NaN}`} />, and the whole gradient is <code>NaN</code> even though the forward
+    value was perfect. This is a well-known pitfall with <code>jnp.where</code> in JAX, and the standard fix is the
+    <strong>double where</strong>: also feed the masked branch a harmless input, so its derivatives stay finite. Below is a
+    tiny reverse-mode engine with a tape, on the one-variable example. Read the backward pass from the bottom up.
+  </p>
+  <figure class="note-fig ad-demo">
+    <div class="ad-controls">
+      <label>Program <select id="tp-prog"><option value="single">one where</option><option value="double">double where</option><option value="taylor">double where + Taylor branch</option></select></label>
+      <label>x <select id="tp-x"><option value="0">0</option><option value="1e-9">1e-9</option><option value="0.5">0.5</option></select></label>
+    </div>
+    <pre class="ad-code" id="tp-code"></pre>
+    <div id="tp-table"></div>
+    <div id="tp-read" class="ad-read"></div>
+  </figure>
+  <p>
+    With one <code>where</code> at zero, the adjoint flowing into the masked division is a clean zero, and it becomes
+    <code>NaN</code> the moment it meets <Tex tex={String.raw`1/x`} />. The double where removes the <code>NaN</code>, but the
+    selected branch is still a constant, so the gradient at zero is <Tex tex={String.raw`0`} /> instead of
+    <Tex tex={String.raw`\tfrac12`} />: the constant-guard problem again. Only a differentiable small-input branch is right.
+  </p>
+
+  <h2 id="custom">The clean fix: tell autodiff the derivative</h2>
+  <p>
+    Every AD system lets you replace a function's derivative with your own rule (in JAX, <code>custom_jvp</code> and
+    <code>custom_vjp</code>; in PyTorch, a custom <code>autograd.Function</code>). For a function with a removable
+    singularity this is usually the right design: evaluate the value with whatever switch you like, and give each
+    derivative its own stable formula, typically its own short series near the singular point and the closed form away
+    from it. The "custom rule" curves in the demo do exactly this and are accurate everywhere. The price is that you own
+    those derivatives and must test them: against finite differences away from the singular point, and exactly on it.
+  </p>
+
+  <h2 id="checklist">A short checklist</h2>
+  <ul>
+    <li><strong>Test derivatives exactly at the singular point</strong>, which for materials is the rest shape: that is where
+      constant guards and too-short series hide.</li>
+    <li><strong>Count orders.</strong> A switch formula accurate to <Tex tex={String.raw`O(d^b)`} /> gives gradients to
+      <Tex tex={String.raw`O(d^{b-1})`} /> and Hessians to <Tex tex={String.raw`O(d^{b-2})`} />; for a Hessian, <Tex tex={String.raw`b=2`} /> is not enough.</li>
+    <li><strong>Never leave a division by zero inside a <code>where</code></strong>; feed the masked branch a safe input.</li>
+    <li><strong>Check derivatives of "stable" formulas too</strong>; the quotient rule can bring back the cancellation.</li>
+    <li><strong>For anything that feeds a Hessian, write the derivative rule yourself</strong> and test it over a log-spaced
+      range of distances to the singular point.</li>
+  </ul>
+
+  <h2 id="refs">References</h2>
+  <ul class="ad-refs">
+    <li>Huanyu Chen, Jiahao Wen, Jernej Barbič. ANIME-Rod: Adjustable Nonlinear Isotropic Materials for Elastic Rods.
+      <em>ACM Transactions on Graphics</em> 44(4), SIGGRAPH 2025. <a href="https://doi.org/10.1145/3731208">doi:10.1145/3731208</a></li>
+    <li>Huanyu Chen, Yumeng He, Jernej Barbič. Beyond Kirchhoff-Love: A Volumetric Approach to Thin-Shell Mechanics.
+      <em>ACM Transactions on Graphics</em> 45(6), SIGGRAPH Asia 2026.</li>
+  </ul>
+
+
+<style is:global>
+  .ad-demo canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; margin-top: .5em; }
+  .ad-controls { display: flex; flex-wrap: wrap; gap: .5em 1.4em; align-items: center; }
+  .ad-controls select { font: inherit; padding: .2em .5em; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; max-width: 100%; }
+  .ad-legend { display: flex; flex-wrap: wrap; gap: .3em 1.2em; font-size: .85em; margin-top: .5em; }
+  .ad-legend span::before { content: ''; display: inline-block; width: 1.6em; height: 0; border-top: 3px solid var(--c); vertical-align: middle; margin-right: .4em; }
+  .ad-legend span.dash::before { border-top-style: dashed; }
+  .ad-code { background: color-mix(in srgb, var(--ink) 5%, transparent); padding: .6em .9em; border-radius: 4px; overflow-x: auto; font-size: .88em; }
+  .ad-demo table { border-collapse: collapse; font-size: .85em; margin-top: .6em; width: 100%; }
+  .ad-demo th, .ad-demo td { text-align: left; padding: .25em .6em .25em 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .ad-demo td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ad-demo .bad { color: var(--link); font-weight: 600; }
+  .ad-read { margin-top: .5em; font-size: .92em; }
+  .ad-scroll { overflow-x: auto; }
+  .ad-refs li { margin: .4em 0; }
+</style>
+
+<script>
+  import * as A from '../scripts/autodiff-removable-singularities.js';
+  const cv = document.getElementById('ad-canvas') as HTMLCanvasElement;
+  const ctx = cv.getContext('2d')!;
+  const W = cv.width, H = cv.height, L = 70, R = 20, Tm = 16, B = 46, EMIN = -17, EMAX = 12;
+  const css = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#000';
+  const STY: Record<string, [string, number, number[]]> = {
+    naive: ['--muted', 2, []], rewrite: ['--ink', 1.5, [6, 4]], taylor1: ['--muted', 1.5, [2, 3]], taylor2: ['--link', 2, [6, 4]], custom: ['--link', 3, []],
+  };
+  const FAMILIES: Record<string, any> = {
+    rod: { programs: A.ROD_PROGRAMS, exact: A.rodExact, xlabel: 'd = λ − ρ  (ρ = 1)' },
+    expm1: { programs: A.PROGRAMS, exact: A.exact, xlabel: 'x' },
+  };
+  const fmt = (v: number) => (Number.isNaN(v) ? 'NaN' : !Number.isFinite(v) ? String(v) : Math.abs(v) < 1e-3 && v !== 0 ? v.toExponential(3) : String(+v.toPrecision(6)));
+
+  function drawPlot() {
+    const fam = FAMILIES[(document.getElementById('ad-fn') as HTMLSelectElement).value];
+    const k = +(document.querySelector('input[name=ad-k]:checked') as HTMLInputElement).value;
+    const muted = css('--muted'), line = css('--line'), bg = css('--bg');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    const a = -12, b = 0;
+    const px = (x: number) => L + ((Math.log10(x) - a) / (b - a)) * (W - L - R);
+    const py = (e: number) => { const l = Math.log10(Math.max(e, 1e-17)); const c = Number.isFinite(l) ? Math.min(Math.max(l, EMIN), EMAX) : EMAX; return Tm + ((EMAX - c) / (EMAX - EMIN)) * (H - Tm - B); };
+    ctx.strokeStyle = line; ctx.fillStyle = muted; ctx.lineWidth = 1; ctx.font = '13px system-ui, sans-serif';
+    for (let e = -16; e <= EMAX; e += 4) { const y = py(Math.pow(10, e)); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(W - R, y); ctx.stroke(); ctx.textAlign = 'right'; ctx.fillText(`1e${e}`, L - 6, y + 4); }
+    for (let e = a; e <= b; e += 2) { const x = px(Math.pow(10, e)); ctx.beginPath(); ctx.moveTo(x, Tm); ctx.lineTo(x, H - B); ctx.stroke(); ctx.textAlign = 'center'; ctx.fillText(`1e${e}`, x, H - B + 18); }
+    ctx.textAlign = 'center'; ctx.fillText(fam.xlabel, (L + W - R) / 2, H - 8);
+    ctx.save(); ctx.translate(16, (Tm + H - B) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(`relative error of ${k === 1 ? 'first' : 'second'} derivative`, 0, 0); ctx.restore();
+    const xs: number[] = []; for (let i = 0; i < 360; i++) xs.push(Math.pow(10, a + (b - a) * i / 359));
+    const shown = fam.programs.filter((p: any) => STY[p.id]);
+    for (const p of shown) {
+      const [col, w, dash] = STY[p.id]; ctx.strokeStyle = css(col); ctx.lineWidth = w; ctx.setLineDash(dash); ctx.beginPath();
+      xs.forEach((x, i) => {
+        const j = p.f(A.variable(x)), e = fam.exact(x), got = k === 1 ? A.d1(j) : A.d2(j), want = e[k];
+        const err = Number.isFinite(got) ? Math.abs(got - want) / Math.abs(want) : Infinity;
+        const X = px(x), Y = py(err); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+      });
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    (document.getElementById('ad-legend') as HTMLElement).innerHTML = shown.map((p: any) => {
+      const [col, , dash] = STY[p.id]; return `<span class="${dash.length ? 'dash' : ''}" style="--c:${css(col)}">${p.label}</span>`;
+    }).join('');
+    const truth = fam.exact(0);
+    (document.getElementById('ad-table') as HTMLElement).innerHTML = '<div class="ad-scroll"><table><tr><th>program</th><th>value</th><th>first derivative</th><th>second derivative</th></tr>' +
+      fam.programs.map((p: any) => { const j = p.f(A.variable(0)); const v = [j[0], A.d1(j), A.d2(j)];
+        return `<tr><td><code>${p.label}</code></td>${v.map((x, i) => `<td class="num ${Math.abs(x - truth[i]) <= 1e-12 * Math.max(1, Math.abs(truth[i])) ? '' : 'bad'}">${fmt(x)}</td>`).join('')}</tr>`; }).join('') +
+      `<tr><td><em>true value at the singular point</em></td>${truth.map((t: number) => `<td class="num">${fmt(t)}</td>`).join('')}</tr></table></div>`;
+  }
+
+  function drawTape() {
+    const key = (document.getElementById('tp-prog') as HTMLSelectElement).value, x = +(document.getElementById('tp-x') as HTMLSelectElement).value;
+    const t = (A.TAPES as any)[key];
+    (document.getElementById('tp-code') as HTMLElement).textContent = t.code;
+    const r = A.runTape(t.build, x);
+    const name = (i: number) => { const n = r.nodes[i]; return n.op === 'input' ? 'x' : n.op === 'const' ? n.label : `v${i}`; };
+    const desc = (n: any) => {
+      if (n.op === 'input') return 'x'; if (n.op === 'const') return 'constant';
+      if (n.op === 'where') return `where(${n.cond}, ${name(n.args[0])}, ${name(n.args[1])})`;
+      if (n.args.length === 1) return `${n.op}(${name(n.args[0])})`;
+      return `${name(n.args[0])} ${({ add: '+', sub: '−', mul: '×', div: '/' } as any)[n.op]} ${name(n.args[1])}`;
+    };
+    const cls = (v: number) => (Number.isFinite(v) ? '' : 'bad');
+    (document.getElementById('tp-table') as HTMLElement).innerHTML = '<div class="ad-scroll"><table><tr><th>node</th><th>operation</th><th>forward value</th><th>adjoint (backward)</th></tr>' +
+      r.nodes.map((n: any, i: number) => n.op === 'const' ? '' : `<tr><td>${name(i)}</td><td><code>${desc(n)}</code></td><td class="num ${cls(n.val)}">${fmt(n.val)}</td><td class="num ${cls(n.adj)}">${fmt(n.adj)}</td></tr>`).join('') + '</table></div>';
+    const truth = A.exact(x)[1], ok = Number.isFinite(r.grad) && Math.abs(r.grad - truth) / Math.abs(truth) < 1e-6;
+    (document.getElementById('tp-read') as HTMLElement).innerHTML = `Output <strong>${fmt(r.nodes[r.out].val)}</strong>; gradient dy/dx = <strong class="${ok ? '' : 'bad'}">${fmt(r.grad)}</strong>; true f′(x) = ${fmt(truth)}.`;
+  }
+
+  document.getElementById('ad-fn')!.addEventListener('change', drawPlot);
+  document.querySelectorAll('input[name=ad-k]').forEach((e) => e.addEventListener('change', drawPlot));
+  ['tp-prog', 'tp-x'].forEach((id) => document.getElementById(id)!.addEventListener('change', drawTape));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { drawPlot(); drawTape(); });
+  drawPlot(); drawTape();
+</script>

@@ -1,0 +1,37 @@
+---
+// A series as a tile: three cover illustrations, title, blurb and card count. Used on /notes and at the end of a series.
+import { seriesReps, seriesUrl } from '../data/notes.js';
+interface Props { s: any; note?: string; eager?: boolean }
+const { s, note, eager = false } = Astro.props;
+const [a, b, c] = seriesReps(s);
+const nOpt = s.cards.filter((n: any) => (s.optional || []).includes(n.slug)).length;
+---
+<a class="s-tile" href={seriesUrl(s.id)} id={s.id}>
+  <span class="s-mosaic">
+    <img class="big" src={a} alt="" width="1200" height="750" loading={eager ? 'eager' : 'lazy'} />
+    {b && <img src={b} alt="" width="1200" height="750" loading={eager ? 'eager' : 'lazy'} />}
+    {c && <img src={c} alt="" width="1200" height="750" loading={eager ? 'eager' : 'lazy'} />}
+  </span>
+  <span class="s-body">
+    <span class="s-title">{s.title}</span>
+    <span class="s-blurb">{s.blurb}</span>
+    <span class="s-meta">{s.cards.length - nOpt} cards{nOpt > 0 && <> + {nOpt} optional</>}{note && <> · {note}</>} <span class="s-go">Start →</span></span>
+  </span>
+</a>
+
+<style>
+  .s-tile { display: block; text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 10px;
+    overflow: hidden; background: var(--bg); transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+  .s-tile:hover, .s-tile:focus-visible { transform: translateY(-2px); border-color: var(--link);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--ink) 12%, transparent); }
+  .s-mosaic { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 1px;
+    background: var(--line); aspect-ratio: 2.4 / 1; border-bottom: 1px solid var(--line); }
+  .s-mosaic img { width: 100%; height: 100%; object-fit: contain; background: #fff; display: block; min-height: 0; }
+  .s-mosaic .big { grid-row: 1 / 3; }
+  .s-body { display: block; padding: .8em 1em 1em; }
+  .s-title { display: block; font-size: 1.25em; font-weight: 650; color: var(--link); line-height: 1.25; }
+  .s-blurb { display: block; color: var(--muted); margin-top: .3em; line-height: 1.45; }
+  .s-meta { display: flex; gap: .4em; align-items: baseline; margin-top: .6em; font-size: .9em; color: var(--muted); }
+  .s-go { margin-left: auto; color: var(--link); font-weight: 600; }
+  @media (prefers-color-scheme: dark) { .s-mosaic img { filter: brightness(.88); } }
+</style>

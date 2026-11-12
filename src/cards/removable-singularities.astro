@@ -1,0 +1,142 @@
+---
+// Card body for /notes/removable-singularities. Rendered on its own page and inside every series that uses it.
+// Kept elementary on purpose (calculus only); the isotropic-material cases live in stretch-hessian-singularities.
+import Tex from '../components/Tex.astro';
+---
+  <h2 id="what">What a removable singularity looks like in code</h2>
+  <p>
+    A removable singularity is a point where a formula is undefined but the function it describes is not. The textbook
+    example is <Tex tex={String.raw`\sin x / x`} />, which is <Tex tex={String.raw`0/0`} /> at <Tex tex={String.raw`x=0`} />
+    but tends to <Tex tex={String.raw`1`} />. In code there are really two problems. <strong>At the point</strong>, the
+    formula returns <code>NaN</code>. <strong>Near the point</strong>, it may lose digits to cancellation, when the
+    numerator subtracts two numbers that agree in almost every digit. <Tex tex={String.raw`\sin x/x`} /> only has the
+    first problem; <Tex tex={String.raw`(1-\cos x)/x^2`} /> has both, and at <Tex tex={String.raw`x=10^{-8}`} /> it
+    returns <Tex tex={String.raw`0`} /> instead of <Tex tex={String.raw`\tfrac12`} />. And not every zero denominator is
+    removable: the gradient of a vector length, <Tex tex={String.raw`\mathbf v/\lVert\mathbf v\rVert`} />, has no limit at
+    <Tex tex={String.raw`\mathbf v=\mathbf 0`} />, and no formula fixes that.
+  </p>
+
+  <h2 id="dd">The everyday case: a divided difference</h2>
+  <p>
+    The removable singularity you are most likely to meet is the slope of a secant,
+  </p>
+  <Tex block tex={String.raw`\frac{f(a)-f(b)}{a-b}\ \xrightarrow{\ a\to b\ }\ f'(b).`} />
+  <p>
+    It appears whenever a formula compares a function at two values that can coincide: two eigenvalues, two lengths,
+    a value and its reference. For some functions algebra removes it, for example
+    <Tex tex={String.raw`(a^3-b^3)/(a-b)=a^2+ab+b^2`} /> or
+    <Tex tex={String.raw`(\sqrt a-\sqrt b)/(a-b)=1/(\sqrt a+\sqrt b)`} />. For a general <Tex tex="f" />, say one
+    supplied by a user or fitted to data, no such rewrite exists, and the formula is <Tex tex={String.raw`0/0`} /> at
+    <Tex tex="a=b" /> and inaccurate near it. Write <Tex tex="d=a-b" />. Taylor's theorem around <Tex tex="b" /> gives
+  </p>
+  <Tex block tex={String.raw`\frac{f(b+d)-f(b)}{d}=f'(b)+\frac{d}{2}f''(b)+\frac{d^2}{6}f'''(b)+\dots=\sum_{k\ge0}\frac{d^{\,k}}{(k+1)!}\,f^{(k+1)}(b),`} />
+  <p>
+    a formula with no division by <Tex tex="d" />. Near <Tex tex="a=b" /> you switch to a truncation of it. How many
+    terms you keep sets the <em>order</em> <Tex tex="p" /> of the replacement: its error shrinks like <Tex tex="d^{\,p}" />.
+  </p>
+
+  <h2 id="fill">Three ways to fill the hole</h2>
+  <ul>
+    <li><strong>The limit alone,</strong> <Tex tex="f'(b)" />. Error about <Tex tex={String.raw`\tfrac d2 f''(b)`} />:
+      first order.</li>
+    <li><strong>The average of the two endpoint slopes,</strong> <Tex tex={String.raw`\tfrac12\big(f'(a)+f'(b)\big)`} />.
+      The divided difference is the mean of <Tex tex="f'" /> over <Tex tex="[b,a]" />, and this is the trapezoid rule for
+      that mean, with error about <Tex tex={String.raw`\tfrac{d^2}{12}f'''`} />: second order, from the same derivative as
+      the limit, just evaluated at both ends. Evaluating once at the midpoint, <Tex tex={String.raw`f'\big(\tfrac{a+b}2\big)`} />,
+      is also second order.</li>
+    <li><strong>More Taylor terms,</strong> up to whatever order you need, if higher derivatives are available.</li>
+  </ul>
+  <p>
+    The first option is what most code does. The second is almost free and gains a whole order, which matters more
+    than it sounds, as the next section shows.
+  </p>
+
+  <h2 id="where">Where to put the switch</h2>
+  <p>
+    Above the threshold <Tex tex={String.raw`\tau`} />, the original formula's rounding error grows as
+    <Tex tex="d" /> shrinks, roughly like <Tex tex={String.raw`\varepsilon/d`} /> times a constant, where
+    <Tex tex={String.raw`\varepsilon\approx2.2\times10^{-16}`} /> is the spacing of double-precision numbers near 1. Below
+    it, a replacement of order <Tex tex="p" /> is off by about <Tex tex="d^{\,p}" />. The worst error sits at the
+    threshold, and it is smallest when the two match:
+  </p>
+  <Tex block tex={String.raw`\frac{\varepsilon}{\tau}\approx\tau^{\,p}\quad\Longrightarrow\quad \tau\approx\varepsilon^{1/(1+p)},\qquad\text{worst error}\approx\varepsilon^{\,p/(1+p)}.`} />
+  <p>
+    Here is the divided difference of <Tex tex={String.raw`f=\log`} /> at <Tex tex="b=1.1" />, measured against
+    50-digit reference values over <Tex tex={String.raw`10^{-12}\le d\le 0.3`} />:
+  </p>
+  <div class="rs-scroll"><table class="rs-table">
+    <tr><th>replacement</th><th>order</th><th>worst error with <Tex tex={String.raw`\tau=10^{-3}`} /></th><th>best <Tex tex={String.raw`\tau`} /> (rule)</th><th>worst error there</th></tr>
+    <tr><td>limit <Tex tex="f'(b)" /></td><td>1</td><td><Tex tex={String.raw`4.5\times10^{-4}`} /></td><td><Tex tex={String.raw`5\times10^{-9}`} /> (<Tex tex={String.raw`1.5\times10^{-8}`} />)</td><td><Tex tex={String.raw`2.5\times10^{-9}`} /></td></tr>
+    <tr><td>average <Tex tex={String.raw`\tfrac12(f'(a)+f'(b))`} /></td><td>2</td><td><Tex tex={String.raw`1.4\times10^{-7}`} /></td><td><Tex tex={String.raw`5\times10^{-6}`} /> (<Tex tex={String.raw`6\times10^{-6}`} />)</td><td><Tex tex={String.raw`2.7\times10^{-12}`} /></td></tr>
+    <tr><td>Taylor through <Tex tex="d^3" /></td><td>4</td><td><Tex tex={String.raw`1.4\times10^{-13}`} /></td><td><Tex tex={String.raw`6\times10^{-4}`} /> (<Tex tex={String.raw`7\times10^{-4}`} />)</td><td><Tex tex={String.raw`2\times10^{-14}`} /></td></tr>
+  </table></div>
+  <p>
+    The rule predicts the best thresholds well. Two lessons follow. With the limit alone, a round-looking threshold like
+    <Tex tex={String.raw`10^{-3}`} /> keeps only three digits, and even the best possible threshold keeps eight of
+    sixteen. And each order you add moves the best threshold toward a comfortable size: at fourth order it is about
+    <Tex tex={String.raw`10^{-3}`} />, the number you would have picked anyway, and nearly every digit survives.
+  </p>
+
+  <h2 id="demo">Try it</h2>
+  <p>
+    The plot shows the relative error of each way of evaluating a function, on log axes. Move the threshold and the
+    number of terms and watch the <strong>switched</strong> curve: the replacement's error rises toward the threshold
+    from the left, the formula's rounding error rises toward it from the right, and the best setting is where they meet
+    in a V.
+  </p>
+  <figure class="note-fig rs-demo">
+    <div class="rs-controls">
+      <label>Function
+        <select id="rs-case"></select>
+      </label>
+      <label>Terms <input type="range" id="rs-n" min="0" max="6" step="1" value="0" /> <span id="rs-nv"></span></label>
+      <label>Threshold τ <input type="range" id="rs-tau" min="-12" max="0" step="0.05" value="-3" /> <span id="rs-tv"></span></label>
+      <button type="button" id="rs-best">Best τ</button>
+    </div>
+    <canvas id="rs-canvas" width="880" height="500" aria-label="Log-log plot of relative error against the distance to the singular point, for the naive formula, the small-distance formula, the switched evaluation and a stable rewrite."></canvas>
+    <div class="rs-legend" id="rs-legend"></div>
+    <div class="rs-read" id="rs-read"></div>
+    <figcaption>Relative error against the distance to the singular point, both on log scales. Errors at the limit of
+      double precision are drawn at the floor.</figcaption>
+  </figure>
+
+  <h2 id="rewrite">When a rewrite beats a threshold</h2>
+  <p>
+    Sometimes algebra removes the cancellation and no threshold is needed:
+    <Tex tex={String.raw`(1-\cos x)/x^2=\tfrac12\big(\sin(x/2)/(x/2)\big)^2`} />, or
+    <Tex tex={String.raw`(e^x-1)/x=\mathrm{expm1}(x)/x`} />, or the divided difference of the logarithm written with
+    <code>log1p</code> (all three are in the demo). A rewrite still leaves <Tex tex={String.raw`0/0`} /> at the point
+    itself, so the exact point needs a branch either way. And sometimes the best rewrite is upstream: compute what you
+    need in a form that never takes the difference in the first place.
+  </p>
+  <p>
+    Two other cards build on this one. <a href="/notes/stretch-hessian-singularities">Singularities in Stretch-Based
+    Hessians</a> finds the same divided difference inside the stiffness of every isotropic material, and shows how
+    three of my papers handle it. <a href="/notes/autodiff-removable-singularities">Why Removable Singularities Are Bad
+    for Autodiff</a> shows what happens when you differentiate the fixed code.
+  </p>
+
+  <h2 id="checklist">A short checklist</h2>
+  <ul>
+    <li><strong>Find the divided difference.</strong> Most 0/0 formulas reduce to one; isolate it and leave the
+      harmless parts alone.</li>
+    <li><strong>Test exactly at the point,</strong> not just near it. Equal inputs are often the most common case
+      (a body at rest, a symmetric shape), not a rare one.</li>
+    <li><strong>Use more than the limit.</strong> A one-term switch costs about half your digits; averaging the two
+      endpoint derivatives gains an order for free.</li>
+    <li><strong>Set the threshold by the rule</strong> <Tex tex={String.raw`\tau\approx\varepsilon^{1/(1+p)}`} />, then
+      confirm it by measuring against a high-precision reference over a log-spaced range of distances.</li>
+  </ul>
+
+  <h2 id="refs">References</h2>
+  <ul class="rs-refs">
+    <li>David Goldberg. What Every Computer Scientist Should Know About Floating-Point Arithmetic.
+      <em>ACM Computing Surveys</em> 23(1), 1991.</li>
+    <li>Nicholas J. Higham. <em>Accuracy and Stability of Numerical Algorithms</em>, 2nd edition. SIAM, 2002.</li>
+  </ul>
+
+<script>
+  import { CASES } from '../scripts/removable-singularities.js';
+  import { mount } from '../scripts/singularity-demo.js';
+  mount('rs', CASES, { ddlog: 0 });
+</script>

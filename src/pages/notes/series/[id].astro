@@ -1,0 +1,240 @@
+---
+// A series page: its card map, then every card played in the recommended order (skip or jump at will),
+// then related series. The cards are the same components as /notes/<slug>, which stays each card's citable home.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SeriesTile from '../../../components/SeriesTile.astro';
+import 'katex/dist/katex.min.css';
+import '../../../styles/notes.css';
+import { seriesList, seriesOf, relatedSeries, cardGraph, getNote, isOptional } from '../../../data/notes.js';
+
+export function getStaticPaths() {
+  return seriesList.map((s) => ({ params: { id: s.id } }));
+}
+const s = seriesList.find((x) => x.id === Astro.params.id)!;
+const cardMods = import.meta.glob('../../../cards/*.astro', { eager: true }) as Record<string, any>;
+const Body = (slug: string) => cardMods[`../../../cards/${slug}.astro`].default;
+const related = relatedSeries(s.id);
+const opt = (slug: string) => isOptional(s, slug);
+const nOpt = s.cards.filter((n) => opt(n.slug)).length;
+
+// Card map, laid out left to right (wide screens) and top to bottom (phones).
+const g = cardGraph(s);
+const NW = 196, NH = 52, GX = 54, GY = 16, GYV = 40;
+const wrap = (t: string, max: number) => {
+  if (t.length <= max) return [t];
+  const w = t.split(' '); let a = '';
+  while (w.length && (a + ' ' + w[0]).trim().length <= max) a = (a + ' ' + w.shift()).trim();
+  return [a, w.join(' ')];
+};
+function layout(vertical: boolean) {
+  const pos = new Map<string, { x: number; y: number }>();
+  for (const nd of g.nodes) {
+    if (!vertical) pos.set(nd.n.slug, { x: nd.col * (NW + GX), y: nd.row * (NH + GY) });
+    else pos.set(nd.n.slug, { x: nd.row * (NW * 0.82 + 12), y: nd.col * (NH + GYV) });
+  }
+  const w = vertical ? g.nrows * (NW * 0.82 + 12) - 12 : g.ncols * (NW + GX) - GX;
+  const h = vertical ? g.ncols * (NH + GYV) - GYV : g.nrows * (NH + GY) - GY;
+  const nw = vertical ? NW * 0.82 : NW;
+  const edges = g.edges.map(([a, b]) => {
+    const p = pos.get(a)!, q = pos.get(b)!;
+    if (!vertical) { const x1 = p.x + nw, y1 = p.y + NH / 2, x2 = q.x - 6, y2 = q.y + NH / 2, m = (x1 + x2) / 2;
+      return `M${x1},${y1} C${m},${y1} ${m},${y2} ${x2},${y2}`; }
+    const x1 = p.x + nw / 2, y1 = p.y + NH, x2 = q.x + nw / 2, y2 = q.y - 6, m = (y1 + y2) / 2;
+    return `M${x1},${y1} C${x1},${m} ${x2},${m} ${x2},${y2}`;
+  });
+  return { pos, w, h, nw, edges, max: vertical ? 15 : 20 };
+}
+const maps = [{ cls: 'map-h', L: layout(false) }, { cls: 'map-v', L: layout(true) }];
+---
+<BaseLayout title={`${s.title} — Notes — Huanyu Chen`} description={s.blurb}>
+  <Fragment slot="head">
+    <link rel="alternate" type="application/rss+xml" title="Huanyu Chen — Notes" href="/notes/rss.xml" />
+  </Fragment>
+
+  <header class="sr-head">
+    <p class="muted sr-crumb"><a href="/notes">← All series</a></p>
+    <p class="sr-kicker">Series · {s.cards.length - nOpt} cards{nOpt > 0 && <> + {nOpt} optional</>}</p>
+    <h1>{s.title}</h1>
+    <p class="sr-blurb">{s.blurb}</p>
+    <figure class="sr-map">
+      {maps.map(({ cls, L }) => (
+        <svg class={cls} viewBox={`-2 -2 ${L.w + 4} ${L.h + 4}`} style={`max-width:${L.w + 4}px`} role="img" aria-label={`Map of the ${s.cards.length} cards in this series`}>
+          <defs><marker id={`ah-${cls}`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="ah" /></marker></defs>
+          {L.edges.map((d) => <path d={d} class="edge" marker-end={`url(#ah-${cls})`} />)}
+          {g.nodes.map(({ n, i }) => { const p = L.pos.get(n.slug)!; const lines = wrap(n.short || n.title, L.max); return (
+            <a href={`#card-${n.slug}`} class={opt(n.slug) ? 'node opt' : 'node'} data-slug={n.slug}>
+              <rect x={p.x} y={p.y} width={L.nw} height={NH} rx="9" />
+              <circle cx={p.x + 22} cy={p.y + NH / 2} r="12" />
+              <text x={p.x + 22} y={p.y + NH / 2 + 5} class="num">{i + 1}</text>
+              {lines.map((t, k) => <text x={p.x + 42} y={p.y + NH / 2 + 5 + (k - (lines.length - 1) / 2) * 17} class="lbl">{t}</text>)}
+            </a>
+          ); })}
+        </svg>
+      ))}
+      <figcaption>Numbers give the suggested order; an arrow means “builds on”. Cards with no arrow into them are fine starting points{nOpt > 0 && '; dashed cards are optional detours'}. Tap one to jump to it.</figcaption>
+    </figure>
+    <p><a class="sr-start" href={`#card-${s.cards[0].slug}`}>Start with card 1 ↓</a></p>
+  </header>
+
+  <nav class="sr-rail" aria-label="Cards in this series">
+    <span class="rail-title"><span class="rail-n">1/{s.cards.length}</span> <span class="rail-t">{s.cards[0].short}</span></span>
+    <span class="rail-chips">
+      {s.cards.map((n, i) => <a href={`#card-${n.slug}`} data-slug={n.slug} title={opt(n.slug) ? `${n.title} (optional)` : n.title} class={opt(n.slug) ? 'opt' : undefined}>{i + 1}</a>)}
+    </span>
+    <span class="rail-bar"><span></span></span>
+  </nav>
+
+  {s.cards.map((n, i) => {
+    const C = Body(n.slug);
+    const builds = (n.requires || []).map(getNote).filter(Boolean);
+    const also = seriesOf(n.slug).filter((v) => v.series.id !== s.id);
+    const next = s.cards[i + 1];
+    return (
+      <section class={opt(n.slug) ? 'sr-card opt' : 'sr-card'} id={`card-${n.slug}`} data-slug={n.slug} data-short={n.short} data-i={i + 1}>
+        <div class="sr-opener">
+          <img src={`/notes/thumbs/${n.slug}.webp`} alt="" width="1200" height="750" loading={i < 1 ? 'eager' : 'lazy'} />
+          <p class="sr-num">Card {i + 1} of {s.cards.length}{opt(n.slug) && <> · <span class="opt-tag">optional</span></>}</p>
+          <h2 class="sr-title">{n.title}</h2>
+          <div class="callout note-tldr"><strong>In one sentence.</strong> {n.tldr}</div>
+          {(builds.length > 0 || also.length > 0) && (
+            <p class="muted sr-rel"><small>
+              {builds.length > 0 && <>Builds on {builds.map((b: any, k: number) => <>{k > 0 && ', '}<a href={s.cards.some((c) => c.slug === b.slug) ? `#card-${b.slug}` : `/notes/${b.slug}`}>{b.short || b.title}</a></>)}.</>}
+              {also.length > 0 && <> Also in {also.map((v, k) => <>{k > 0 && ', '}<a href={`/notes/series/${v.series.id}/#card-${n.slug}`}>{v.series.title}</a></>)}.</>}
+            </small></p>
+          )}
+          <p class="sr-actions">
+            {next ? <a href={`#card-${next.slug}`} class="skip">Skip to card {i + 2} ↓</a> : <a href="#related" class="skip">Skip to the end ↓</a>}
+            <a href={`/notes/${n.slug}`}>Own page and citation</a>
+          </p>
+        </div>
+        {opt(n.slug) ? (
+          <details class="sr-opt">
+            <summary>Read this optional card</summary>
+            <div class="note sr-body" data-card={n.slug}><C /></div>
+            {n.source && <p class="muted note-source"><small><strong>Where this comes from.</strong> {n.source}</small></p>}
+          </details>
+        ) : (<>
+          <div class="note sr-body" data-card={n.slug}><C /></div>
+          {n.source && <p class="muted note-source"><small><strong>Where this comes from.</strong> {n.source}</small></p>}
+        </>)}
+      </section>
+    );
+  })}
+
+  <section class="sr-end" id="related">
+    <p class="sr-kicker">End of the series</p>
+    <h2>Keep going</h2>
+    <div class="related-grid">
+      {related.map((r) => <SeriesTile s={r.series} note={r.shared ? `shares ${r.shared} card${r.shared > 1 ? 's' : ''} with this one` : undefined} />)}
+    </div>
+    <p class="muted"><small>Every card has a permanent address, a version number and a BibTeX entry on its own page ·
+      <a href="/notes">all series</a> · <a href="/notes/rss.xml">RSS</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></small></p>
+    <p class="muted note-ai"><small>Based on my published papers and derivation notes. Drafting and interactive demos were
+      done with AI assistance; the content was checked against the papers and verified numerically.</small></p>
+  </section>
+
+  <script>
+    // Section ids repeat across cards ("demo", "checklist"…), so make them unique per card on this page.
+    document.querySelectorAll<HTMLElement>('.sr-body[data-card]').forEach((b) => {
+      const slug = b.dataset.card;
+      b.querySelectorAll<HTMLElement>('h2[id], h3[id]').forEach((h) => {
+        const old = h.id; h.id = `${slug}--${old}`;
+        b.querySelectorAll<HTMLAnchorElement>(`a[href="#${old}"]`).forEach((a) => (a.href = `#${h.id}`));
+      });
+    });
+    const header = document.querySelector<HTMLElement>('.site-header');
+    const setHdr = () => document.documentElement.style.setProperty('--hdr', `${header ? header.offsetHeight : 0}px`);
+    setHdr(); addEventListener('resize', setHdr);
+
+    const cards = [...document.querySelectorAll<HTMLElement>('.sr-card')];
+    const rail = document.querySelector<HTMLElement>('.sr-rail')!;
+    const chips = [...rail.querySelectorAll<HTMLAnchorElement>('.rail-chips a')];
+    const nodes = [...document.querySelectorAll<SVGAElement>('.sr-map .node')];
+    const bar = rail.querySelector<HTMLElement>('.rail-bar span')!;
+    const railN = rail.querySelector<HTMLElement>('.rail-n')!, railT = rail.querySelector<HTMLElement>('.rail-t')!;
+    let cur = -1;
+    function update() {
+      const line = innerHeight * 0.35;
+      let k = 0;
+      cards.forEach((c, i) => { if (c.getBoundingClientRect().top < line) k = i; });
+      const r = cards[k].getBoundingClientRect();
+      const frac = Math.min(1, Math.max(0, (line - r.top) / r.height));
+      bar.style.width = `${((k + frac) / cards.length) * 100}%`;
+      rail.classList.toggle('on', cards[0].getBoundingClientRect().top < line + 40);
+      if (k === cur) return;
+      cur = k;
+      chips.forEach((c, i) => { c.classList.toggle('cur', i === k); c.classList.toggle('done', i < k); });
+      nodes.forEach((nd) => nd.classList.toggle('cur', nd.dataset.slug === cards[k].dataset.slug));
+      railN.textContent = `${k + 1}/${cards.length}`; railT.textContent = cards[k].dataset.short || '';
+      if (rail.classList.contains('on')) history.replaceState(null, '', `#card-${cards[k].dataset.slug}`);
+    }
+    addEventListener('scroll', update, { passive: true }); addEventListener('resize', update); update();
+    // j / k (or n / p) jump to the next / previous card, like flicking to the next video.
+    addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || (e.target as HTMLElement).closest('input, textarea, select, [contenteditable]')) return;
+      const d = e.key === 'j' || e.key === 'n' ? 1 : e.key === 'k' || e.key === 'p' ? -1 : 0;
+      if (!d) return;
+      const t = cards[Math.min(cards.length - 1, Math.max(0, cur + d))];
+      t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .sr-crumb { margin: 0 0 .6em; }
+  .sr-kicker { text-transform: uppercase; letter-spacing: .08em; font-size: .78em; color: var(--muted); margin: 0; }
+  .sr-head h1 { margin: .1em 0 .2em; }
+  .sr-blurb { font-size: 1.1em; margin: 0 0 1.2em; }
+  .sr-map { margin: 0 0 1em; }
+  .sr-map svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .map-v { display: none !important; max-width: 420px; margin: 0 auto; }
+  @media (max-width: 620px) { .map-h { display: none !important; } .map-v { display: block !important; } }
+  .sr-map .edge { fill: none; stroke: var(--muted); stroke-width: 1.6; opacity: .7; }
+  .sr-map .ah { fill: var(--muted); }
+  .sr-map .node rect { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; transition: stroke .15s, fill .15s; }
+  .sr-map .node circle { fill: color-mix(in srgb, var(--link) 12%, var(--bg)); }
+  .sr-map .node .num { text-anchor: middle; font-size: 13px; font-weight: 700; fill: var(--link); }
+  .sr-map .node .lbl { font-size: 14px; fill: var(--ink); }
+  .sr-map .node:hover rect, .sr-map .node:focus rect { stroke: var(--link); }
+  .sr-map .node.opt rect { stroke-dasharray: 6 4; }
+  .sr-map .node.opt .lbl { fill: var(--muted); }
+  .sr-map .node.cur rect { stroke: var(--link); fill: color-mix(in srgb, var(--link) 6%, var(--bg)); }
+  .sr-map figcaption { color: var(--muted); font-size: .88em; margin-top: .6em; }
+  .sr-start { display: inline-block; padding: .45em 1em; border: 1px solid var(--link); border-radius: 999px; font-weight: 600; }
+
+  .sr-rail { position: sticky; top: var(--hdr, 56px); z-index: 9; display: flex; align-items: center; gap: .8em;
+    margin: 1.5em -20px 0; padding: .45em 20px; background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); font-size: .9em; }
+  .rail-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .rail-n { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: .3em; }
+  .rail-chips { display: flex; gap: .3em; flex: none; }
+  .rail-chips a { width: 1.9em; height: 1.9em; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line);
+    color: var(--muted); font-variant-numeric: tabular-nums; font-size: .9em; }
+  .rail-chips a.done { background: color-mix(in srgb, var(--link) 10%, var(--bg)); color: var(--link); border-color: transparent; }
+  .rail-chips a.cur { background: var(--link); color: var(--bg); border-color: var(--link); font-weight: 700; }
+  .rail-chips a.opt { border-style: dashed; }
+  .rail-bar { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; }
+  .rail-bar span { display: block; height: 100%; width: 0; background: var(--link); transition: width .1s linear; }
+
+  .sr-card { scroll-margin-top: calc(var(--hdr, 56px) + 48px); padding-top: 2.2em; }
+  .sr-card + .sr-card { margin-top: 3em; border-top: 6px solid color-mix(in srgb, var(--ink) 6%, transparent); }
+  .sr-opener img { width: 100%; height: auto; aspect-ratio: 16 / 10; max-height: 420px; object-fit: contain; display: block;
+    background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+  .sr-num { margin: 1.1em 0 0; color: var(--muted); font-size: .85em; text-transform: uppercase; letter-spacing: .08em; }
+  .sr-title { font-size: 1.7rem; border: 0; margin: .1em 0 .2em; padding: 0; line-height: 1.25; }
+  .sr-rel { margin: -.6em 0 .6em; }
+  .sr-actions { display: flex; flex-wrap: wrap; gap: .5em 1.4em; font-size: .92em; margin: 0 0 1em; }
+  .sr-actions .skip { font-weight: 600; }
+  .sr-body { padding-top: .2em; }
+  .opt-tag { border: 1px dashed var(--muted); border-radius: 4px; padding: 0 .4em; letter-spacing: .04em; }
+  .sr-card.opt .sr-opener img { max-height: 260px; }
+  .sr-opt > summary { cursor: pointer; display: inline-block; padding: .4em 1em; border: 1px dashed var(--link);
+    border-radius: 999px; color: var(--link); font-weight: 600; list-style: none; margin-bottom: .5em; }
+  .sr-opt > summary::-webkit-details-marker { display: none; }
+  .sr-opt[open] > summary { margin-bottom: 1em; }
+  .sr-end { margin-top: 4em; padding-top: 2em; border-top: 6px solid color-mix(in srgb, var(--ink) 6%, transparent); }
+  .sr-end h2 { border: 0; margin-top: .1em; }
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2em; margin: 1em 0 2em; }
+  @media (prefers-color-scheme: dark) { .sr-opener img { filter: brightness(.88); } }
+</style>

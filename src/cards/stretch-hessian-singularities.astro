@@ -1,0 +1,176 @@
+---
+// Card body for /notes/stretch-hessian-singularities. Rendered on its own page and inside every series that uses it.
+// Builds on isotropic-gradient-hessian (where the quotient comes from) and removable-singularities (the general fix).
+import Tex from '../components/Tex.astro';
+---
+  <h2 id="where-from">Where the 0/0 comes from</h2>
+  <p>
+    <a href="/notes/isotropic-gradient-hessian">The Gradient and Hessian of an Isotropic Energy</a> writes the Hessian of an
+    energy <Tex tex={String.raw`\psi(\lambda_1,\lambda_2,\lambda_3)`} /> of the principal stretches in a fixed basis, with
+    two coefficients for each pair of stretches: a twist quotient
+    <Tex tex={String.raw`(\psi_i+\psi_j)/(\lambda_i+\lambda_j)`} /> and a flip quotient
+    <Tex tex={String.raw`(\psi_i-\psi_j)/(\lambda_i-\lambda_j)`} />, where <Tex tex={String.raw`\psi_i=\partial\psi/\partial\lambda_i`} />.
+    The flip quotient is <Tex tex={String.raw`0/0`} /> whenever two stretches are equal: at the rest shape, under uniform
+    scaling, and in every symmetric deformation. It is a divided difference in the sense of
+    <a href="/notes/removable-singularities">Removable Singularities, Numerically</a>: because <Tex tex={String.raw`\psi`} />
+    is symmetric, <Tex tex={String.raw`\psi_2(\lambda_1,\lambda_2,\lambda_3)=\psi_1(\lambda_2,\lambda_1,\lambda_3)`} />, so the numerator
+    compares one function at two points that meet when the stretches do. Its limit is
+    <Tex tex={String.raw`\psi_{11}-\psi_{12}`} />, so the singularity is removable, and the question is only how to evaluate
+    the quotient accurately near it. The twist quotient's denominator vanishes only for inverted configurations, which is a
+    different matter: whether that singularity is removable depends on the energy, and for ARAP it is not.
+  </p>
+
+  <h2 id="papers">One divided difference, three papers</h2>
+  <p>
+    The same quotient has come back in all three of my papers on isotropic materials, each time handled a little
+    differently. Below, <Tex tex={String.raw`\partial_i\psi=\psi_i`} />, and the stretches are called
+    <Tex tex={String.raw`\lambda`} /> or <Tex tex={String.raw`\rho`} /> as in each paper. In every case the flip quotient is the
+    only singular piece: the other expressions are built from it.
+  </p>
+
+  <h3>Material capture (SIGGRAPH Asia 2023)</h3>
+  <p>
+    In <em>Capturing Animation-Ready Isotropic Materials Using Systematic Poking</em>, the Hessian is assembled in a basis
+    built from the SVD (Appendix D), and the divided difference appears in its 1×1 blocks. Appendix D.1 expands it in
+    <Tex tex={String.raw`\lambda_1`} /> around <Tex tex={String.raw`\lambda_2`} />:
+  </p>
+  <Tex block tex={String.raw`\frac{\partial_1\psi-\partial_2\psi}{\lambda_1-\lambda_2}
+    =\sum_{k=0}^{\infty}\frac{(\lambda_1-\lambda_2)^k}{(k+1)!}\,\partial_1^{k+1}(\partial_1-\partial_2)\psi(\lambda_2,\lambda_2,\lambda_3),
+    \qquad \lim_{\lambda_1\to\lambda_2}=\partial_{11}\psi-\partial_{12}\psi.`} />
+  <p>
+    The paper keeps the limit and switches to it when two stretches are within <Tex tex={String.raw`10^{-4}`} /> of each
+    other, an absolute threshold that works because physical stretches stay within about
+    <Tex tex={String.raw`[1/2,\,3/2]`} />. The gradient avoids the problem altogether by being chained through the
+    invariants of the stretch tensor (Appendix C).
+  </p>
+
+  <h3>Elastic rods (SIGGRAPH 2025)</h3>
+  <p>
+    In <em>ANIME-Rod</em>, a rod's cross-section shrinks or expands by a factor <Tex tex={String.raw`\rho`} /> while the
+    centerline stretches by <Tex tex={String.raw`\lambda`} />, and the twisting energy and the energy of a varying
+    cross-section (the <Tex tex={String.raw`\rho'^2`} /> term) contain
+  </p>
+  <Tex block tex={String.raw`K_1=\frac{\lambda\,\partial_1\psi-\rho\,\partial_2\psi}{\lambda^2-\rho^2},
+    \qquad
+    K_2=\frac{\rho\,\partial_1\psi-\lambda\,\partial_2\psi}{\lambda^2-\rho^2},`} />
+  <p>
+    which are singular at <Tex tex={String.raw`\lambda=\rho`} />, again including the rest shape, where
+    <Tex tex={String.raw`K_1=K_2=\mu`} />. Appendix G switches, below <Tex tex={String.raw`|\lambda-\rho|=10^{-3}`} />, to
+  </p>
+  <Tex block tex={String.raw`K_{1,2}\approx\frac12\left(\frac{\partial_{11}\psi+\partial_{22}\psi}{2}-\partial_{12}\psi\pm\frac{\partial_1\psi+\partial_2\psi}{\lambda+\rho}\right),`} />
+  <p>
+    with the derivatives taken at the actual <Tex tex={String.raw`(\lambda,\rho)`} />, not at the midpoint. Averaging
+    <Tex tex={String.raw`\partial_{11}\psi`} /> and <Tex tex={String.raw`\partial_{22}\psi`} /> cancels the first-order error, so
+    this formula is accurate to <Tex tex={String.raw`O(|\lambda-\rho|^2)`} />, one order better than the limit alone.
+    A small identity makes the structure clear: with <Tex tex={String.raw`\sigma_1=\lambda,\ \sigma_2=\rho`} />,
+  </p>
+  <Tex block tex={String.raw`K_{1,2}=\frac12\left(\frac{\partial_1\psi-\partial_2\psi}{\lambda-\rho}\pm\frac{\partial_1\psi+\partial_2\psi}{\lambda+\rho}\right),`} />
+  <p>so only the divided difference needs care; the other half is harmless.</p>
+
+  <h3>Thin shells (SIGGRAPH Asia 2026)</h3>
+  <p>
+    In <em>Beyond Kirchhoff-Love</em>, a shell has two in-plane stretches <Tex tex={String.raw`\lambda_1,\lambda_2`} /> and a
+    thickness stretch <Tex tex={String.raw`\rho`} />, and the singularities multiply. The thickness-gradient energy
+    contains <Tex tex={String.raw`K_{13}^{+}`} /> and <Tex tex={String.raw`K_{23}^{+}`} />, singular at
+    <Tex tex={String.raw`\lambda_i=\rho`} /> and handled with the same second-order formula (Appendix E, Eqs. 90–91). The
+    bending energy is singular at <Tex tex={String.raw`\lambda_1=\lambda_2`} />, and there the fix is structural: Appendix F
+    regroups it into eight terms built from sums and differences of the entries of two curvature-like matrices
+    <Tex tex={String.raw`r`} /> and <Tex tex={String.raw`s`} />, and factors each singular term into pieces whose limits exist. The coefficients that remain get their own Taylor branches below
+    <Tex tex={String.raw`\varepsilon=10^{-3}`} />, for example
+  </p>
+  <Tex block tex={String.raw`C_7^{\mathrm{sing}}=\frac12\,\frac{\partial_1\psi-\partial_2\psi}{\lambda_1-\lambda_2}
+    \approx\frac14\left(\partial_{11}\psi+\partial_{22}\psi-2\partial_{12}\psi\right)
+    -\frac{\lambda_1-\lambda_2}{24}\left(\partial_{111}\psi-3\partial_{112}\psi+3\partial_{122}\psi-\partial_{222}\psi\right).`} />
+  <p>
+    The correction term pays off handsomely: checked in high precision, this formula is accurate to fourth order in
+    <Tex tex={String.raw`\lambda_1-\lambda_2`} />, not second. The shell paper also avoids computing
+    <Tex tex={String.raw`\lambda_1,\lambda_2`} /> from an SVD at all, solving a 2×2 generalized eigenproblem instead
+    (Section 9), because the derivatives of singular values are themselves hard to compute robustly when two of them meet.
+  </p>
+
+  <h2 id="measured">How the papers' thresholds measure up</h2>
+  <p>
+    <a href="/notes/removable-singularities">Removable Singularities, Numerically</a> derives the rule for the threshold: a
+    replacement of order <Tex tex="p" /> should switch in at about <Tex tex={String.raw`\tau\approx\varepsilon^{1/(1+p)}`} />,
+    where <Tex tex={String.raw`\varepsilon\approx2.2\times10^{-16}`} />, and then keeps a worst error of about
+    <Tex tex={String.raw`\varepsilon^{\,p/(1+p)}`} />. Here the distance is <Tex tex={String.raw`d=\lambda_1-\lambda_2`} />.
+  </p>
+  <p>
+    Here is how the three papers' choices measure up on a test material (an Ogden-like energy with volume coupling, at
+    <Tex tex={String.raw`\lambda_2=1.1,\ \rho=0.9`} />), against 50-digit reference values:
+  </p>
+  <div class="rs-scroll"><table class="rs-table">
+    <tr><th>formula</th><th>order</th><th>threshold used</th><th>worst error there</th><th>best threshold</th></tr>
+    <tr><td>limit only (2023)</td><td>1</td><td><Tex tex={String.raw`10^{-4}`} /></td><td><Tex tex={String.raw`2.5\times10^{-4}`} /></td><td><Tex tex={String.raw`\sim10^{-8}`} />, error <Tex tex={String.raw`2\times10^{-8}`} /></td></tr>
+    <tr><td><Tex tex={String.raw`K^{\pm}`} /> formula (2025, 2026)</td><td>2</td><td><Tex tex={String.raw`10^{-3}`} /></td><td><Tex tex={String.raw`8\times10^{-7}`} /></td><td><Tex tex={String.raw`\sim4\times10^{-6}`} />, error <Tex tex={String.raw`2\times10^{-11}`} /></td></tr>
+    <tr><td><Tex tex={String.raw`C_7^{\mathrm{sing}}`} /> formula (2026)</td><td>4</td><td><Tex tex={String.raw`10^{-3}`} /></td><td><Tex tex={String.raw`1.6\times10^{-13}`} /></td><td><Tex tex={String.raw`\sim8\times10^{-4}`} />, error <Tex tex={String.raw`10^{-13}`} /></td></tr>
+  </table></div>
+  <p>
+    The rule predicts the best thresholds well (<Tex tex={String.raw`\varepsilon^{1/2}\approx10^{-8}`} />,
+    <Tex tex={String.raw`\varepsilon^{1/3}\approx6\times10^{-6}`} />, <Tex tex={String.raw`\varepsilon^{1/5}\approx7\times10^{-4}`} />).
+    With the limit alone, the error at the switch is about the size of the threshold itself, so
+    <Tex tex={String.raw`10^{-4}`} /> keeps three to four digits there; one more series term at the same threshold keeps
+    eight. The fourth-order shell formula is the nicest case: its best threshold is
+    <Tex tex={String.raw`10^{-3}`} />, a round number you would pick anyway, and it keeps nearly thirteen digits.
+  </p>
+
+  <h2 id="demo">Try it</h2>
+  <p>
+    The same error plot as in <a href="/notes/removable-singularities">the general card</a>, now for the three papers'
+    formulas on the test material above. <strong>Paper’s τ</strong> sets the threshold each paper uses; <strong>Best τ</strong>
+    searches for the one that minimizes the worst error.
+  </p>
+  <figure class="note-fig rs-demo">
+    <div class="rs-controls">
+      <label>Formula
+        <select id="sh-case"></select>
+      </label>
+      <label>Terms <input type="range" id="sh-n" min="0" max="6" step="1" value="0" /> <span id="sh-nv"></span></label>
+      <label>Threshold τ <input type="range" id="sh-tau" min="-12" max="0" step="0.05" value="-4" /> <span id="sh-tv"></span></label>
+      <button type="button" id="sh-paper">Paper’s τ</button>
+      <button type="button" id="sh-best">Best τ</button>
+    </div>
+    <canvas id="sh-canvas" width="880" height="500" aria-label="Log-log plot of relative error against the distance between two stretches, for each paper's naive formula, its small-distance formula and the switched evaluation."></canvas>
+    <div class="rs-legend" id="sh-legend"></div>
+    <div class="rs-read" id="sh-read"></div>
+    <figcaption>Relative error against <Tex tex={String.raw`d=\lambda_1-\lambda_2`} />, both on log scales, with reference
+      values computed in 50-digit arithmetic. Errors at the limit of double precision are drawn at the floor.</figcaption>
+  </figure>
+
+  <h2 id="structural">Structural fixes</h2>
+  <p>
+    Thresholds are not the only tool. The shell paper's Appendix F regroups the bending energy so that each singular
+    factor is isolated and only a few scalar coefficients need a series, instead of expanding the whole energy. And it
+    avoids an upstream problem by computing <Tex tex={String.raw`\lambda_1,\lambda_2`} /> from a 2×2 generalized eigenproblem
+    rather than an SVD, because the derivatives of singular values are themselves hard to compute robustly when two of
+    them meet. How any of these fixes behaves under automatic differentiation is the subject of
+    <a href="/notes/autodiff-removable-singularities">Why Removable Singularities Are Bad for Autodiff</a>.
+  </p>
+
+  <h2 id="checklist">A short checklist</h2>
+  <ul>
+    <li><strong>Find the divided difference.</strong> In isotropic materials, every singular term reduces to
+      <Tex tex={String.raw`(\psi_i-\psi_j)/(\lambda_i-\lambda_j)`} />; split it off and leave the harmless parts alone.</li>
+    <li><strong>Expect the rest state.</strong> All stretches equal 1 there, so the "rare" singular point is the most common input.</li>
+    <li><strong>Use more than the limit.</strong> Evaluating the second derivatives at the actual stretches and averaging
+      gains an order for free.</li>
+    <li><strong>Test exactly on the singular points</strong>, not just near them; the shell paper's finite-difference checks
+      land on <Tex tex={String.raw`\lambda_1=\lambda_2`} />, <Tex tex={String.raw`\lambda_i=\rho`} /> and the triple point.</li>
+  </ul>
+
+  <h2 id="refs">References</h2>
+  <ul class="rs-refs">
+    <li>Huanyu Chen, Danyong Zhao, Jernej Barbič. Capturing Animation-Ready Isotropic Materials Using Systematic Poking.
+      <em>ACM Transactions on Graphics</em> 42(6), SIGGRAPH Asia 2023.</li>
+    <li>Huanyu Chen, Jiahao Wen, Jernej Barbič. ANIME-Rod: Adjustable Nonlinear Isotropic Materials for Elastic Rods.
+      <em>ACM Transactions on Graphics</em> 44(4), SIGGRAPH 2025.
+      <a href="https://doi.org/10.1145/3731208">doi:10.1145/3731208</a></li>
+    <li>Huanyu Chen, Yumeng He, Jernej Barbič. Beyond Kirchhoff-Love: A Volumetric Approach to Thin-Shell Mechanics.
+      <em>ACM Transactions on Graphics</em> 45(6), SIGGRAPH Asia 2026.</li>
+  </ul>
+
+<script>
+  import { PAPER_CASES } from '../scripts/removable-singularities.js';
+  import { mount } from '../scripts/singularity-demo.js';
+  mount('sh', PAPER_CASES, { poking: 0, kplus: 0, c7: 1 });
+</script>

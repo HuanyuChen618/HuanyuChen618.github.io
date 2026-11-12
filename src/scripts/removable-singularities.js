@@ -5,7 +5,29 @@
 const fact = (n) => { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; };
 
 // coef(k): coefficient of the k-th kept term; pow: the power of h in that term is step*k.
+const DB = 1.1; // divided difference of log at b = 1.1; x is d = a - b, recomputed from the double a so it is exact
+const dA = (x) => DB + x, dD = (x) => dA(x) - DB;
 export const CASES = [
+  {
+    id: 'ddlog',
+    label: '(log a − log b) / (a − b),  near a = b = 1.1',
+    naive: (x) => { const a = dA(x); return (Math.log(a) - Math.log(DB)) / (a - DB); },
+    // n = 0: the limit f'(b); n = 1: the average (f'(a) + f'(b))/2; n >= 2: Taylor series through d^n
+    taylorFn: (x, n) => {
+      const a = dA(x), d = dD(x);
+      if (n === 0) return 1 / DB;
+      if (n === 1) return 0.5 * (1 / a + 1 / DB);
+      let s = 0; for (let k = n; k >= 0; k--) s = s * d + ((k % 2 ? -1 : 1)) / ((k + 1) * Math.pow(DB, k + 1)); return s;
+    },
+    refFn: (x) => { const d = dD(x); let s = 0; for (let k = 160; k >= 0; k--) s = s * d + ((k % 2 ? -1 : 1)) / ((k + 1) * Math.pow(DB, k + 1)); return s; },
+    stable: (x) => { const a = dA(x), d = a - DB; return Math.log1p(d / DB) / d; },
+    stableLabel: 'log1p(d / b) / d',
+    nmax: 4,
+    termsLabel: (n) => (n === 0 ? 'limit f′(b) only' : n === 1 ? 'average of f′(a) and f′(b)' : `Taylor series through d${'⁰¹²³⁴⁵⁶⁷⁸⁹'[n]}`),
+    h: (x) => dD(x),
+    xlabel: 'd = a − b',
+    xmin: 1e-12, xmax: Math.pow(10, -0.5),
+  },
   {
     id: 'cosine',
     label: '(1 − cos x) / x²',
@@ -52,6 +74,7 @@ export const CASES = [
     coef: (k) => ((k % 2 ? -1 : 1)) / (k + 1),
     step: 1,
     h: (y) => y,
+    var: 'y', xlabel: 'y = x − 1',
     xmin: 1e-12, xmax: 0.5,
   },
 ];

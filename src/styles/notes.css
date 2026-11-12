@@ -1,0 +1,38 @@
+.note h2 { margin-top: 2em; }
+.note-meta { margin-top: -.4em; }
+.note-tldr { margin: 1.2em 0 1.6em; }
+.tex-block { overflow-x: auto; overflow-y: hidden; margin: 1em 0; position: relative; }
+.note .katex-display { margin: 0; }
+.note-cite { margin-top: 3em; border-top: 1px solid var(--line); }
+.bib-wrap { position: relative; }
+.bib { background: color-mix(in srgb, var(--ink) 5%, transparent); padding: .8em 1em; overflow-x: auto; font-size: .85em; border-radius: 4px; }
+.bib-copy { position: absolute; top: .5em; right: .5em; font: inherit; font-size: .8em; padding: .25em .7em; cursor: pointer;
+  background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
+.note-series-nav { display: flex; justify-content: space-between; gap: 1em; margin-top: 2.5em; padding-top: 1em; border-top: 1px solid var(--line); }
+.note-series-nav .next { text-align: right; margin-left: auto; }
+.note-fig { margin: 1.5em 0; }
+.note-fig figcaption { color: var(--muted); font-size: .9em; margin-top: .4em; }
+.note-series-nav span { flex: 1; }
+.note-series-nav .mid { text-align: center; color: var(--muted); font-size: .9em; flex: 0 1 auto; }
+@media (max-width: 560px) { .note-series-nav { flex-wrap: wrap; } .note-series-nav .mid { order: -1; flex-basis: 100%; } }
+
+/* error-plot demo for removable singularities (removable-singularities, stretch-hessian-singularities) */
+.rs-demo canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; margin-top: .6em; }
+.rs-controls { display: flex; flex-wrap: wrap; gap: .5em 1.2em; align-items: center; }
+.rs-controls select, .rs-controls button { font: inherit; padding: .25em .6em; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; max-width: 100%; }
+.rs-controls button { cursor: pointer; }
+.rs-controls button:hover { border-color: var(--link); }
+.rs-controls button[hidden] { display: none; }
+.rs-controls label:first-child { flex: 1 1 100%; min-width: 0; display: flex; gap: .5em; align-items: center; }
+.rs-controls label:first-child select { flex: 1 1 auto; min-width: 0; width: 100%; }
+.rs-controls input { vertical-align: middle; }
+.rs-legend { display: flex; flex-wrap: wrap; gap: .3em 1.2em; font-size: .88em; margin-top: .5em; }
+.rs-legend span::before { content: ''; display: inline-block; width: 1.6em; height: 0; border-top: 3px solid var(--c); vertical-align: middle; margin-right: .4em; }
+.rs-legend span.dash::before { border-top-style: dashed; }
+.rs-read { font-size: .9em; margin-top: .4em; }
+.rs-scroll { overflow-x: auto; }
+.rs-table { border-collapse: collapse; font-size: .9em; margin: .8em 0; }
+.rs-table th, .rs-table td { text-align: left; padding: .3em .9em .3em 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.rs-refs li { margin: .4em 0; }
+/* keep KaTeX's hidden MathML inside the scrollable equation box on narrow screens */
+.note .tex-block { position: relative; }

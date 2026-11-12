@@ -1,0 +1,291 @@
+---
+// Card body for /notes/gauss-newton. Rendered on its own page and inside every series that uses it.
+import Tex from '../components/Tex.astro';
+---
+  <h2 id="problem">The problem</h2>
+  <p>
+    Many fitting problems have the same shape: a vector of residuals <Tex tex={String.raw`\mathbf{r}(\mathbf{x})\in\mathbb{R}^m`} />
+    (model minus data, at every data point), and we want the parameters <Tex tex={String.raw`\mathbf{x}\in\mathbb{R}^n`} /> that make them small:
+  </p>
+  <Tex block tex={String.raw`f(\mathbf{x}) = \tfrac12\,\|\mathbf{r}(\mathbf{x})\|^2 = \tfrac12\sum_{i=1}^m r_i(\mathbf{x})^2 .`} />
+  <p>
+    With <Tex tex={String.raw`\mathbf{J}=\partial\mathbf{r}/\partial\mathbf{x}`} /> the <Tex tex={String.raw`m\times n`} /> Jacobian of the
+    residuals, the gradient and the Hessian of <Tex tex={String.raw`f`} /> are
+  </p>
+  <Tex block tex={String.raw`\nabla f = \mathbf{J}^{\mathsf T}\mathbf{r},
+    \qquad
+    \nabla^2 f = \underbrace{\mathbf{J}^{\mathsf T}\mathbf{J}}_{\text{first derivatives only}} + \underbrace{\sum_{i} r_i\,\nabla^2 r_i}_{\text{second derivatives, weighted by } r_i} .`} />
+  <p>
+    Newton's method would solve <Tex tex={String.raw`\nabla^2 f\,\Delta\mathbf{x} = -\nabla f`} /> at every step. That needs the second
+    derivatives of every residual, and far from the answer the second term can make the Hessian indefinite, so the
+    Newton step may not even point downhill.
+  </p>
+
+  <h2 id="gn">Gauss-Newton: drop the second term</h2>
+  <p>
+    Gauss-Newton simply throws the second term away and solves
+  </p>
+  <Tex block tex={String.raw`\mathbf{J}^{\mathsf T}\mathbf{J}\,\Delta\mathbf{x} = -\mathbf{J}^{\mathsf T}\mathbf{r} .`} />
+  <p>
+    There is a cleaner way to see the same step: linearize the residuals, <Tex tex={String.raw`\mathbf{r}(\mathbf{x}+\Delta\mathbf{x})\approx\mathbf{r}+\mathbf{J}\Delta\mathbf{x}`} />,
+    and solve the resulting <em>linear</em> least-squares problem <Tex tex={String.raw`\min_{\Delta\mathbf{x}}\|\mathbf{r}+\mathbf{J}\Delta\mathbf{x}\|^2`} />
+    exactly. Its normal equations are the line above. Three things come for free:
+  </p>
+  <ul>
+    <li><strong>Only first derivatives.</strong> You need <Tex tex={String.raw`\mathbf{J}`} />, which you need for the gradient anyway.</li>
+    <li><strong>Always downhill.</strong> <Tex tex={String.raw`\mathbf{J}^{\mathsf T}\mathbf{J}`} /> is positive semidefinite, so when
+      <Tex tex={String.raw`\mathbf{J}`} /> has full column rank the step is a descent direction, wherever you are.</li>
+    <li><strong>A well-posed solve.</strong> In practice you can solve the least-squares problem with a QR factorization of
+      <Tex tex={String.raw`\mathbf{J}`} /> instead of forming <Tex tex={String.raw`\mathbf{J}^{\mathsf T}\mathbf{J}`} />, which squares the condition number.</li>
+  </ul>
+
+  <h2 id="when">When is dropping it harmless?</h2>
+  <p>
+    The dropped term is weighted by the residuals <Tex tex={String.raw`r_i`} />. So the approximation is good exactly when the
+    residuals are small at the answer, or when the model is nearly linear (small <Tex tex={String.raw`\nabla^2 r_i`} />).
+  </p>
+  <ul>
+    <li><strong>Zero-residual problems</strong> (the model can fit the data exactly): near the solution Gauss-Newton converges
+      quadratically, just like Newton. On the demo problem below with the misfit slider at zero, starting 0.07 away
+      from the fit, the error drops 7&nbsp;×&nbsp;10<sup>−2</sup> → 5&nbsp;×&nbsp;10<sup>−4</sup> → 7&nbsp;×&nbsp;10<sup>−8</sup>
+      → 3&nbsp;×&nbsp;10<sup>−15</sup>.</li>
+    <li><strong>Large-residual problems</strong> (the model cannot follow the data): convergence becomes linear, with a
+      rate that gets worse as the residuals grow. From the same nearby start, at misfit 1 the error shrinks by about
+      a factor of 12 per step, at misfit 3 only by about 4, while Newton stays quadratic. For very large residuals, plain
+      Gauss-Newton can fail to converge at all.</li>
+  </ul>
+
+  <h2 id="variants">The variants</h2>
+  <p>
+    <strong>Line search (damped Gauss-Newton).</strong> Keep the direction, but shorten the step until the loss actually
+    decreases enough (a backtracking or Armijo line search). Because the direction is always downhill, this always
+    finds a step.
+  </p>
+  <p>
+    <strong>Levenberg-Marquardt.</strong> Add a multiple of the identity before solving:
+  </p>
+  <Tex block tex={String.raw`\left(\mathbf{J}^{\mathsf T}\mathbf{J} + \mu\,\mathbf{I}\right)\Delta\mathbf{x} = -\mathbf{J}^{\mathsf T}\mathbf{r} .`} />
+  <p>
+    With <Tex tex={String.raw`\mu\to 0`} /> this is Gauss-Newton; with large <Tex tex={String.raw`\mu`} /> it is a short gradient-descent step,
+    <Tex tex={String.raw`\Delta\mathbf{x}\approx-\nabla f/\mu`} />. The damping is adapted on the fly: shrink
+    <Tex tex={String.raw`\mu`} /> when a step reduces the loss about as much as the linear model predicted, grow it when the step
+    fails. It is a trust-region method in disguise, and it also fixes a rank-deficient <Tex tex={String.raw`\mathbf{J}`} />.
+    Marquardt's original version scales the damping by the diagonal of <Tex tex={String.raw`\mathbf{J}^{\mathsf T}\mathbf{J}`} /> instead of the
+    identity, which makes it insensitive to the units of each parameter.
+  </p>
+  <p>
+    <strong>Generalized Gauss-Newton.</strong> The same trick works whenever the loss is a nice convex function
+    <Tex tex={String.raw`\phi`} /> of some intermediate quantity, <Tex tex={String.raw`f(\mathbf{x}) = \phi(\mathbf{r}(\mathbf{x}))`} />: keep
+    <Tex tex={String.raw`\mathbf{J}^{\mathsf T}\nabla^2\phi\,\mathbf{J}`} /> and drop the term with second derivatives of
+    <Tex tex={String.raw`\mathbf{r}`} />. In a simulation-based inverse problem, <Tex tex={String.raw`\mathbf{r}`} /> is the simulated
+    state and <Tex tex={String.raw`\mathbf{J}`} /> is its sensitivity to the parameters. You rarely form
+    <Tex tex={String.raw`\mathbf{J}`} /> there: a conjugate-gradient solve only needs products <Tex tex={String.raw`\mathbf{J}\mathbf{v}`} />
+    (one forward-sensitivity pass) and <Tex tex={String.raw`\mathbf{J}^{\mathsf T}\mathbf{w}`} /> (one <a href="/notes/adjoint-method">adjoint</a> pass).
+  </p>
+
+  <h2 id="poking">In practice: fitting a material by poking</h2>
+  <p>
+    This is the optimizer we used to measure nonlinear materials in
+    <a href="#references">Chen, Zhao and Barbič (2023)</a>. We poke a layer of material with rigid cylinders of several
+    radii and record the contact force at each indentation depth (Section 3). The material is a stretch-based
+    Valanis–Landel energy whose shape is set by a parameter vector <Tex tex={String.raw`\boldsymbol{\mu}`} />: the values of
+    a cubic spline for <Tex tex={String.raw`f''`} /> at a set of control points, plus a Lamé parameter for the volume term
+    (Sections 6 and 7). For every poking sample <Tex tex={String.raw`i`} />, a quasi-static FEM solve gives the simulated total
+    contact force <Tex tex={String.raw`f^S_i`} />, and the loss is a sum of squares against the measured force
+    <Tex tex={String.raw`f^E_i`} /> (Equation 13), plus a small smoothness penalty on the spline (Equation 17):
+  </p>
+  <Tex block tex={String.raw`\ell(\boldsymbol{\mu}) = \sum_i \big(f^S_i(\boldsymbol{\mu}) - f^E_i\big)^2 + \frac{\beta}{2}\,\boldsymbol{\mu}^{\mathsf T}\mathbf{L}\,\boldsymbol{\mu}.`} />
+  <p>
+    The residuals here are one number per poking sample, and the parameters are the spline values. The paper writes
+    out the full Hessian of the force term (Equation 15, derived in Appendix E). Its first line is the
+    <Tex tex={String.raw`\mathbf{J}^{\mathsf T}\mathbf{J}`} /> term above, and its second line is the residual-weighted term that
+    Gauss-Newton drops. Appendix E records what we found: useful optimizations can be obtained with as little as the
+    first term, but not without it. That first-term-only optimizer is the one labeled Gauss-Newton in the paper's
+    Figure 10, where it converges faster than BFGS and L-BFGS on our problem. Before that, we had tried nonlinear
+    conjugate gradients, which converged more slowly or not at all (Section 7). The smoothness term is already a
+    quadratic in <Tex tex={String.raw`\boldsymbol{\mu}`} />, so its Hessian <Tex tex={String.raw`\beta\mathbf{L}`} /> is exact; and the stability
+    condition <Tex tex={String.raw`f''>0`} /> is enforced by clamping <Tex tex={String.raw`f''`} /> to a small positive value.
+  </p>
+  <p>
+    <strong>The "Fit E" trick.</strong> Our material energy is linear in <Tex tex={String.raw`\boldsymbol{\mu}`} />. So if you scale
+    every parameter by the same <Tex tex={String.raw`\kappa>0`} />, the elastic forces scale by <Tex tex={String.raw`\kappa`} /> at every shape:
+    the equilibrium shape under the cylinder does not change, and every simulated contact force is simply multiplied
+    by <Tex tex={String.raw`\kappa`} />. That makes <Tex tex={String.raw`\ell(\kappa\boldsymbol{\mu})`} /> a scalar quadratic in
+    <Tex tex={String.raw`\kappa`} />, which we minimize exactly after every iteration at almost no cost:
+  </p>
+  <Tex block tex={String.raw`\kappa^\ast = \frac{\sum_i f^S_i f^E_i}{\sum_i (f^S_i)^2 + \tfrac{\beta}{2}\,\boldsymbol{\mu}^{\mathsf T}\mathbf{L}\boldsymbol{\mu}},\qquad \boldsymbol{\mu}\leftarrow\kappa^\ast\boldsymbol{\mu}.`} />
+  <p>
+    Physically, this re-fits the overall stiffness (the Young's modulus, hence the name) while keeping the shape of
+    the material curve. In the paper it cut the number of Newton iterations by about a factor of two
+    (Section 7, Figure 10). The same idea gives the starting point: restrict the material to a constant
+    <Tex tex={String.raw`f''`} />, so that only Young's modulus and Poisson's ratio remain, find the best Young's modulus for each
+    Poisson's ratio with the same scaling step, and minimize over Poisson's ratio alone. Across the four real materials
+    in the paper, the whole fit took 10 to 54 iterations (Table 1).
+  </p>
+  <p>
+    The general lesson: when some parameters enter the model linearly, solve for them exactly in an inner step and
+    let the outer optimizer handle the rest. (This is related to what is known as variable projection.) The demo below
+    has the same structure, since the curve <Tex tex={String.raw`a\,e^{bt}`} /> is linear in <Tex tex={String.raw`a`} />.
+  </p>
+
+  <h2 id="demo">Try it</h2>
+  <p>
+    The demo fits the curve <Tex tex={String.raw`y = a\,e^{b t}`} /> to five data points, so there are two parameters and the
+    loss can be drawn as a contour map over <Tex tex={String.raw`(a, b)`} />. <strong>Click or drag on the map</strong> to choose a
+    starting point; all methods start there. The <strong>misfit</strong> slider bends the data away from any
+    exponential, which raises the residuals at the best fit. The lower plot shows the data and each method's final curve.
+  </p>
+  <figure class="note-fig gn-demo">
+    <canvas id="gn-map" width="880" height="600" aria-label="Contour map of the least-squares loss over the two parameters, with the paths of four optimization methods."></canvas>
+    <canvas id="gn-fit" width="880" height="220" aria-label="The data points and the fitted curves."></canvas>
+    <div class="gn-controls">
+      <label><input type="checkbox" data-m="gd" checked /> <span class="sw" data-c="gd"></span> Gradient descent</label>
+      <label><input type="checkbox" data-m="gn" checked /> <span class="sw" data-c="gn"></span> Gauss-Newton</label>
+      <label><input type="checkbox" data-m="lm" checked /> <span class="sw" data-c="lm"></span> Levenberg-Marquardt</label>
+      <label><input type="checkbox" data-m="newton" checked /> <span class="sw" data-c="newton"></span> Newton</label>
+    </div>
+    <div class="gn-controls">
+      <label>Misfit <input type="range" id="gn-mis" min="0" max="3" step="0.25" value="0" /> <span id="gn-misv">0</span></label>
+      <label>LM starting damping μ <input type="range" id="gn-mu" min="-3" max="3" step="0.5" value="0" /> <span id="gn-muv">1</span></label>
+      <label><input type="checkbox" id="gn-ls" /> Line search for Gauss-Newton and Newton</label>
+      <label><input type="checkbox" id="gn-fit-a" /> Refit <Tex tex={String.raw`a`} /> exactly after each step ("Fit E")</label>
+    </div>
+    <div class="gn-read" id="gn-read"></div>
+    <figcaption>Shaded bands are level sets of the loss (on a log scale); the cross marks the best fit. Each path is one
+      method's iterates. A method "converges" when the gradient falls below 10<sup>−9</sup>.</figcaption>
+  </figure>
+  <p>
+    Things to try. At misfit 0, Gauss-Newton and Levenberg-Marquardt reach the fit in 5 to 8 steps from almost
+    anywhere, while gradient descent needs close to 200, zigzagging down the narrow valley. Pure Newton often
+    walks off the map: far from the fit, the full Hessian has a negative eigenvalue (it does at four of the five
+    starting points I tested), and the step goes the wrong way. Raise the misfit to 3: Gauss-Newton still
+    converges, but needs more steps. Push the starting damping of Levenberg-Marquardt up and its first steps
+    look like gradient descent; it then speeds up as the damping is reduced.
+  </p>
+  <p>
+    Then turn on the line search and the exact refit of <Tex tex={String.raw`a`} />, the analogue of "Fit E". Here it cuts
+    gradient descent's steps by a factor of two to three (from 188 to 83 at the default start): after every step it
+    lands exactly on the floor of the valley in the <Tex tex={String.raw`a`} /> direction.
+    Gauss-Newton barely changes in this two-parameter toy; it already handles the scale well. Without the line search,
+    the refit cannot rescue a Gauss-Newton step that overshoots, so keep both on.
+  </p>
+
+  <h2 id="checklist">A short checklist</h2>
+  <ul>
+    <li><strong>Start with Levenberg-Marquardt</strong> (or Gauss-Newton with a line search) for any sum-of-squares loss.
+      Pure Newton is rarely worth its second derivatives far from the answer.</li>
+    <li><strong>Look at the residual at the solution.</strong> If it stays large and convergence is slow, the dropped term
+      matters: consider adding it back near the end, or a quasi-Newton correction.</li>
+    <li><strong>Avoid forming J transpose J</strong> when the problem is ill-conditioned; use QR, or conjugate gradients
+      with Jacobian-vector products.</li>
+    <li><strong>Scale your parameters.</strong> Gradient descent and plain damping are sensitive to units; Marquardt's
+      diagonal scaling helps.</li>
+    <li><strong>Solve linear parameters exactly.</strong> If the model is linear in some parameters (an overall
+      stiffness, a scale), minimize over them in closed form after every step, as with "Fit E".</li>
+  </ul>
+
+  <h2 id="references">References</h2>
+  <ul class="refs">
+    <li>Huanyu Chen, Danyong Zhao, Jernej Barbič. Capturing Animation-Ready Isotropic Materials Using Systematic Poking.
+      <em>ACM Transactions on Graphics</em> 42(6) (SIGGRAPH Asia 2023).
+      <a href="https://doi.org/10.1145/3618406">doi:10.1145/3618406</a></li>
+  </ul>
+
+
+<style>
+  .gn-demo canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; }
+  #gn-map { touch-action: none; cursor: crosshair; }
+  #gn-fit { margin-top: .5em; }
+  .gn-controls { display: flex; flex-wrap: wrap; gap: .4em 1.2em; align-items: center; margin-top: .6em; font-size: .95em; }
+  .gn-controls input[type=range] { vertical-align: middle; }
+  .sw { display: inline-block; width: 1.4em; height: .3em; vertical-align: middle; border-radius: 2px; }
+  .gn-read { margin-top: .6em; font-size: .9em; }
+  .gn-read table { border-collapse: collapse; }
+  .gn-read td { padding: .1em 1em .1em 0; }
+</style>
+
+<script>
+  import { data, f, run } from '../scripts/gauss-newton.js';
+  const map = document.getElementById('gn-map') as HTMLCanvasElement, mc = map.getContext('2d')!;
+  const fit = document.getElementById('gn-fit') as HTMLCanvasElement, fc = fit.getContext('2d')!;
+  const W = map.width, H = map.height;
+  const A0 = 0, A1 = 3.5, B0 = -1.5, B1 = 3; // parameter window: a horizontal, b vertical
+  const px = (a: number) => ((a - A0) / (A1 - A0)) * W, py = (b: number) => H - ((b - B0) / (B1 - B0)) * H;
+  const pa = (x: number) => A0 + (x / W) * (A1 - A0), pb = (y: number) => B0 + ((H - y) / H) * (B1 - B0);
+  const NAMES: Record<string, string> = { gd: 'Gradient descent', gn: 'Gauss-Newton', lm: 'Levenberg-Marquardt', newton: 'Newton' };
+  let start = [0.5, 0.2], misfit = 0, mu0 = 1, ls = false, rescale = false;
+  const on: Record<string, boolean> = { gd: true, gn: true, lm: true, newton: true };
+  const css = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#000';
+  const dark = () => matchMedia('(prefers-color-scheme: dark)').matches;
+  const color = (m: string) => ({ gd: css('--muted'), gn: css('--link'), lm: dark() ? '#5cc6a8' : '#1f7a62', newton: dark() ? '#f0a848' : '#b25f00' } as Record<string, string>)[m];
+  let bg: ImageData | null = null, bgKey = '';
+
+  function shade() {
+    const key = misfit + (dark() ? 'd' : 'l');
+    if (bg && bgKey === key) { mc.putImageData(bg, 0, 0); return; }
+    const Y = data(misfit), ink = dark() ? [232, 232, 232] : [26, 26, 26], back = dark() ? [20, 20, 20] : [255, 255, 255];
+    const img = mc.createImageData(W, H), C = 4;
+    for (let y = 0; y < H; y += C) for (let x = 0; x < W; x += C) {
+      const v = Math.log(f([pa(x + C / 2), pb(y + C / 2)], Y) + 1e-3) * 1.6, band = Math.floor(v) & 1 ? 0.10 : 0.03;
+      for (let j = 0; j < C; j++) for (let i = 0; i < C; i++) {
+        const k = ((y + j) * W + (x + i)) * 4;
+        for (let c = 0; c < 3; c++) img.data[k + c] = back[c] * (1 - band) + ink[c] * band;
+        img.data[k + 3] = 255;
+      }
+    }
+    mc.putImageData(img, 0, 0); bg = mc.getImageData(0, 0, W, H); bgKey = key;
+  }
+
+  function drawPath(p: number[][], col: string) {
+    mc.strokeStyle = col; mc.fillStyle = col; mc.lineWidth = 2.2; mc.beginPath();
+    p.forEach((x, i) => { const X = px(x[0]), Yp = py(x[1]); i ? mc.lineTo(X, Yp) : mc.moveTo(X, Yp); }); mc.stroke();
+    for (const x of p) { mc.beginPath(); mc.arc(px(x[0]), py(x[1]), 2.6, 0, 7); mc.fill(); }
+  }
+
+  function draw() {
+    const Y = data(misfit), ink = css('--ink'), muted = css('--muted');
+    shade();
+    const best = run('lm', [1.5, 1], Y, { mu0: 1 }, 2000, 1e-13).at(-1)!;
+    const res: Record<string, number[][]> = {};
+    for (const m of ['gd', 'gn', 'lm', 'newton']) res[m] = run(m, start, Y, { lineSearch: ls, mu0, rescale }, 500, 1e-9);
+    for (const m of ['gd', 'newton', 'lm', 'gn']) if (on[m]) drawPath(res[m], color(m));
+    mc.strokeStyle = ink; mc.lineWidth = 2; const bx = px(best[0]), by = py(best[1]);
+    mc.beginPath(); mc.moveTo(bx - 8, by - 8); mc.lineTo(bx + 8, by + 8); mc.moveTo(bx - 8, by + 8); mc.lineTo(bx + 8, by - 8); mc.stroke();
+    mc.fillStyle = ink; mc.beginPath(); mc.arc(px(start[0]), py(start[1]), 6, 0, 7); mc.fill();
+    mc.font = '14px system-ui, sans-serif'; mc.fillStyle = muted;
+    mc.fillText('a →', W - 40, H - 10); mc.fillText('b ↑', 8, 18);
+    // fit panel
+    const FW = fit.width, FH = fit.height; fc.fillStyle = css('--bg'); fc.fillRect(0, 0, FW, FH);
+    const T0 = -0.05, T1 = 1.05, Ymin = Math.min(0, ...Y) - 0.5, Ymax = Math.max(...Y) + 1;
+    const fx = (t: number) => ((t - T0) / (T1 - T0)) * FW, fy = (v: number) => FH - ((v - Ymin) / (Ymax - Ymin)) * FH;
+    for (const m of ['gd', 'newton', 'lm', 'gn']) if (on[m]) {
+      const x = res[m].at(-1)!; if (!isFinite(x[0]) || !isFinite(x[1])) continue;
+      fc.strokeStyle = color(m); fc.lineWidth = 2; fc.beginPath();
+      for (let k = 0; k <= 100; k++) { const t = T0 + (k / 100) * (T1 - T0), v = x[0] * Math.exp(x[1] * t); k ? fc.lineTo(fx(t), fy(v)) : fc.moveTo(fx(t), fy(v)); }
+      fc.stroke();
+    }
+    fc.fillStyle = ink; [0, 0.25, 0.5, 0.75, 1].forEach((t, i) => { fc.beginPath(); fc.arc(fx(t), fy(Y[i]), 5, 0, 7); fc.fill(); });
+    // readout
+    const rows = ['gd', 'gn', 'lm', 'newton'].filter((m) => on[m]).map((m) => {
+      const p = res[m], e = p.at(-1)!, ok = Math.hypot(e[0] - best[0], e[1] - best[1]) < 1e-5;
+      const label = ok ? `${p.length - 1} steps` : (p.length > 500 ? 'not converged after 500 steps' : 'did not reach the fit');
+      return `<tr><td><span class="sw" style="background:${color(m)}"></span> ${NAMES[m]}</td><td>${label}</td></tr>`;
+    }).join('');
+    (document.getElementById('gn-read') as HTMLElement).innerHTML = `Best fit a = ${best[0].toFixed(3)}, b = ${best[1].toFixed(3)}, loss ${f(best, Y).toFixed(3)}<table>${rows}</table>`;
+    document.querySelectorAll<HTMLElement>('.gn-controls .sw').forEach((s) => (s.style.background = color(s.dataset.c!)));
+  }
+
+  document.querySelectorAll<HTMLInputElement>('.gn-controls input[data-m]').forEach((c) => c.addEventListener('change', () => { on[c.dataset.m!] = c.checked; draw(); }));
+  const mis = document.getElementById('gn-mis') as HTMLInputElement, mu = document.getElementById('gn-mu') as HTMLInputElement;
+  mis.addEventListener('input', () => { misfit = +mis.value; (document.getElementById('gn-misv') as HTMLElement).textContent = mis.value; draw(); });
+  mu.addEventListener('input', () => { mu0 = 10 ** +mu.value; (document.getElementById('gn-muv') as HTMLElement).textContent = mu0 >= 1 ? String(Math.round(mu0)) : mu0.toPrecision(1); draw(); });
+  (document.getElementById('gn-ls') as HTMLInputElement).addEventListener('change', (e) => { ls = (e.target as HTMLInputElement).checked; draw(); });
+  (document.getElementById('gn-fit-a') as HTMLInputElement).addEventListener('change', (e) => { rescale = (e.target as HTMLInputElement).checked; draw(); });
+  let dragging = false;
+  const setStart = (e: PointerEvent) => { const r = map.getBoundingClientRect(); start = [pa(((e.clientX - r.left) / r.width) * W), pb(((e.clientY - r.top) / r.height) * H)]; draw(); };
+  map.addEventListener('pointerdown', (e) => { dragging = true; map.setPointerCapture(e.pointerId); setStart(e); });
+  map.addEventListener('pointermove', (e) => { if (dragging) setStart(e); });
+  map.addEventListener('pointerup', () => (dragging = false));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { bg = null; draw(); });
+  draw();
+</script>

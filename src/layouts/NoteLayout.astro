@@ -4,13 +4,15 @@
 import BaseLayout from './BaseLayout.astro';
 import Comments from '../components/Comments.astro';
 import 'katex/dist/katex.min.css';
-import { allNotes, AUTHOR, SITE, seriesNav } from '../data/notes.js';
+import '../styles/notes.css';
+import { allNotes, AUTHOR, SITE, seriesOf, seriesUrl } from '../data/notes.js';
 
-interface Props { slug: string; tldr: string; source?: string }
-const { slug, tldr, source } = Astro.props;
+interface Props { slug: string }
+const { slug } = Astro.props;
 const n = allNotes.find((x) => x.slug === slug);
-const nav = seriesNav(slug);
 if (!n) throw new Error(`No notes.js entry for ${slug}`);
+const { tldr, source } = n;
+const navs = seriesOf(slug);
 const url = `${SITE}/notes/${slug}/`;
 const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const year = n.published.slice(0, 4);
@@ -36,7 +38,7 @@ const plain = `${AUTHOR}. "${n.title}." Research note, version ${n.version}, ${f
     <link rel="alternate" type="application/rss+xml" title="Huanyu Chen — Notes" href="/notes/rss.xml" />
   </Fragment>
   <article class="note">
-    <p class="muted note-crumb"><a href="/notes">← Notes</a>{nav && <> · <a href={`/notes#${nav.series.id}`}>{nav.series.title}</a>, part {nav.index} of {nav.count}</>}</p>
+    <p class="muted note-crumb"><a href="/notes">← Notes</a>{navs.map((v) => <> · <a href={seriesUrl(v.series.id, slug)}>{v.series.title}</a>, card {v.index} of {v.count}</>)}</p>
     <h1>{n.title}</h1>
     <p class="muted note-meta">
       {AUTHOR} · {fmt(n.published)}{n.updated !== n.published && <> · updated {fmt(n.updated)}</>} · version {n.version}
@@ -46,12 +48,13 @@ const plain = `${AUTHOR}. "${n.title}." Research note, version ${n.version}, ${f
       done with AI assistance; the content was checked against the papers and verified numerically.</small></p>
     <slot />
     {source && <p class="muted note-source"><small><strong>Where this comes from.</strong> {source}</small></p>}
-    {nav && (nav.prev || nav.next) && (
-      <nav class="note-series-nav" aria-label={`${nav.series.title} series`}>
-        <span>{nav.prev && <a href={`/notes/${nav.prev.slug}`}>← {nav.prev.title}</a>}</span>
-        <span class="next">{nav.next && <a href={`/notes/${nav.next.slug}`}>{nav.next.title} →</a>}</span>
+    {navs.map((v) => (
+      <nav class="note-series-nav" aria-label={`${v.series.title} series`}>
+        <span>{v.prev && <a href={`/notes/${v.prev.slug}`}>← {v.prev.title}</a>}</span>
+        <span class="mid"><a href={seriesUrl(v.series.id, slug)}>{v.series.title}</a> · {v.index}/{v.count}</span>
+        <span class="next">{v.next && <a href={`/notes/${v.next.slug}`}>{v.next.title} →</a>}</span>
       </nav>
-    )}
+    ))}
     <section class="note-cite" id="cite">
       <h2>How to cite</h2>
       <p>{plain}</p>
@@ -74,20 +77,3 @@ const plain = `${AUTHOR}. "${n.title}." Research note, version ${n.version}, ${f
     });
   </script>
 </BaseLayout>
-
-<style is:global>
-  .note h2 { margin-top: 2em; }
-  .note-meta { margin-top: -.4em; }
-  .note-tldr { margin: 1.2em 0 1.6em; }
-  .tex-block { overflow-x: auto; overflow-y: hidden; margin: 1em 0; position: relative; }
-  .note .katex-display { margin: 0; }
-  .note-cite { margin-top: 3em; border-top: 1px solid var(--line); }
-  .bib-wrap { position: relative; }
-  .bib { background: color-mix(in srgb, var(--ink) 5%, transparent); padding: .8em 1em; overflow-x: auto; font-size: .85em; border-radius: 4px; }
-  .bib-copy { position: absolute; top: .5em; right: .5em; font: inherit; font-size: .8em; padding: .25em .7em; cursor: pointer;
-    background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
-  .note-series-nav { display: flex; justify-content: space-between; gap: 1em; margin-top: 2.5em; padding-top: 1em; border-top: 1px solid var(--line); }
-  .note-series-nav .next { text-align: right; margin-left: auto; }
-  .note-fig { margin: 1.5em 0; }
-  .note-fig figcaption { color: var(--muted); font-size: .9em; margin-top: .4em; }
-</style>
