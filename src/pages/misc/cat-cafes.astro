@@ -4,25 +4,25 @@ import Comments from '../../components/Comments.astro';
 import RegionMap from '../../components/RegionMap.astro';
 const P = 'https://media.huanyuchen.com/misc/cat-cafes/';
 const L = (label, lat, lon) => ({ label, lat, lon });
-const SPOTS = [
+const LOCAL = [
   { name: "Miko's Pet Supplies", locs: [L('West Covina', 34.0489, -117.9067)] },
   { name: 'Fika Fika (adoption days)', locs: [L('Arcadia', 34.13131, -118.06662)] },
-  { name: 'Save The Meow Meows Cat Lounge', locs: [L('Yucca Valley', 34.1202, -116.4223)] },
-  { name: 'Whiskers & Wine', locs: [L('San Diego', 32.7629, -117.1325)] },
 ];
 const AWAY = [
-  { name: 'Brooklyn Cat Cafe', locs: [L('Brooklyn Heights', 40.69522, -73.9964)] },
-];
-const PLACES = [
-  { name: 'Ernest Hemingway Home', locs: [L('Key West', 24.5512, -81.8006)] },
-  { name: 'Hilton Waikoloa Village self-parking lot', locs: [L('Waikoloa', 19.9221, -155.8884)] },
-];
-const BAY = [
+  { name: 'Save The Meow Meows Cat Lounge', locs: [L('Yucca Valley', 34.1202, -116.4223)] },
+  { name: 'Whiskers & Wine', locs: [L('San Diego', 32.7629, -117.1325)] },
+  { name: 'Cat Therapy', locs: [L('Santa Barbara', 34.42331, -119.70546)] },
   { name: 'Mini Cat Town', locs: [L('Palo Alto', 37.42603, -122.14484)] },
+  { name: 'Cat café', locs: [L('Richmond, BC', 49.1676, -123.1357)] },
+  { name: 'Brooklyn Cat Cafe', locs: [L('Brooklyn Heights', 40.69522, -73.9964)] },
+  { name: 'Ernest Hemingway Home', locs: [L('Key West', 24.5512, -81.8006)] },
+  { name: 'Tropicats', locs: [L('Līhuʻe', 21.9617, -159.3533)] },
+  { name: 'Hilton Waikoloa Village self-parking lot', locs: [L('Waikoloa', 19.9221, -155.8884)] },
+  { name: 'Cat Café MOFF', locs: [L('Ala Moana Center', 21.2905, -157.8432)] },
 ];
 ---
 <BaseLayout title="Cat Cafés — Huanyu Chen"
-  description="Cats we did not take home, 2023–2026: Brooklyn Cat Cafe on New Year's Day, the cat room at Miko's Pet Supplies in West Covina, kitten adoption days at Fika Fika in Arcadia, a cat lounge in Yucca Valley, a cat wine bar in San Diego, Mini Cat Town in Palo Alto, the Hemingway cats of Key West, a parking lot full of cats in Waikoloa, cat cafés in Richmond, Līhuʻe and Honolulu, and the kittens we fostered in 2023, with maps.">
+  description="Cats we did not take home, 2023–2026: Brooklyn Cat Cafe on New Year's Day, the cat room at Miko's Pet Supplies in West Covina, kitten adoption days at Fika Fika in Arcadia, a cat lounge in Yucca Valley, a cat wine bar in San Diego, Mini Cat Town in Palo Alto, the Hemingway cats of Key West, a parking lot full of cats in Waikoloa, cat cafés in Santa Barbara, Richmond, Līhuʻe and Honolulu, and the kittens we fostered in 2023, with maps.">
   <p class="muted"><a href="/misc">← Misc</a> · 2023 – 2026</p>
   <h1>Cat Cafés</h1>
   <p class="muted trip-sub">Cats we visited but did not take home, and a few we did, for a while.</p>
@@ -34,12 +34,15 @@ const BAY = [
   </div>
 
   <p>
-    Most of these photos are from my wife's camera roll; the Brooklyn and Palo Alto ones, and some from Richmond and Honolulu, are stills from our videos. They are the places where the cats belong to someone
-    else, or are waiting for someone: a cat café in Brooklyn, a pet store with a cat room, adoption days at a café, three cat lounges, and two places where the cats simply live. At the end are the kittens we fostered in 2023.
+    Most of these photos are from my wife's camera roll; the Brooklyn and Palo Alto ones, and some from Richmond and
+    Honolulu, are stills from our videos. They are the places where the cats belong to someone else, or are waiting for
+    someone, plus the kittens that stayed with us for a while. Close to home first, then further away.
   </p>
-  <RegionMap stores={SPOTS} region="Southern California" />
 
-  <h2 id="miko">Miko's Pet Supplies, West Covina</h2>
+  <h2 id="local">Local</h2>
+  <RegionMap stores={LOCAL} region="Los Angeles" />
+
+  <h3 id="miko">Miko's Pet Supplies, West Covina</h3>
   <p>
     <strong>Miko's Pet Supplies</strong> in West Covina has a room full of cats, with shelves and scratching posts up the
     walls. In 2024 it was the regular stop, ten times by the card records between May and the next January. In May
@@ -58,7 +61,7 @@ const BAY = [
     <figure class="trip-fig"><img src={P + 'miko-kitten.webp'} alt="An orange-and-white kitten peeking out from inside a denim jacket." loading="lazy" /><figcaption>In the jacket, December 2024.</figcaption></figure>
   </div>
 
-  <h2 id="fika">Adoption days at Fika Fika, Arcadia</h2>
+  <h3 id="fika">Adoption days at Fika Fika, Arcadia</h3>
   <p>
     <strong>Fika Fika</strong>, the Arcadia café from the sweets post, hosts adoption days with
     <strong>Cat and Comics Rescue</strong>: pens of kittens to look at with a coffee or an ice cream
@@ -76,85 +79,7 @@ const BAY = [
     <figure class="trip-fig"><img src={P + 'fika-black-kitten.webp'} alt="A black kitten lying in a box of wood-pellet litter inside a pen." loading="lazy" /><figcaption>In the litter box.</figcaption></figure>
   </div>
 
-  <h2 id="lounges">Two cat lounges</h2>
-  <p>
-    The evening we arrived for a Joshua Tree weekend in December 2024, we went to <strong>Save The Meow Meows Cat
-    Lounge</strong> in Yucca Valley, where a big black cat settled onto a lap. Later that night was
-    <a href="/misc/joshua-tree#dec-2024">Orion over the Joshua trees</a>.
-  </p>
-  <figure class="trip-fig narrow-fig"><img src={P + 'meow-black-cat.webp'} alt="A large black cat lying across a lap, being petted." loading="lazy" /><figcaption>Save The Meow Meows Cat Lounge, Yucca Valley, December 8, 2024.</figcaption></figure>
-  <p>
-    And in October 2026, <strong>Whiskers &amp; Wine</strong> on Adams Avenue in San Diego, a cocktail bar with a cat
-    lounge.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'whiskers-lounge.webp'} alt="A cat lounge with wall shelves, a gold mirror and cat beds, a black-and-white cat on a leopard-print rug." loading="lazy" /><figcaption>Whiskers &amp; Wine, San Diego, October 2026.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'whiskers-cat.webp'} alt="A tabby cat by the glass door of the lounge, next to a water bowl." loading="lazy" /><figcaption>By the door.</figcaption></figure>
-  </div>
-
-  <h2 id="mini-cat-town">Mini Cat Town, Palo Alto</h2>
-  <p>
-    One evening in August 2026 was at <strong>Mini Cat Town</strong> on California Avenue in Palo Alto, a cat lounge
-    run by a rescue, where the cats are up for adoption and shoe covers go on at the door. The Siamese-point kittens
-    took the sofa: one stretched out under a hand, one sat up for a chin scratch.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'minicat-siamese.webp'} alt="A cream kitten with dark points stretched out on a gray sofa, a hand beside it." loading="lazy" /><figcaption>On the sofa, Mini Cat Town, August 2026.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'minicat-chin.webp'} alt="A cream kitten with dark points sitting up on the sofa for a chin scratch." loading="lazy" /><figcaption>Sitting up.</figcaption></figure>
-  </div>
-  <p>
-    A black cat claimed a white chair, and an orange kitten took a break next to the ball tower.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'minicat-chair.webp'} alt="A black cat lying on the seat of a white chair in a bright lounge." loading="lazy" /><figcaption>A chair of his own.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'minicat-orange.webp'} alt="An orange kitten lying on a wood floor next to a purple ball-track toy." loading="lazy" /><figcaption>By the ball tower.</figcaption></figure>
-  </div>
-  <RegionMap stores={BAY} region="Palo Alto" />
-
-  <h2 id="brooklyn">Brooklyn Cat Cafe, New Year's Day 2023</h2>
-  <p>
-    On New Year's Day 2023, on a trip to New York, we stopped at <strong>Brooklyn
-    Cat Cafe</strong> on Montague Street in Brooklyn Heights, a few blocks from the Promenade. One cat was asleep in a
-    felt carrot on the counter, and a white cat lay upside down on a chair.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'brooklyn-carrot.webp'} alt="A black-and-white cat curled up asleep inside an orange felt carrot bed on a counter." loading="lazy" /><figcaption>In the carrot, Brooklyn Cat Cafe, January 1, 2023.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'brooklyn-white-cat.webp'} alt="A white cat lying on its back on a chair seat, pawing at a hand." loading="lazy" /><figcaption>Upside down on a chair.</figcaption></figure>
-  </div>
-  <p>
-    A black cat closed his eyes for a chin scratch, and a tuxedo cat kept watch over the street from the cat tree in the
-    front window.
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'brooklyn-black-cat.webp'} alt="A black cat with eyes closed, getting a chin scratch from a hand with an entry sticker." loading="lazy" /><figcaption>A chin scratch.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'brooklyn-tuxedo.webp'} alt="A black-and-white cat lying on a cat tree platform by the front window." loading="lazy" /><figcaption>In the front window.</figcaption></figure>
-  </div>
-  <RegionMap stores={AWAY} region="New York" />
-
-  <h2 id="places">Cats that come with the place</h2>
-  <p>
-    Some places just have cats. At the <strong>Ernest Hemingway Home</strong> in Key West, on the 2024 road trip, the
-    descendants of Hemingway's six-toed cat have the run of the house and garden. One was minding the gift shop
-    counter, and an orange one patrolled the garden path. (More of them in
-    <a href="/misc/roadtrip-2024">the road trip post</a>.)
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'hemingway-shop-cat.webp'} alt="A tortoiseshell cat standing on a white counter in the museum gift shop, next to a card reader." loading="lazy" /><figcaption>Minding the shop, Hemingway Home, August 2024.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'hemingway-orange-cat.webp'} alt="An orange cat walking across a gravel garden path edged with coral stones." loading="lazy" /><figcaption>On patrol in the garden.</figcaption></figure>
-  </div>
-  <p>
-    The biggest surprise came on the Big Island in September 2026. Driving into the self-parking lot of the Hilton Waikoloa Village
-    after dark, we suddenly found the headlights full of cats: dozens of them, spread across the asphalt between the
-    painted lines, a feral colony at its dinner hour. We had never heard of it, and spent ten minutes just watching.
-    (The full story is in <a href="/misc/hawaii-2026">the Hawaiʻi post</a>.)
-  </p>
-  <div class="trip-pair">
-    <figure class="trip-fig"><img src={P + 'waikoloa-lot.webp'} alt="Cats of every color scattered across a dark parking lot at night, casting long shadows in the lights." loading="lazy" /><figcaption>The cat parking lot, Waikoloa, September 9, 2026.</figcaption></figure>
-    <figure class="trip-fig"><img src={P + 'waikoloa-calico.webp'} alt="A calico, a tabby-and-white and a white cat close up on the asphalt at night." loading="lazy" /><figcaption>Up close.</figcaption></figure>
-  </div>
-  <RegionMap stores={PLACES} region="Key West and Hawaiʻi" />
-
-  <h2 id="fosters">Fosters, 2023</h2>
+  <h3 id="fosters">Our fosters, 2023</h3>
   <p>
     In 2023 the cats came to us for a change: we fostered three rounds of kittens. The first was a litter of orange and
     tabby kittens, with us from mid-May into early June. One of the orange ones decided a flowerpot was a bed.
@@ -175,23 +100,115 @@ const BAY = [
   </p>
   <figure class="trip-fig"><img src={P + 'foster-tuxedo.webp'} alt="A black-and-white kitten with white paws held in the crook of an arm in a pink sweater." loading="lazy" /><figcaption>December.</figcaption></figure>
 
-  <h2 id="away">On the road</h2>
+  <h2 id="away">Further away</h2>
   <p>
-    Three more are in the trip posts. On the last afternoon of the <a href="/misc/vancouver-2023">Vancouver trip</a>
-    in October 2023 we went to a cat café in Richmond, BC. Most of the cats there were long-haired.
+    Trips, from the desert to Hawaiʻi, roughly from nearest to farthest.
+  </p>
+  <RegionMap stores={AWAY} region="further away" />
+
+  <h3 id="yucca-valley">Save The Meow Meows, Yucca Valley, December 2024</h3>
+  <p>
+    The evening we arrived for a Joshua Tree weekend in December 2024, we went to <strong>Save The Meow Meows Cat
+    Lounge</strong> in Yucca Valley, where a big black cat settled onto a lap. Later that night was
+    <a href="/misc/joshua-tree#dec-2024">Orion over the Joshua trees</a>.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'meow-black-cat.webp'} alt="A large black cat lying across a lap, being petted." loading="lazy" /><figcaption>Save The Meow Meows Cat Lounge, Yucca Valley, December 8, 2024.</figcaption></figure>
+
+  <h3 id="san-diego">Whiskers &amp; Wine, San Diego, October 2026</h3>
+  <p>
+    In October 2026, <strong>Whiskers &amp; Wine</strong> on Adams Avenue in San Diego, a cocktail bar with a cat
+    lounge.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'whiskers-lounge.webp'} alt="A cat lounge with wall shelves, a gold mirror and cat beds, a black-and-white cat on a leopard-print rug." loading="lazy" /><figcaption>Whiskers &amp; Wine, San Diego, October 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'whiskers-cat.webp'} alt="A tabby cat by the glass door of the lounge, next to a water bowl." loading="lazy" /><figcaption>By the door.</figcaption></figure>
+  </div>
+
+  <h3 id="santa-barbara">Cat Therapy, Santa Barbara, June 2024</h3>
+  <p>
+    <strong>Cat Therapy</strong> on State Street was meant to be a May 2024 visit, but that was the weekend of the big
+    aurora, and we went to chase it instead. We moved the visit to the June trip. There are no photos from this
+    one.
+  </p>
+
+  <h3 id="mini-cat-town">Mini Cat Town, Palo Alto, August 2026</h3>
+  <p>
+    One evening in August 2026 was at <strong>Mini Cat Town</strong> on California Avenue in Palo Alto, a cat lounge
+    run by a rescue, where the cats are up for adoption and shoe covers go on at the door. The Siamese-point kittens
+    took the sofa: one stretched out under a hand, one sat up for a chin scratch.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'minicat-siamese.webp'} alt="A cream kitten with dark points stretched out on a gray sofa, a hand beside it." loading="lazy" /><figcaption>On the sofa, Mini Cat Town, August 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'minicat-chin.webp'} alt="A cream kitten with dark points sitting up on the sofa for a chin scratch." loading="lazy" /><figcaption>Sitting up.</figcaption></figure>
+  </div>
+  <p>
+    A black cat claimed a white chair, and an orange kitten took a break next to the ball tower.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'minicat-chair.webp'} alt="A black cat lying on the seat of a white chair in a bright lounge." loading="lazy" /><figcaption>A chair of his own.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'minicat-orange.webp'} alt="An orange kitten lying on a wood floor next to a purple ball-track toy." loading="lazy" /><figcaption>By the ball tower.</figcaption></figure>
+  </div>
+
+  <h3 id="richmond">A cat café in Richmond, BC, October 2023</h3>
+  <p>
+    On the last afternoon of the <a href="/misc/vancouver-2023">Vancouver trip</a> we went to a cat café in Richmond.
+    Most of the cats there were long-haired.
   </p>
   <div class="trip-pair">
     <figure class="trip-fig"><img src={P + 'richmond-ragdoll.webp'} alt="A fluffy cream cat with a dark face and ears sitting on a white counter, eyes half closed." loading="lazy" /><figcaption>Richmond, BC, October 2, 2023.</figcaption></figure>
     <figure class="trip-fig"><img src={P + 'richmond-pair.webp'} alt="Two long-haired cats, one cream with dark points and one gray, on a tile floor by a scratching post." loading="lazy" /><figcaption>Two of the regulars.</figcaption></figure>
   </div>
+
+  <h3 id="brooklyn">Brooklyn Cat Cafe, January 2023</h3>
   <p>
-    On Kauaʻi in April 2026 we stopped at Tropicats in Līhuʻe after lunch (<a href="/misc/kauai-2026">Kauaʻi,
-    2026</a>).
+    On New Year's Day 2023, on a trip to New York, we stopped at <strong>Brooklyn
+    Cat Cafe</strong> on Montague Street in Brooklyn Heights, a few blocks from the Promenade. One cat was asleep in a
+    felt carrot on the counter, and a white cat lay upside down on a chair.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'brooklyn-carrot.webp'} alt="A black-and-white cat curled up asleep inside an orange felt carrot bed on a counter." loading="lazy" /><figcaption>In the carrot, Brooklyn Cat Cafe, January 1, 2023.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'brooklyn-white-cat.webp'} alt="A white cat lying on its back on a chair seat, pawing at a hand." loading="lazy" /><figcaption>Upside down on a chair.</figcaption></figure>
+  </div>
+  <p>
+    A black cat closed his eyes for a chin scratch, and a tuxedo cat kept watch over the street from the cat tree in the
+    front window.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'brooklyn-black-cat.webp'} alt="A black cat with eyes closed, getting a chin scratch from a hand with an entry sticker." loading="lazy" /><figcaption>A chin scratch.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'brooklyn-tuxedo.webp'} alt="A black-and-white cat lying on a cat tree platform by the front window." loading="lazy" /><figcaption>In the front window.</figcaption></figure>
+  </div>
+
+  <h3 id="key-west">The Hemingway cats, Key West, August 2024</h3>
+  <p>
+    At the <strong>Ernest Hemingway Home</strong> in Key West, on the 2024 road trip, the
+    descendants of Hemingway's six-toed cat have the run of the house and garden. One was minding the gift shop
+    counter, and an orange one patrolled the garden path. (More of them in
+    <a href="/misc/roadtrip-2024">the road trip post</a>.)
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'hemingway-shop-cat.webp'} alt="A tortoiseshell cat standing on a white counter in the museum gift shop, next to a card reader." loading="lazy" /><figcaption>Minding the shop, Hemingway Home, August 2024.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'hemingway-orange-cat.webp'} alt="An orange cat walking across a gravel garden path edged with coral stones." loading="lazy" /><figcaption>On patrol in the garden.</figcaption></figure>
+  </div>
+
+  <h3 id="hawaii">Hawaiʻi, 2026</h3>
+  <p>
+    Three on the islands. On Kauaʻi in April, <strong>Tropicats</strong> in Līhuʻe after lunch on the first day
+    (<a href="/misc/kauai-2026">Kauaʻi, 2026</a>).
   </p>
   <figure class="trip-fig narrow-fig"><img src={P + 'tropicats-chair.webp'} alt="A tabby cat curled up on white cushions inside a round rattan egg chair, against a bamboo-paneled wall." loading="lazy" /><figcaption>Tropicats, Līhuʻe, April 22, 2026.</figcaption></figure>
   <p>
-    And in September 2026 we spent a while at Cat Café MOFF in Ala Moana Center, Honolulu (<a
-    href="/misc/hawaii-2026">Hawaiʻi, 2026</a>). A cup of treats drew a silver tabby to the table.
+    The biggest surprise came on the Big Island in September 2026. Driving into the self-parking lot of the Hilton Waikoloa Village
+    after dark, we suddenly found the headlights full of cats: dozens of them, spread across the asphalt between the
+    painted lines, a feral colony at its dinner hour. We had never heard of it, and spent ten minutes just watching.
+    (The full story is in <a href="/misc/hawaii-2026">the Hawaiʻi post</a>.)
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'waikoloa-lot.webp'} alt="Cats of every color scattered across a dark parking lot at night, casting long shadows in the lights." loading="lazy" /><figcaption>The cat parking lot, Waikoloa, September 9, 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'waikoloa-calico.webp'} alt="A calico, a tabby-and-white and a white cat close up on the asphalt at night." loading="lazy" /><figcaption>Up close.</figcaption></figure>
+  </div>
+  <p>
+    And on Oʻahu a few days later, we spent a while at <strong>Cat Café MOFF</strong> in Ala Moana Center (<a href="/misc/hawaii-2026">Hawaiʻi,
+    2026</a>). A cup of treats drew a silver tabby to the table.
   </p>
   <div class="trip-pair">
     <figure class="trip-fig"><img src={P + 'moff-treat.webp'} alt="A silver tabby cat at a low table, looking at a small cup of treats held out by a hand." loading="lazy" /><figcaption>Treat time, Cat Café MOFF, September 11, 2026.</figcaption></figure>
