@@ -1,0 +1,288 @@
+---
+import NoteLayout from '../../layouts/NoteLayout.astro';
+import Tex from '../../components/Tex.astro';
+---
+<NoteLayout slug="removable-singularities"
+  tldr="A formula with a removable singularity is fine far from the bad point, undefined at it, and quietly inaccurate in between; in isotropic materials the culprit is almost always one divided difference, and the right fix is a short Taylor formula switched in at a threshold of roughly ε^(1/(1+b)), where b is the formula's order of accuracy."
+  source="The three cases below come from my papers on isotropic materials: the material-capture paper (SIGGRAPH Asia 2023, Appendices C–D), the elastic-rod paper (SIGGRAPH 2025, Section 4 and Appendix G) and the thin-shell paper (SIGGRAPH Asia 2026, Section 9 and Appendices C, E, F). The error measurements are new: I re-ran each paper's formula on a test material in high precision for this note.">
+
+  <h2 id="what">What a removable singularity looks like in code</h2>
+  <p>
+    A removable singularity is a point where a formula is undefined but the function it describes is not. The textbook
+    example is <Tex tex={String.raw`\sin x / x`} />, which is <Tex tex={String.raw`0/0`} /> at <Tex tex={String.raw`x=0`} />
+    but tends to <Tex tex={String.raw`1`} />. In code there are really two problems. <strong>At the point</strong>, the
+    formula returns <code>NaN</code>. <strong>Near the point</strong>, it may lose digits to cancellation, when the
+    numerator subtracts two numbers that agree in almost every digit. <Tex tex={String.raw`\sin x/x`} /> only has the
+    first problem; <Tex tex={String.raw`(1-\cos x)/x^2`} /> has both, and at <Tex tex={String.raw`x=10^{-8}`} /> it
+    returns <Tex tex={String.raw`0`} /> instead of <Tex tex={String.raw`\tfrac12`} />. And not every zero denominator is
+    removable: the gradient of a vector length, <Tex tex={String.raw`\mathbf v/\lVert\mathbf v\rVert`} />, has no limit at
+    <Tex tex={String.raw`\mathbf v=\mathbf 0`} />, and no formula fixes that.
+  </p>
+
+  <h2 id="papers">One divided difference, three papers</h2>
+  <p>
+    In my work on isotropic materials the same singularity has come back in every paper. An isotropic energy is a
+    symmetric function of the principal stretches, <Tex tex={String.raw`\psi(\sigma_1,\sigma_2,\sigma_3)`} />, and its
+    Hessian with respect to the deformation gradient contains, for each pair <Tex tex={String.raw`i<j`} />, the two
+    coefficients
+  </p>
+  <Tex block tex={String.raw`\frac{\partial_i\psi+\partial_j\psi}{\sigma_i+\sigma_j}
+    \qquad\text{and}\qquad
+    \frac{\partial_i\psi-\partial_j\psi}{\sigma_i-\sigma_j},`} />
+  <p>
+    where <Tex tex={String.raw`\partial_i\psi`} /> is the derivative with respect to <Tex tex={String.raw`\sigma_i`} />. The
+    second one is <Tex tex={String.raw`0/0`} /> whenever two stretches are equal, which includes the rest shape, where
+    all of them are 1. By symmetry, <Tex tex={String.raw`\partial_i\psi=\partial_j\psi`} /> there, and the limit is
+    <Tex tex={String.raw`\partial_{ii}\psi-\partial_{ij}\psi`} />. It is a divided difference of the gradient, and it is the
+    only singular piece: every other expression below is built from it.
+  </p>
+
+  <h3>Material capture (SIGGRAPH Asia 2023)</h3>
+  <p>
+    In <em>Capturing Animation-Ready Isotropic Materials Using Systematic Poking</em>, the Hessian is assembled in a basis
+    built from the SVD (Appendix D), and the divided difference appears in its 1×1 blocks. Appendix D.1 expands it in
+    <Tex tex={String.raw`\lambda_1`} /> around <Tex tex={String.raw`\lambda_2`} />:
+  </p>
+  <Tex block tex={String.raw`\frac{\partial_1\psi-\partial_2\psi}{\lambda_1-\lambda_2}
+    =\sum_{k=0}^{\infty}\frac{(\lambda_1-\lambda_2)^k}{(k+1)!}\,\partial_1^{k+1}(\partial_1-\partial_2)\psi(\lambda_2,\lambda_2,\lambda_3),
+    \qquad \lim_{\lambda_1\to\lambda_2}=\partial_{11}\psi-\partial_{12}\psi.`} />
+  <p>
+    The paper keeps the limit and switches to it when two stretches are within <Tex tex={String.raw`10^{-4}`} /> of each
+    other, an absolute threshold that works because physical stretches stay within about
+    <Tex tex={String.raw`[1/2,\,3/2]`} />. The gradient avoids the problem altogether by being chained through the
+    invariants of the stretch tensor (Appendix C).
+  </p>
+
+  <h3>Elastic rods (SIGGRAPH 2025)</h3>
+  <p>
+    In <em>ANIME-Rod</em>, a rod's cross-section shrinks or expands by a factor <Tex tex={String.raw`\rho`} /> while the
+    centerline stretches by <Tex tex={String.raw`\lambda`} />, and the twisting energy and the energy of a varying
+    cross-section (the <Tex tex={String.raw`\rho'^2`} /> term) contain
+  </p>
+  <Tex block tex={String.raw`K_1=\frac{\lambda\,\partial_1\psi-\rho\,\partial_2\psi}{\lambda^2-\rho^2},
+    \qquad
+    K_2=\frac{\rho\,\partial_1\psi-\lambda\,\partial_2\psi}{\lambda^2-\rho^2},`} />
+  <p>
+    which are singular at <Tex tex={String.raw`\lambda=\rho`} />, again including the rest shape, where
+    <Tex tex={String.raw`K_1=K_2=\mu`} />. Appendix G switches, below <Tex tex={String.raw`|\lambda-\rho|=10^{-3}`} />, to
+  </p>
+  <Tex block tex={String.raw`K_{1,2}\approx\frac12\left(\frac{\partial_{11}\psi+\partial_{22}\psi}{2}-\partial_{12}\psi\pm\frac{\partial_1\psi+\partial_2\psi}{\lambda+\rho}\right),`} />
+  <p>
+    with the derivatives taken at the actual <Tex tex={String.raw`(\lambda,\rho)`} />, not at the midpoint. Averaging
+    <Tex tex={String.raw`\partial_{11}\psi`} /> and <Tex tex={String.raw`\partial_{22}\psi`} /> cancels the first-order error, so
+    this formula is accurate to <Tex tex={String.raw`O(|\lambda-\rho|^2)`} />, one order better than the limit alone.
+    A small identity makes the structure clear: with <Tex tex={String.raw`\sigma_1=\lambda,\ \sigma_2=\rho`} />,
+  </p>
+  <Tex block tex={String.raw`K_{1,2}=\frac12\left(\frac{\partial_1\psi-\partial_2\psi}{\lambda-\rho}\pm\frac{\partial_1\psi+\partial_2\psi}{\lambda+\rho}\right),`} />
+  <p>so only the divided difference needs care; the other half is harmless.</p>
+
+  <h3>Thin shells (SIGGRAPH Asia 2026)</h3>
+  <p>
+    In <em>Beyond Kirchhoff-Love</em>, a shell has two in-plane stretches <Tex tex={String.raw`\lambda_1,\lambda_2`} /> and a
+    thickness stretch <Tex tex={String.raw`\rho`} />, and the singularities multiply. The thickness-gradient energy
+    contains <Tex tex={String.raw`K_{13}^{+}`} /> and <Tex tex={String.raw`K_{23}^{+}`} />, singular at
+    <Tex tex={String.raw`\lambda_i=\rho`} /> and handled with the same second-order formula (Appendix E, Eqs. 90–91). The
+    bending energy is singular at <Tex tex={String.raw`\lambda_1=\lambda_2`} />, and there the fix is structural: Appendix F
+    regroups it into eight terms built from sums and differences of the entries of two curvature-like matrices
+    <Tex tex={String.raw`r`} /> and <Tex tex={String.raw`s`} />, and factors each singular term into pieces whose limits exist. The coefficients that remain get their own Taylor branches below
+    <Tex tex={String.raw`\varepsilon=10^{-3}`} />, for example
+  </p>
+  <Tex block tex={String.raw`C_7^{\mathrm{sing}}=\frac12\,\frac{\partial_1\psi-\partial_2\psi}{\lambda_1-\lambda_2}
+    \approx\frac14\left(\partial_{11}\psi+\partial_{22}\psi-2\partial_{12}\psi\right)
+    -\frac{\lambda_1-\lambda_2}{24}\left(\partial_{111}\psi-3\partial_{112}\psi+3\partial_{122}\psi-\partial_{222}\psi\right).`} />
+  <p>
+    The correction term pays off handsomely: checked in high precision, this formula is accurate to fourth order in
+    <Tex tex={String.raw`\lambda_1-\lambda_2`} />, not second. The shell paper also avoids computing
+    <Tex tex={String.raw`\lambda_1,\lambda_2`} /> from an SVD at all, solving a 2×2 generalized eigenproblem instead
+    (Section 9), because the derivatives of singular values are themselves hard to compute robustly when two of them meet.
+  </p>
+
+  <h2 id="where">Where to put the switch</h2>
+  <p>
+    Above the threshold, the formula's rounding error grows as the two stretches approach each other, roughly like
+    <Tex tex={String.raw`\varepsilon/d`} />, where <Tex tex={String.raw`d=\lambda_1-\lambda_2`} /> and
+    <Tex tex={String.raw`\varepsilon\approx2.2\times10^{-16}`} />. Below it, a formula of order <Tex tex={String.raw`b`} /> is off by
+    about <Tex tex={String.raw`d^{\,b}`} />. The worst error sits at the threshold, and it is smallest when the two match:
+  </p>
+  <Tex block tex={String.raw`\frac{\varepsilon}{\tau}\approx\tau^{\,b}\quad\Longrightarrow\quad \tau\approx\varepsilon^{1/(1+b)},\qquad\text{worst error}\approx\varepsilon^{\,b/(1+b)}.`} />
+  <p>
+    Here is how the three papers' choices measure up on a test material (an Ogden-like energy with volume coupling, at
+    <Tex tex={String.raw`\lambda_2=1.1,\ \rho=0.9`} />), against 50-digit reference values:
+  </p>
+  <div class="rs-scroll"><table class="rs-table">
+    <tr><th>formula</th><th>order</th><th>threshold used</th><th>worst error there</th><th>best threshold</th></tr>
+    <tr><td>limit only (2023)</td><td>1</td><td><Tex tex={String.raw`10^{-4}`} /></td><td><Tex tex={String.raw`2.5\times10^{-4}`} /></td><td><Tex tex={String.raw`\sim10^{-8}`} />, error <Tex tex={String.raw`2\times10^{-8}`} /></td></tr>
+    <tr><td><Tex tex={String.raw`K^{\pm}`} /> formula (2025, 2026)</td><td>2</td><td><Tex tex={String.raw`10^{-3}`} /></td><td><Tex tex={String.raw`8\times10^{-7}`} /></td><td><Tex tex={String.raw`\sim4\times10^{-6}`} />, error <Tex tex={String.raw`2\times10^{-11}`} /></td></tr>
+    <tr><td><Tex tex={String.raw`C_7^{\mathrm{sing}}`} /> formula (2026)</td><td>4</td><td><Tex tex={String.raw`10^{-3}`} /></td><td><Tex tex={String.raw`1.6\times10^{-13}`} /></td><td><Tex tex={String.raw`\sim8\times10^{-4}`} />, error <Tex tex={String.raw`10^{-13}`} /></td></tr>
+  </table></div>
+  <p>
+    The rule predicts the best thresholds well (<Tex tex={String.raw`\varepsilon^{1/2}\approx10^{-8}`} />,
+    <Tex tex={String.raw`\varepsilon^{1/3}\approx6\times10^{-6}`} />, <Tex tex={String.raw`\varepsilon^{1/5}\approx7\times10^{-4}`} />).
+    With the limit alone, the error at the switch is about the size of the threshold itself, so
+    <Tex tex={String.raw`10^{-4}`} /> keeps three to four digits there; one more series term at the same threshold keeps
+    eight. The fourth-order shell formula is the nicest case: its best threshold is
+    <Tex tex={String.raw`10^{-3}`} />, a round number you would pick anyway, and it keeps nearly thirteen digits.
+  </p>
+
+  <h2 id="demo">Try it</h2>
+  <p>
+    The plot shows the relative error of each way of evaluating a function, on log axes. The first three functions are
+    the ones above, from the papers; the rest are classic one-variable cases. Move the threshold and the number of
+    Taylor terms and watch the <strong>switched</strong> curve: the series' error rises toward the threshold from the
+    left, the formula's rounding error rises toward it from the right, and the best setting is where they meet in a V.
+  </p>
+  <figure class="note-fig rs-demo">
+    <div class="rs-controls">
+      <label>Function
+        <select id="rs-case"></select>
+      </label>
+      <label>Terms <input type="range" id="rs-n" min="0" max="6" step="1" value="0" /> <span id="rs-nv"></span></label>
+      <label>Threshold τ <input type="range" id="rs-tau" min="-12" max="0" step="0.05" value="-4" /> <span id="rs-tv"></span></label>
+      <button type="button" id="rs-paper">Paper’s τ</button>
+      <button type="button" id="rs-best">Best τ</button>
+    </div>
+    <canvas id="rs-canvas" width="880" height="500" aria-label="Log-log plot of relative error against the distance to the singular point, for the naive formula, the Taylor formula, the switched evaluation and a stable rewrite."></canvas>
+    <div class="rs-legend" id="rs-legend"></div>
+    <div class="rs-read" id="rs-read"></div>
+    <figcaption>Relative error against the distance to the singular point, both on log scales. For the paper cases the
+      reference values were computed in 50-digit arithmetic. Errors at the limit of double precision are drawn at the
+      floor.</figcaption>
+  </figure>
+
+  <h2 id="rewrite">When a rewrite beats a threshold</h2>
+  <p>
+    Sometimes algebra removes the cancellation and no threshold is needed:
+    <Tex tex={String.raw`(1-\cos x)/x^2=\tfrac12\big(\sin(x/2)/(x/2)\big)^2`} />, or
+    <Tex tex={String.raw`(e^x-1)/x=\mathrm{expm1}(x)/x`} />, or a divided difference of logarithms written with
+    <code>log1p</code> (try them in the demo). The shell paper's Appendix F is the same idea at a larger scale: rather than
+    expanding the whole bending energy, regroup it so that each singular factor is isolated and only a few scalar
+    coefficients need a series. And sometimes the best rewrite is upstream, as in not computing an SVD whose
+    derivatives you would then have to rescue. A rewrite still leaves <Tex tex={String.raw`0/0`} /> at the point itself,
+    so the exact point needs a branch either way. How any of these fixes behaves under automatic differentiation is a
+    separate story: see <a href="/notes/autodiff-removable-singularities">why removable singularities are bad for autodiff</a>.
+  </p>
+
+  <h2 id="checklist">A short checklist</h2>
+  <ul>
+    <li><strong>Find the divided difference.</strong> In isotropic materials, every singular term reduces to
+      <Tex tex={String.raw`(\partial_i\psi-\partial_j\psi)/(\sigma_i-\sigma_j)`} />; split it off and leave the harmless parts alone.</li>
+    <li><strong>Expect the rest state.</strong> All stretches equal 1 there, so the "rare" singular point is the most common input.</li>
+    <li><strong>Use more than the limit.</strong> A one-term switch costs about half your digits; evaluating derivatives at the
+      actual point and averaging gains an order for free.</li>
+    <li><strong>Set the threshold by the rule</strong> <Tex tex={String.raw`\tau\approx\varepsilon^{1/(1+b)}`} />, then confirm it by
+      measuring against a high-precision reference over a log-spaced range of distances.</li>
+    <li><strong>Test exactly on the singular points</strong>, not just near them; the shell paper's finite-difference checks
+      land on <Tex tex={String.raw`\lambda_1=\lambda_2`} />, <Tex tex={String.raw`\lambda_i=\rho`} /> and the triple point.</li>
+  </ul>
+
+  <h2 id="refs">References</h2>
+  <ul class="rs-refs">
+    <li>Huanyu Chen, Danyong Zhao, Jernej Barbič. Capturing Animation-Ready Isotropic Materials Using Systematic Poking.
+      <em>ACM Transactions on Graphics</em> 42(6), SIGGRAPH Asia 2023.</li>
+    <li>Huanyu Chen, Jiahao Wen, Jernej Barbič. ANIME-Rod: Adjustable Nonlinear Isotropic Materials for Elastic Rods.
+      <em>ACM Transactions on Graphics</em> 44(4), SIGGRAPH 2025.
+      <a href="https://doi.org/10.1145/3731208">doi:10.1145/3731208</a></li>
+    <li>Huanyu Chen, Yumeng He, Jernej Barbič. Beyond Kirchhoff-Love: A Volumetric Approach to Thin-Shell Mechanics.
+      <em>ACM Transactions on Graphics</em> 45(6), SIGGRAPH Asia 2026.</li>
+  </ul>
+</NoteLayout>
+
+<style is:global>
+  .rs-demo canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; margin-top: .6em; }
+  .rs-controls { display: flex; flex-wrap: wrap; gap: .5em 1.2em; align-items: center; }
+  .rs-controls select, .rs-controls button { font: inherit; padding: .25em .6em; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; max-width: 100%; }
+  .rs-controls button { cursor: pointer; }
+  .rs-controls button:hover { border-color: var(--link); }
+  .rs-controls button[hidden] { display: none; }
+  .rs-controls label:first-child { flex: 1 1 100%; min-width: 0; display: flex; gap: .5em; align-items: center; }
+  .rs-controls label:first-child select { flex: 1 1 auto; min-width: 0; width: 100%; }
+  .rs-controls input { vertical-align: middle; }
+  .rs-legend { display: flex; flex-wrap: wrap; gap: .3em 1.2em; font-size: .88em; margin-top: .5em; }
+  .rs-legend span::before { content: ''; display: inline-block; width: 1.6em; height: 0; border-top: 3px solid var(--c); vertical-align: middle; margin-right: .4em; }
+  .rs-legend span.dash::before { border-top-style: dashed; }
+  .rs-read { font-size: .9em; margin-top: .4em; }
+  .rs-scroll { overflow-x: auto; }
+  .rs-table { border-collapse: collapse; font-size: .9em; margin: .8em 0; }
+  .rs-table th, .rs-table td { text-align: left; padding: .3em .9em .3em 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .rs-refs li { margin: .4em 0; }
+  /* keep KaTeX's hidden MathML inside the scrollable equation box on narrow screens */
+  .note .tex-block { position: relative; }
+</style>
+
+<script>
+  import { CASES, PAPER_CASES, taylor, reference, switched, relerr, samples } from '../../scripts/removable-singularities.js';
+  const ALL: any[] = [...PAPER_CASES, ...CASES];
+  const cv = document.getElementById('rs-canvas') as HTMLCanvasElement;
+  const ctx = cv.getContext('2d')!;
+  const W = cv.width, H = cv.height, L = 70, R = 20, Tm = 16, B = 46;
+  const sel = document.getElementById('rs-case') as HTMLSelectElement;
+  const nS = document.getElementById('rs-n') as HTMLInputElement, tS = document.getElementById('rs-tau') as HTMLInputElement;
+  const paperBtn = document.getElementById('rs-paper') as HTMLButtonElement;
+  ALL.forEach((c, i) => { const o = document.createElement('option'); o.value = String(i); o.textContent = c.label; sel.appendChild(o); });
+  const css = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#000';
+  const EMIN = -17, EMAX = 1;
+  const sup = (k: number) => String(k).split('').map((ch) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+ch]).join('');
+  const DEFAULT_N: Record<string, number> = { poking: 0, kplus: 0, c7: 1 };
+
+  function worst(c: any, n: number, tau: number, xs: number[]) {
+    let w = 0; for (const x of xs) w = Math.max(w, relerr(switched(c, x, n, tau), reference(c, x))); return w;
+  }
+  function bestTau(c: any, n: number, xs: number[]) {
+    let best = [Infinity, 0];
+    for (let e = Math.log10(c.xmin); e <= 0; e += 0.05) { const t = Math.pow(10, e), w = worst(c, n, t, xs); if (w < best[0]) best = [w, t]; }
+    return best;
+  }
+  function setCase() {
+    const c = ALL[+sel.value];
+    const nmax = c.nmax ?? 6; nS.max = String(nmax); nS.disabled = nmax === 0;
+    nS.value = String(DEFAULT_N[c.id] ?? Math.min(2, nmax));
+    tS.min = String(Math.floor(Math.log10(c.xmin)));
+    tS.value = String(c.paperTau ? Math.log10(c.paperTau) : -2);
+    paperBtn.hidden = !c.paperTau;
+    draw();
+  }
+
+  function draw() {
+    const c = ALL[+sel.value], n = +nS.value, tau = Math.pow(10, +tS.value);
+    (document.getElementById('rs-nv') as HTMLElement).textContent = c.termsLabel ? c.termsLabel(n) : `${n + 1} (through ${c.id === 'logratio' ? 'y' : 'x'}${sup(c.step * n)})`;
+    (document.getElementById('rs-tv') as HTMLElement).textContent = tau.toExponential(1);
+    const ink = css('--ink'), muted = css('--muted'), link = css('--link'), line = css('--line'), bg = css('--bg');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    const a = Math.log10(c.xmin), b = Math.log10(c.xmax);
+    const px = (x: number) => L + ((Math.log10(x) - a) / (b - a)) * (W - L - R);
+    const py = (e: number) => { const l = Math.log10(Math.max(e, 1e-17)); const k = Number.isFinite(l) ? Math.min(Math.max(l, EMIN), EMAX) : EMAX; return Tm + ((EMAX - k) / (EMAX - EMIN)) * (H - Tm - B); };
+    ctx.strokeStyle = line; ctx.fillStyle = muted; ctx.lineWidth = 1; ctx.font = '13px system-ui, sans-serif';
+    for (let e = EMIN + 1; e <= EMAX; e += 2) { const y = py(Math.pow(10, e)); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(W - R, y); ctx.stroke(); ctx.textAlign = 'right'; ctx.fillText(`1e${e}`, L - 6, y + 4); }
+    for (let e = Math.ceil(a); e <= Math.floor(b); e += (b - a > 8 ? 2 : 1)) { const x = px(Math.pow(10, e)); ctx.beginPath(); ctx.moveTo(x, Tm); ctx.lineTo(x, H - B); ctx.stroke(); ctx.textAlign = 'center'; ctx.fillText(`1e${e}`, x, H - B + 18); }
+    ctx.textAlign = 'center'; ctx.fillText(c.xlabel ?? (c.id === 'logratio' ? 'y = x − 1' : 'x'), (L + W - R) / 2, H - 8);
+    ctx.save(); ctx.translate(16, (Tm + H - B) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('relative error', 0, 0); ctx.restore();
+    const xs = samples(c, 360);
+    const curve = (f: (x: number) => number, col: string, w: number, dash: number[] = []) => {
+      ctx.strokeStyle = col; ctx.lineWidth = w; ctx.setLineDash(dash); ctx.beginPath();
+      xs.forEach((x, i) => { const e = relerr(f(x), reference(c, x)); const X = px(x), Y = py(e); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); });
+      ctx.stroke(); ctx.setLineDash([]);
+    };
+    curve((x) => c.naive(x), muted, 2);
+    curve((x) => taylor(c, x, n), muted, 1.5, [6, 5]);
+    if (c.stable) curve((x) => c.stable(x), ink, 1.5);
+    curve((x) => switched(c, x, n, tau), link, 3);
+    if (tau >= c.xmin && tau <= c.xmax) { ctx.strokeStyle = link; ctx.lineWidth = 1; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(px(tau), Tm); ctx.lineTo(px(tau), H - B); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = link; ctx.textAlign = 'left'; ctx.fillText('τ', px(tau) + 5, Tm + 14); }
+    const lg = document.getElementById('rs-legend') as HTMLElement;
+    lg.innerHTML = `<span style="--c:${muted}">naive formula</span><span class="dash" style="--c:${muted}">${c.taylorFn ? 'small-d formula only' : 'Taylor series only'}</span>` +
+      (c.stable ? `<span style="--c:${ink}">rewrite: ${c.stableLabel}</span>` : '') + `<span style="--c:${link}"><strong>switched</strong> (series below τ)</span>`;
+    const w = worst(c, n, tau, xs), bt = bestTau(c, n, xs);
+    (document.getElementById('rs-read') as HTMLElement).innerHTML =
+      `Worst relative error of the switched version over this range: <strong>${w.toExponential(1)}</strong>` +
+      ` (about ${Math.max(0, Math.floor(-Math.log10(Math.max(w, 1e-17))))} correct digits). Best τ for this setting: ${bt[1].toExponential(1)}, giving ${bt[0].toExponential(1)}.` +
+      ` Exactly at the singular point, the naive formula returns ${String(c.naive(0))}${c.stable ? ' and so does the rewrite' : ''}.`;
+  }
+  (document.getElementById('rs-best') as HTMLElement).addEventListener('click', () => {
+    const c = ALL[+sel.value]; const bt = bestTau(c, +nS.value, samples(c, 360)); tS.value = String(Math.log10(bt[1])); draw();
+  });
+  paperBtn.addEventListener('click', () => { const c = ALL[+sel.value]; if (c.paperTau) { tS.value = String(Math.log10(c.paperTau)); draw(); } });
+  sel.addEventListener('input', setCase);
+  [nS, tS].forEach((e) => e.addEventListener('input', draw));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+  setCase();
+</script>

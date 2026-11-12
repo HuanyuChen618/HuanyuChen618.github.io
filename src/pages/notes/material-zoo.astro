@@ -1,0 +1,328 @@
+---
+import NoteLayout from '../../layouts/NoteLayout.astro';
+import Tex from '../../components/Tex.astro';
+
+// Table 1 of Chen & Barbič, SCA 2026, transcribed from the paper's LaTeX source. Δ(ν) = 11ν² − 18ν + 15.
+const L = String.raw`\lambda_{\text{Lamé}}`, M = String.raw`\mu_{\text{Lamé}}`;
+const rows: { group?: string; name: string; cite?: string; psi: string; lam: string; mu: string; scien: string; ri: string }[] = [
+  { group: 'Seth-Hill and Hill families', name: 'Seth-Hill family (S.H.)', cite: '[Set64]',
+    psi: String.raw`\frac{\mu}{\alpha^2}\textstyle\sum_i(\lambda_i^{\alpha}-1)^2+\frac{\lambda}{2\alpha^2}\big(-3+\sum_i\lambda_i^{\alpha}\big)^2`, lam: String.raw`\lambda`, mu: String.raw`\mu`, scien: String.raw`\alpha`, ri: '0' },
+  { name: 'Linear Corotational (S.H. α = 1)',
+    psi: String.raw`\mu\textstyle\sum_i(\lambda_i-1)^2+\frac{\lambda}{2}\big(-3+\sum_i\lambda_i\big)^2`, lam: String.raw`\lambda`, mu: String.raw`\mu`, scien: '1', ri: '0' },
+  { name: 'St. Venant–Kirchhoff (S.H. α = 2)',
+    psi: String.raw`\frac{\mu}{4}\textstyle\sum_i(\lambda_i^2-1)^2+\frac{\lambda}{8}\big(-3+\sum_i\lambda_i^2\big)^2`, lam: String.raw`\lambda`, mu: String.raw`\mu`, scien: '2', ri: '0' },
+  { name: 'Hencky (S.H. α = 0)',
+    psi: String.raw`\mu\textstyle\sum_i\log^2\lambda_i+\frac{\lambda}{2}\log^2 J`, lam: String.raw`\lambda`, mu: String.raw`\mu`, scien: '0', ri: '0' },
+  { name: 'Symmetric Seth-Hill', cite: '[Baz98]',
+    psi: String.raw`\frac{\mu}{4\alpha^2}\textstyle\sum_i\big(\lambda_i^{\alpha}-\frac{1}{\lambda_i^{\alpha}}\big)^2+\frac{\lambda}{8\alpha^2}\big(\sum_i(\lambda_i^{\alpha}-\frac{1}{\lambda_i^{\alpha}})\big)^2`, lam: String.raw`\lambda`, mu: String.raw`\mu`, scien: '0', ri: '0' },
+  { name: 'Hill family', cite: '[Hil68]',
+    psi: String.raw`\mu\textstyle\sum_i f^2(\lambda_i)+\frac{\lambda}{2}\big(\sum_i f(\lambda_i)\big)^2`, lam: String.raw`\lambda`, mu: String.raw`\mu`, scien: String.raw`1+f''(1)`, ri: '0' },
+  { name: 'Volume-corrected Linear Corot.',
+    psi: String.raw`\mu\textstyle\sum_i(\lambda_i-1)^2+\frac{\lambda}{2}\log^2 J`, lam: String.raw`\lambda`, mu: String.raw`\mu`,
+    scien: String.raw`\frac{3(1-2\nu)(5-3\nu)}{\Delta(\nu)}`, ri: String.raw`\frac{2\sqrt{21}\,\nu(1-2\nu)}{\Delta(\nu)}` },
+  { name: 'Volume-corrected StVK',
+    psi: String.raw`\frac{\mu}{4}\textstyle\sum_i(\lambda_i^2-1)^2+\frac{\lambda}{2}\log^2 J`, lam: String.raw`\lambda`, mu: String.raw`\mu`,
+    scien: String.raw`\frac{6(1-2\nu)(5-3\nu)}{\Delta(\nu)}`, ri: String.raw`\frac{4\sqrt{21}\,\nu(1-2\nu)}{\Delta(\nu)}` },
+  { group: 'Neo-Hookean family', name: 'Neo-Hookean (standard)',
+    psi: String.raw`\frac{\mu}{2}\big(-3+\textstyle\sum_i\lambda_i^2\big)-\mu\log J+\frac{\lambda}{2}\log^2 J`, lam: String.raw`\lambda`, mu: String.raw`\mu`,
+    scien: String.raw`\frac{2(6\nu^2-13\nu+5)}{\Delta(\nu)}`, ri: String.raw`\frac{4\sqrt{21}\,|\nu(1-2\nu)|}{3\Delta(\nu)}` },
+  { name: 'Neo-Hookean (Ogden)',
+    psi: String.raw`\frac{\mu}{2}\big(-3+\textstyle\sum_i\lambda_i^2\big)-\mu\log J+\frac{\lambda}{2}(J-1)^2`, lam: String.raw`\lambda`, mu: String.raw`\mu`,
+    scien: String.raw`\frac{9\nu^2+7\nu+10}{\Delta(\nu)}`, ri: String.raw`\frac{2|\nu|\sqrt{1641\nu^2-2838\nu+1434}}{3\Delta(\nu)}` },
+  { name: 'Stable Neo-Hookean (Eq. 13 of [SGK18])',
+    psi: String.raw`\frac{\mu}{2}\big(-3+\textstyle\sum_i\lambda_i^2\big)-\mu(J-1)+\frac{\lambda}{2}(J-1)^2`, lam: String.raw`\lambda-\mu`, mu: String.raw`\mu`,
+    scien: String.raw`\frac{11\nu^2-16\nu+21}{\Delta(\nu)}`, ri: String.raw`\frac{2\sqrt3\sqrt{11\nu^4+4\nu^3+53\nu^2-114\nu+78}}{3\Delta(\nu)}` },
+  { name: 'STS material', cite: '[PRWH*18]',
+    psi: String.raw`\frac{\mu}{2}\big(-3+\textstyle\sum_i\lambda_i^2\big)-\mu\log J+\frac{\lambda}{2}\log^2 J+\frac{\mu_4}{8}\sum_i(\lambda_i^2-1)^4`, lam: String.raw`\lambda`, mu: String.raw`\mu`,
+    scien: String.raw`\frac{2(6\nu^2-13\nu+5)}{\Delta(\nu)}`, ri: String.raw`\frac{4\sqrt{21}\,|\nu(1-2\nu)|}{3\Delta(\nu)}` },
+  { group: 'Valanis-Landel family', name: 'Valanis-Landel (original)', cite: '[VL67]',
+    psi: String.raw`2\mu\textstyle\sum_i\lambda_i(\log\lambda_i-1)+\frac{\lambda}{2}\log^2 J`, lam: String.raw`\lambda`, mu: String.raw`\mu`,
+    scien: String.raw`\frac{2(6\nu^2-13\nu+5)}{\Delta(\nu)}`, ri: String.raw`\frac{4\sqrt{21}\,|\nu(1-2\nu)|}{3\Delta(\nu)}` },
+  { name: 'Valanis-Landel (general f and h)', cite: '[Val22, CZB23]',
+    psi: String.raw`\textstyle\sum_i f(\lambda_i)+h(J)`, lam: String.raw`h''(1)`, mu: String.raw`\frac{f''(1)}{2}`,
+    scien: String.raw`1+\frac{\nu(11-\nu)h_3+(5-3\nu)(1-2\nu)f_3+4\nu(3+\nu)}{\Delta(\nu)}`,
+    ri: String.raw`\frac{2|\nu|}{\sqrt3\,\Delta(\nu)}\Big(\Delta(\nu)(h_3+3)^2+7\big[(1-2\nu)(f_3-h_3)-2(1-\nu)(h_3+3)\big]^2\Big)^{1/2}` },
+  { name: 'Peng-Landel', cite: '[PL72]',
+    psi: String.raw`E\textstyle\sum_i\big(\lambda_i-1-\log\lambda_i-\frac16\log^2\lambda_i+\frac1{18}\log^3\lambda_i-\frac1{216}\log^4\lambda_i\big)`, lam: '0', mu: String.raw`\frac{E}{3}`, scien: String.raw`\frac23`, ri: '0' },
+  { group: 'Geometric models', name: 'ARAP', cite: '[SA07]',
+    psi: String.raw`\|F-R\|^2=\textstyle\sum_i(\lambda_i-1)^2`, lam: '0', mu: '1', scien: '1', ri: '0' },
+  { name: 'Symmetric ARAP', cite: '[SPSH*17]',
+    psi: String.raw`\frac{\mu}{2}\big(\|F-R\|^2+\|F^{-1}-R^{-1}\|^2\big)=\frac{\mu}{2}\textstyle\sum_i\big((\lambda_i-1)^2+(1-\frac1{\lambda_i})^2\big)`, lam: '0', mu: String.raw`\mu`, scien: '0', ri: '0' },
+  { name: 'Symmetric Dirichlet', cite: '[SS15]',
+    psi: String.raw`\frac12\big(\|F\|^2+\|F^{-1}\|^2\big)=\frac12\textstyle\sum_i\big(\lambda_i-\frac1{\lambda_i}\big)^2`, lam: '0', mu: '2', scien: '0', ri: '0' },
+  { group: 'Series models', name: 'Ogden', cite: '[Ogd72]',
+    psi: String.raw`\textstyle\sum_p\frac{\mu_p}{\alpha_p}\big(-3+\sum_i\lambda_i^{\alpha_p}\big)`, lam: '0', mu: String.raw`\sum_p\frac{\mu_p(\alpha_p-1)}{2}`,
+    scien: String.raw`1+\frac{\sum_p\mu_p(\alpha_p-1)(\alpha_p-2)}{3\sum_p\mu_p(\alpha_p-1)}`, ri: '0' },
+  { name: 'Mooney-Rivlin', cite: '[Moo40, Riv48]',
+    psi: String.raw`C_1\big(-3+J^{-2/3}\textstyle\sum_i\lambda_i^2\big)+C_2\big(-3+J^{-4/3}\sum_i\lambda_i^2\lambda_{(1+i)\bmod 3}^2\big)`, lam: String.raw`-\frac{4(C_1+C_2)}{3}`, mu: String.raw`2(C_1+C_2)`,
+    scien: String.raw`\frac{2(C_1-C_2)}{11(C_1+C_2)}`, ri: String.raw`\frac{4\sqrt6}{33}\,\frac{|C_1-C_2|}{|C_1+C_2|}` },
+];
+---
+<NoteLayout slug="material-zoo"
+  tldr="Read the Lamé parameters of any isotropic material off the quadratic Taylor expansion of ψ(λ₁, λ₂, λ₃) at rest, and its weak nonlinearity off the cubic terms: then twenty familiar materials fit in one table, any two can be matched in small deformations, and what is left to tell them apart is a single number (SCIEN) plus a residual."
+  source="This note is Table 1 of my SCA 2026 paper with Jernej Barbič, 'Weak Nonlinearity and Linear Equalization for Isotropic Hyperelastic Materials' (Computer Graphics Forum 45(8)), made interactive. The stretch-based viewpoint comes from our SIGGRAPH Asia 2023 paper on capturing materials by poking.">
+
+  <h2 id="one-language">One language for all of them</h2>
+  <p>
+    Isotropic hyperelastic materials are usually picked from a short list of families (St. Venant–Kirchhoff, Linear
+    Corotational, Neo-Hookean, Ogden, ...), each with its own parameters. That makes it awkward to answer simple questions:
+    are these two materials equally stiff? Is this one "more nonlinear" than that one? The table below answers both, for
+    every material, in the same terms. Everything is written as a symmetric function of the principal stretches
+    <Tex tex={String.raw`\lambda_1,\lambda_2,\lambda_3`} /> (the singular values of <Tex tex={String.raw`F`} />), with
+    <Tex tex={String.raw`J=\lambda_1\lambda_2\lambda_3`} /> and <Tex tex={String.raw`\psi_{ij}=\partial^2\psi/\partial\lambda_i\partial\lambda_j`} />.
+  </p>
+  <p>
+    <strong>Linear behavior.</strong> Expand <Tex tex={String.raw`\psi`} /> around the rest shape
+    <Tex tex={String.raw`\lambda_i=1`} />. The constant and linear terms vanish, and by symmetry the quadratic term has only
+    two distinct coefficients, <Tex tex={String.raw`\psi_{11}`} /> and <Tex tex={String.raw`\psi_{12}`} />. The paper proves
+    that this quadratic truncation is always a Linear Corotational material (its Theorem 1), and that defines the Lamé
+    parameters of <em>any</em> isotropic <Tex tex={String.raw`\psi`} /> (Eqs. 5–6):
+  </p>
+  <Tex block tex={String.raw`\lambda_{\text{Lamé}}=\psi_{12}(1,1,1),\qquad \mu_{\text{Lamé}}=\tfrac12\big(\psi_{11}(1,1,1)-\psi_{12}(1,1,1)\big).`} />
+  <p>
+    So the Linear Corotational material is special: it is the simplest possible isotropic material, the one with nothing
+    beyond second order. For the families that already come with Lamé parameters, this definition agrees with them; for the
+    others (Stable Neo-Hookean, Mooney–Rivlin, ARAP, ...) it tells you what their parameters actually mean.
+  </p>
+  <p>
+    <strong>Weak nonlinearity.</strong> The next terms are cubic, and again symmetry leaves only three distinct coefficients,
+    <Tex tex={String.raw`\psi_{111},\psi_{112},\psi_{123}`} />. Among materials with the same Lamé parameters, the paper
+    defines a distance from these cubic terms (Eq. 27), projects every material onto the one-parameter Seth-Hill family
+    (Hencky at α = 0, Linear Corotational at α = 1, St. Venant–Kirchhoff at α = 2), and calls the closest α the
+    <em>Stretchability–Compressibility Index of Elastic Nonlinearity</em>, SCIEN (Eqs. 35–36):
+  </p>
+  <Tex block tex={String.raw`\text{SCIEN}(\psi)=1+\frac{(15\psi_{11}+6\psi_{12})\,\psi_{111}+(18\psi_{11}+24\psi_{12})\,\psi_{112}}{45\psi_{11}^2+24\psi_{12}^2+36\psi_{11}\psi_{12}}.`} />
+  <p>
+    SCIEN above 1 means the material stiffens under stretching and softens under compression, like silicone; below 1, the
+    opposite, like foam. The Residual Index (RI, Eq. 40) is the distance that is left after the projection: how far the
+    material is from being a Seth-Hill material at all.
+  </p>
+
+  <h2 id="table">The table</h2>
+  <p class="muted"><small>Transcribed from the paper's source. Here <Tex tex={String.raw`\lambda,\mu`} /> are each
+    material's native parameters, <Tex tex={String.raw`\nu=\lambda_{\text{Lamé}}/\big(2(\lambda_{\text{Lamé}}+\mu_{\text{Lamé}})\big)`} />
+    is its Poisson ratio, <Tex tex={String.raw`\Delta(\nu)=11\nu^2-18\nu+15`} />, and for the general Valanis–Landel row
+    <Tex tex={String.raw`f_3=f'''(1)/f''(1)`} />, <Tex tex={String.raw`h_3=h'''(1)/h''(1)`} /> (the original form has
+    <Tex tex={String.raw`f_3=-1,\ h_3=-3`} />). Scroll sideways on a phone.</small></p>
+  <div class="zoo-table-wrap">
+    <table class="zoo-table">
+      <thead><tr><th>Material</th><th><Tex tex={String.raw`\psi(\lambda_1,\lambda_2,\lambda_3)`} /></th><th><Tex tex={L} /></th><th><Tex tex={M} /></th><th>SCIEN</th><th>RI</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <>
+            {r.group && <tr class="zoo-group"><td colspan="6">{r.group}</td></tr>}
+            <tr>
+              <td>{r.name}{r.cite && <span class="muted"> {r.cite}</span>}</td>
+              <td><Tex tex={r.psi} /></td><td><Tex tex={r.lam} /></td><td><Tex tex={r.mu} /></td><td><Tex tex={r.scien} /></td><td><Tex tex={r.ri} /></td>
+            </tr>
+          </>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p>
+    I re-derived every row numerically for this note: for each material, the Lamé parameters from finite-difference
+    second derivatives at rest, SCIEN from finite-difference third derivatives (and, separately, by brute-force minimizing
+    the distance of Eq. 35 over α), and RI from Eq. 40, at several Poisson ratios. All agree with the table to the accuracy of
+    the finite differences (about <Tex tex={String.raw`10^{-5}`} />). The demo below repeats this check live.
+  </p>
+
+  <h2 id="demo">Try it: equalize, then compare</h2>
+  <p>
+    Pick a Poisson ratio. Every material is then <em>equalized</em> (Section 3.1 of the paper): its native parameters are
+    set so that its <Tex tex={L} /> and <Tex tex={M} /> match the same target, with Young's modulus 1. Stable Neo-Hookean,
+    for example, needs native <Tex tex={String.raw`\lambda=\lambda_{\text{Lamé}}+\mu_{\text{Lamé}}`} />. The geometric
+    models and Peng–Landel, Ogden and Mooney–Rivlin have no free volume term, so they can only match <Tex tex={M} /> and
+    keep their own <Tex tex={L} />. Then follow a deformation path and compare the curves.
+  </p>
+  <figure class="note-fig zoo-demo">
+    <canvas id="zoo-canvas" width="880" height="460" aria-label="Interactive plot: energy density of equalized isotropic materials along a deformation path."></canvas>
+    <div class="zoo-controls">
+      <label>Poisson ratio ν <input type="range" id="zoo-nu" min="0" max="0.48" step="0.01" value="0.25" /> <span id="zoo-nuv"></span></label>
+      <label>path <select id="zoo-path">
+        <option value="uniaxial">uniaxial stretch (s, 1, 1)</option>
+        <option value="uniform">uniform scaling (s, s, s)</option>
+        <option value="isochoric">volume-preserving (s, 1/s, 1)</option>
+      </select></label>
+      <label>plot <select id="zoo-qty">
+        <option value="energy">energy ψ</option>
+        <option value="stress">dψ/ds</option>
+      </select></label>
+      <label><input type="checkbox" id="zoo-quad" checked /> shared quadratic truncation</label>
+    </div>
+    <div class="zoo-legend" id="zoo-legend"></div>
+    <div class="zoo-read" id="zoo-read"></div>
+    <figcaption>Curves: equalized materials (Young's modulus 1). Dashed: the quadratic truncation they share, a Linear
+      Corotational material (it applies only to the materials that can match the target Poisson ratio). Gaps: the energy is
+      undefined there (a logarithm of a non-positive stretch or volume). The table under the plot recomputes each checked
+      material's parameters from its formula and compares them with the closed forms above.</figcaption>
+  </figure>
+  <p>
+    What to look for. Near <Tex tex="s = 1" /> all the curves that can match the Poisson ratio sit on the dashed parabola:
+    that is the equalization at work, and it is exactly what makes small deformations look the same in simulation. Away
+    from rest they fan out. Along the two stretching paths, St. Venant–Kirchhoff (SCIEN 2) climbs fastest and Hencky (0)
+    the slowest; under uniform scaling the volume terms take over, and Stable Neo-Hookean, whose
+    <Tex tex={String.raw`(J-1)^2`} /> term grows like <Tex tex={String.raw`s^6`} />, overtakes everything. Two coincidences
+    are worth spotting: along uniaxial stretch, equalized Stable Neo-Hookean is <em>exactly</em> Linear Corotational (both
+    reduce to <Tex tex={String.raw`(\mu_{\text{Lamé}}+\lambda_{\text{Lamé}}/2)(s-1)^2`} />), and along the
+    volume-preserving path the two Neo-Hookeans coincide, because <Tex tex="J = 1" /> there. Under uniaxial compression the
+    polynomial materials stay finite through
+    <Tex tex="s = 0" />, and St. Venant–Kirchhoff even returns to zero energy at <Tex tex="s = -1" />, a fully mirrored
+    element; the logarithmic ones refuse to go there at all. Raise ν toward 0.5 and watch SCIEN of the volume-corrected and
+    standard Neo-Hookean materials fall, while the Seth-Hill materials keep theirs (Figure 12 of the paper).
+  </p>
+
+  <h2 id="notes">Notes for implementers</h2>
+  <ul>
+    <li><strong>Constants do not matter.</strong> The table writes some energies up to an additive constant: the original
+      Valanis–Landel energy equals <Tex tex={String.raw`-6\mu`} /> at rest, and
+      <Tex tex={String.raw`\tfrac12(\|F\|^2+\|F^{-1}\|^2)`} /> is <Tex tex={String.raw`\tfrac12\sum_i(\lambda_i-1/\lambda_i)^2`} />
+      plus 3. Neither changes forces or any entry of the table.</li>
+    <li><strong>Rest stress.</strong> The derivation assumes the rest shape is stress-free. That holds for every row
+      except Ogden, whose rest stress is <Tex tex={String.raw`\sum_p\mu_p`} />: the table's Ogden entries assume
+      <Tex tex={String.raw`\sum_p\mu_p=0`} /> (the demo uses two terms, <Tex tex={String.raw`\alpha=\pm2`} />, which makes
+      it a scaled Symmetric Dirichlet energy, SCIEN 0), or a volume term or constraint that removes it.</li>
+    <li><strong>Zero bulk modulus.</strong> Mooney–Rivlin as written has
+      <Tex tex={String.raw`\lambda_{\text{Lamé}}=-\tfrac23\mu_{\text{Lamé}}`} />: it does not resist volume change at all
+      (Poisson ratio −1). It is meant to be paired with a volume term or an incompressibility constraint, which is what the
+      paper's "mix and match" construction (Section 5) does systematically.</li>
+    <li><strong>Equalize before comparing.</strong> Comparing a Stable Neo-Hookean material with native
+      <Tex tex={String.raw`\lambda`} /> to a corotational one with the same <Tex tex={String.raw`\lambda`} /> compares two
+      different stiffnesses: the paper reports the lowest vibration frequency off by 18% at ν = 0.2 (Figure 5).</li>
+  </ul>
+
+  <h2 id="checklist">A short checklist</h2>
+  <ul>
+    <li>Read Lamé parameters off <Tex tex={String.raw`\psi_{11}`} /> and <Tex tex={String.raw`\psi_{12}`} /> at rest; do not
+      trust a material's parameter names.</li>
+    <li>To change a material's nonlinearity but not its small-deformation behavior, use
+      <Tex tex={String.raw`\psi_\alpha=\alpha^{-2}\,\psi(\lambda_1^\alpha,\lambda_2^\alpha,\lambda_3^\alpha)`} /> (Eq. 28): it keeps
+      <Tex tex={L} /> and <Tex tex={M} /> and multiplies SCIEN by α.</li>
+    <li>Check a new material by computing its row numerically, as the demo does.</li>
+  </ul>
+  <p>
+    How the stretch-based form compares with the invariant forms, and why the paper prefers it, is the subject of
+    <a href="/notes/three-ways-to-write-a-material">Three Ways to Write an Isotropic Material</a>, and its gradient and Hessian are
+    in <a href="/notes/isotropic-gradient-hessian">The Gradient and Hessian of an Isotropic Energy</a>.
+  </p>
+
+  <h2 id="refs">References</h2>
+  <ul class="refs">
+    <li>H. Chen and J. Barbič. Weak Nonlinearity and Linear Equalization for Isotropic Hyperelastic Materials. <em>Computer Graphics Forum</em> 45(8) (Proc. ACM SIGGRAPH / Eurographics Symposium on Computer Animation), 2026. Table 1, Theorem 1, Eqs. 5–6, 14–15, 27–28, 35–40.</li>
+    <li>[CZB23] H. Chen, D. Zhao and J. Barbič. Capturing Animation-Ready Isotropic Materials Using Systematic Poking. <em>ACM Trans. on Graphics</em> (SIGGRAPH Asia 2023) 42(6), 2023.</li>
+    <li>[Set64] B. Seth. Generalized strain measure with applications to physical problems. US Army Mathematics Research Center, 1964.</li>
+    <li>[Baz98] Z. P. Bažant. Easy-to-compute tensors with symmetric inverse approximating Hencky finite strain and its rate. 1998.</li>
+    <li>[Hil68] R. Hill. On constitutive inequalities for simple materials—I. <em>J. Mech. Phys. Solids</em> 16(4), 229–242, 1968.</li>
+    <li>[SGK18] B. Smith, F. de Goes and T. Kim. Stable Neo-Hookean Flesh Simulation. <em>ACM Trans. on Graphics</em> 37(2), 12:1–12:15, 2018.</li>
+    <li>[PRWH*18] D. K. Pai, A. Rothwell, P. Wyder-Hodge, et al. The Human Touch: Measuring Contact with Real Human Soft Tissues. <em>ACM Trans. on Graphics</em> (SIGGRAPH 2018) 37(4), 58, 2018.</li>
+    <li>[VL67] K. Valanis and R. F. Landel. The strain-energy function of a hyperelastic material in terms of the extension ratios. <em>J. Applied Physics</em> 38(7), 2997–3002, 1967.</li>
+    <li>[Val22] K. C. Valanis. The Valanis–Landel energy density function elasticity of incompressible and compressible rubber-like materials. <em>Int. J. Solids and Structures</em> 238, 111271, 2022.</li>
+    <li>[PL72] T. Peng and R. Landel. Stored energy function of rubberlike materials derived from simple tensile data. <em>J. Applied Physics</em> 43(7), 3064–3067, 1972.</li>
+    <li>[SA07] O. Sorkine and M. Alexa. As-Rigid-As-Possible Surface Modeling. <em>Symposium on Geometry Processing</em>, 109–116, 2007.</li>
+    <li>[SPSH*17] A. Shtengel, R. Poranne, O. Sorkine-Hornung, S. Z. Kovalsky and Y. Lipman. Geometric Optimization via Composite Majorization. <em>ACM Trans. on Graphics</em> (SIGGRAPH 2017) 36(4), 2017.</li>
+    <li>[SS15] J. Smith and S. Schaefer. Bijective Parameterization with Free Boundaries. <em>ACM Trans. on Graphics</em> (SIGGRAPH 2015) 34(4), 2015.</li>
+    <li>[Ogd72] R. W. Ogden. Large deformation isotropic elasticity—on the correlation of theory and experiment for incompressible rubberlike solids. <em>Proc. Royal Society A</em> 326(1567), 565–584, 1972.</li>
+    <li>[Moo40] M. Mooney. A theory of large elastic deformation. <em>J. Applied Physics</em> 11(9), 582–592, 1940. [Riv48] R. S. Rivlin. Large elastic deformations of isotropic materials I. <em>Phil. Trans. Royal Society A</em> 240(822), 459–490, 1948.</li>
+  </ul>
+</NoteLayout>
+
+<style>
+  .zoo-table-wrap { position: relative; overflow-x: auto; margin: 1em 0; border: 1px solid var(--line); border-radius: 6px; }
+  .zoo-table { border-collapse: collapse; font-size: .82em; min-width: 900px; }
+  .zoo-table th, .zoo-table td { padding: .45em .7em; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+  .zoo-table th { position: sticky; top: 0; background: var(--bg); }
+  .zoo-group td { font-weight: 600; background: color-mix(in srgb, var(--link) 7%, transparent); }
+  .zoo-demo canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; }
+  .zoo-controls { display: flex; flex-wrap: wrap; gap: .5em 1.2em; align-items: center; margin-top: .6em; }
+  .zoo-controls input[type=range] { vertical-align: middle; width: 9em; }
+  .zoo-controls select { font: inherit; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: .15em .3em; }
+  .zoo-legend { display: flex; flex-wrap: wrap; gap: .2em 1em; margin-top: .6em; font-size: .88em; }
+  .zoo-legend label { white-space: nowrap; cursor: pointer; }
+  .zoo-legend .sw { display: inline-block; width: 1.4em; height: .3em; vertical-align: middle; margin-right: .3em; border-radius: 2px; }
+  .zoo-read { position: relative; margin-top: .8em; font-size: .85em; overflow-x: auto; }
+  .zoo-read table { border-collapse: collapse; }
+  .zoo-read td, .zoo-read th { padding: .15em 1em .15em 0; text-align: left; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .zoo-read .off { color: var(--link); font-weight: 600; }
+  .refs { font-size: .9em; }
+  .refs li { margin: .35em 0; }
+</style>
+
+<script>
+  import { MATERIALS, PATHS, lameFromENu, restDerivs, lameFromDerivs, nuOf, scien, residualIndex } from '../../scripts/material-zoo.js';
+  const cv = document.getElementById('zoo-canvas') as HTMLCanvasElement;
+  const ctx = cv.getContext('2d')!;
+  const W = cv.width, H = cv.height;
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const css = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#000';
+  // categorical palette that reads on light and dark backgrounds
+  const PAL = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#8cd17d', '#499894', '#d37295', '#a0cbe8', '#ffbe7d', '#86bcb6', '#f1ce63', '#d4a6c8', '#bab0ac'];
+  const DEFAULT = new Set(['lc', 'stvk', 'hencky', 'nh', 'snh', 'vcstvk']);
+  const on = new Map(MATERIALS.map((m: any) => [m.id, DEFAULT.has(m.id)]));
+  const color = new Map(MATERIALS.map((m: any, i: number) => [m.id, PAL[i % PAL.length]]));
+
+  const legend = document.getElementById('zoo-legend')!;
+  legend.innerHTML = MATERIALS.map((m: any) => `<label><input type="checkbox" data-id="${m.id}" ${on.get(m.id) ? 'checked' : ''}/> <span class="sw" style="background:${color.get(m.id)}"></span>${m.name}</label>`).join('');
+  legend.querySelectorAll('input').forEach((el) => el.addEventListener('change', (e) => { const t = e.target as HTMLInputElement; on.set(t.dataset.id!, t.checked); update(); }));
+
+  function curve(psi: (a: number, b: number, c: number) => number, path: any, qty: string, n = 400) {
+    const pts: [number, number][] = [];
+    for (let k = 0; k <= n; k++) {
+      const s = path.lo + (path.hi - path.lo) * (k / n);
+      let y: number;
+      if (qty === 'energy') y = psi(...(path.f(s) as [number, number, number]));
+      else { const h = 1e-5; y = (psi(...(path.f(s + h) as [number, number, number])) - psi(...(path.f(s - h) as [number, number, number]))) / (2 * h); }
+      pts.push([s, y]);
+    }
+    return pts;
+  }
+
+  function update() {
+    const nu = +$('zoo-nu').value; $('zoo-nuv').textContent = nu.toFixed(2);
+    const path = (PATHS as any)[$('zoo-path').value], qty = $('zoo-qty').value;
+    const { lamL, muL } = lameFromENu(1, nu);
+    const shown = MATERIALS.filter((m: any) => on.get(m.id)).map((m: any) => ({ m, inst: m.make(lamL, muL) }));
+    const curves = shown.map(({ m, inst }: any) => ({ id: m.id, pts: curve(inst.psi, path, qty) }));
+    const lc = MATERIALS.find((m: any) => m.id === 'lc')!.make(lamL, muL);
+    const quad = $('zoo-quad').checked ? curve(lc.psi, path, qty) : null;
+    // y range: robust over visible finite values, anchored to the quadratic truncation
+    const ys: number[] = []; [...curves.map((c: any) => c.pts), ...(quad ? [quad] : [])].forEach((pts: any) => pts.forEach((p: any) => Number.isFinite(p[1]) && ys.push(p[1])));
+    ys.sort((a, b) => a - b);
+    const q = (t: number) => ys.length ? ys[Math.min(ys.length - 1, Math.floor(t * (ys.length - 1)))] : 1;
+    let y0 = qty === 'energy' ? 0 : q(0.04), y1 = q(0.94);
+    if (qty === 'energy') y1 = Math.max(y1, 0.5); if (y1 - y0 < 1e-6) y1 = y0 + 1;
+    const pad = 0.08 * (y1 - y0); y0 -= qty === 'energy' ? 0.02 * (y1 - y0) : pad; y1 += pad;
+    const ink = css('--ink'), muted = css('--muted'), line = css('--line'), bg = css('--bg');
+    const L = 58, R = 16, T = 18, B = 40;
+    const sx = (s: number) => L + ((s - path.lo) / (path.hi - path.lo)) * (W - L - R), sy = (y: number) => T + (1 - (y - y0) / (y1 - y0)) * (H - T - B);
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.beginPath();
+    ctx.moveTo(L, T); ctx.lineTo(L, H - B); ctx.lineTo(W - R, H - B); ctx.stroke();
+    if (y0 < 0 && y1 > 0) { ctx.beginPath(); ctx.moveTo(L, sy(0)); ctx.lineTo(W - R, sy(0)); ctx.stroke(); }
+    ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(sx(1), T); ctx.lineTo(sx(1), H - B); if (path.lo < 0) { ctx.moveTo(sx(0), T); ctx.lineTo(sx(0), H - B); } ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = muted; ctx.font = '12px system-ui, sans-serif'; ctx.textAlign = 'center';
+    for (let s = Math.ceil(path.lo * 2) / 2; s <= path.hi + 1e-9; s += 0.5) ctx.fillText(s.toFixed(1), sx(s), H - B + 16);
+    ctx.fillText(`s  (${path.name})`, (L + W - R) / 2, H - 6);
+    ctx.textAlign = 'right';
+    for (let k = 0; k <= 4; k++) { const y = y0 + (k / 4) * (y1 - y0); ctx.fillText(y.toFixed(Math.abs(y1 - y0) < 2 ? 2 : 1), L - 6, sy(y) + 4); }
+    ctx.save(); ctx.translate(14, (T + H - B) / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.fillText(qty === 'energy' ? 'ψ / E' : '(dψ/ds) / E', 0, 0); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.rect(L, T, W - L - R, H - T - B); ctx.clip();
+    const drawPts = (pts: [number, number][]) => { ctx.beginPath(); let pen = false; for (const [s, y] of pts) { if (!Number.isFinite(y)) { pen = false; continue; } const X = sx(s), Y = sy(Math.max(Math.min(y, y1 + 10 * (y1 - y0)), y0 - 10 * (y1 - y0))); if (pen) ctx.lineTo(X, Y); else { ctx.moveTo(X, Y); pen = true; } } ctx.stroke(); };
+    curves.forEach((c: any) => { ctx.strokeStyle = color.get(c.id)!; ctx.lineWidth = 2.2; drawPts(c.pts); });
+    if (quad) { ctx.strokeStyle = ink; ctx.lineWidth = 1.6; ctx.setLineDash([6, 5]); drawPts(quad); ctx.setLineDash([]); }
+    ctx.restore();
+    // live table: recompute each shown material's row from its formula and compare with the closed forms
+    const rowsHtml = shown.map(({ m, inst }: any) => {
+      const d = restDerivs(inst.psi), Lm = lameFromDerivs(d), ownNu = nuOf(inst.lamL, inst.muL);
+      const sc = scien(d), ri = residualIndex(d), scT = m.scien(ownNu), riT = m.ri(ownNu);
+      const z = (x: number) => (Math.abs(x) < 5e-4 ? 0 : x).toFixed(3);
+      const cell = (a: number, b: number) => `<td${Math.abs(a - b) > 2e-3 ? ' class="off"' : ''}>${z(a)} <span class="muted">/ ${z(b)}</span></td>`;
+      return `<tr><td><span class="sw" style="display:inline-block;width:1em;height:.3em;vertical-align:middle;margin-right:.4em;background:${color.get(m.id)}"></span>${m.name}</td>${cell(Lm.lamL, inst.lamL)}${cell(Lm.muL, inst.muL)}<td>${ownNu.toFixed(3)}</td>${cell(sc, scT)}${cell(ri, riT)}<td class="muted">${inst.native || ''}</td></tr>`;
+    }).join('');
+    (document.getElementById('zoo-read') as HTMLElement).innerHTML = shown.length ?
+      `<table><tr><th>material</th><th>λ_Lamé computed / table</th><th>μ_Lamé computed / table</th><th>ν</th><th>SCIEN computed / table</th><th>RI computed / table</th><th>native</th></tr>${rowsHtml}</table>` +
+      `<span class="muted">Target: E = 1, ν = ${nu.toFixed(2)}, so λ_Lamé = ${lamL.toFixed(3)}, μ_Lamé = ${muL.toFixed(3)}. "Computed" uses finite differences of each formula at rest (Eqs. 5, 6, 36, 40).</span>` : '<span class="muted">Tick a material above.</span>';
+  }
+  ['zoo-nu', 'zoo-path', 'zoo-qty', 'zoo-quad'].forEach((id) => { $(id).addEventListener('input', update); $(id).addEventListener('change', update); });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', update);
+  update();
+</script>

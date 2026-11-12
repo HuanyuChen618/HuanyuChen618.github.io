@@ -1,0 +1,280 @@
+---
+import NoteLayout from '../../layouts/NoteLayout.astro';
+import Tex from '../../components/Tex.astro';
+---
+<NoteLayout slug="axis-angle-derivatives"
+  tldr="Write every coefficient of Rodrigues' formula as a member of one family of functions f_k(θ); then the first derivative of a rotation with respect to its rotation vector is [g_i]× R, the full second derivative has a closed form too, and nothing in either ever divides by θ, so both are exact and finite at zero."
+  source="The formulas in this note come from my own derivation notes on Rodrigues derivatives, worked out for differentiable simulation with rotation vectors; they are not published elsewhere. Everything below was checked numerically against finite differences and a matrix-exponential reference.">
+
+  <h2 id="rep">Rotation vectors and Rodrigues' formula</h2>
+  <p>
+    A rotation by angle <Tex tex={String.raw`\theta`} /> about a unit axis <Tex tex={String.raw`\mathbf{u}`} /> can be stored as
+    one unconstrained vector, <Tex tex={String.raw`\boldsymbol{\gamma} = \theta\,\mathbf{u}\in\mathbb{R}^3`} />, with
+    <Tex tex={String.raw`\theta = \|\boldsymbol{\gamma}\|`} />. Writing <Tex tex={String.raw`[\mathbf{a}]_\times`} /> for the
+    cross-product matrix, the rotation is <Tex tex={String.raw`\mathbf{R} = \exp([\boldsymbol{\gamma}]_\times)`} />, and
+    Rodrigues' formula evaluates it in closed form:
+  </p>
+  <Tex block tex={String.raw`\mathbf{R}(\boldsymbol{\gamma}) = \mathbf{I} + \frac{\sin\theta}{\theta}[\boldsymbol{\gamma}]_\times + \frac{1-\cos\theta}{\theta^2}[\boldsymbol{\gamma}]_\times^2
+    = \cos\theta\,\mathbf{I} + \frac{\sin\theta}{\theta}[\boldsymbol{\gamma}]_\times + \frac{1-\cos\theta}{\theta^2}\,\boldsymbol{\gamma}\boldsymbol{\gamma}^{\mathsf T}.`} />
+  <p>
+    Optimizers like rotation vectors because they are three free numbers. The price is the derivatives: differentiate
+    this formula naively and every term grows a new <Tex tex={String.raw`1/\theta`} />, which is fine at large angles and
+    useless near zero, exactly where rotations usually start. The fix I use is to stop treating the coefficients as
+    separate formulas.
+  </p>
+
+  <h2 id="fk">One family of functions</h2>
+  <p>All the coefficients that will ever appear belong to one sequence:</p>
+  <Tex block tex={String.raw`f_0(t)=\cos t,\quad f_1(t)=\frac{\sin t}{t},\quad f_2(t)=\frac{1-\cos t}{t^2},\quad f_3(t)=\frac{t-\sin t}{t^3},\ \ldots`} />
+  <p>Each one is the "remainder" of the one two steps earlier, and they differentiate into each other:</p>
+  <Tex block tex={String.raw`f_{k+2}(t) = \frac{f_k(0)-f_k(t)}{t^2},\qquad f_k(t) = \frac{1}{k!} - t^2 f_{k+2}(t),`} />
+  <Tex block tex={String.raw`f_k'(t) = \frac{f_{k-1}(t)-k\,f_k(t)}{t} = t\,\big(k\,f_{k+2}(t) - f_{k+1}(t)\big).`} />
+  <p>
+    From <Tex tex={String.raw`f_1`} /> on, every <Tex tex={String.raw`f_k`} /> is a 0/0 at zero with a perfectly good limit,
+    <Tex tex={String.raw`f_k(0) = 1/k!`} />: a removable singularity. The last
+    identity is the important one: it says <Tex tex={String.raw`f_k'(t)/t = k f_{k+2} - f_{k+1}`} />, a quantity that shows up
+    in every derivative below, can be computed <em>without dividing by</em> <Tex tex={String.raw`t`} />. So the only numerical
+    work is evaluating the <Tex tex={String.raw`f_k`} /> themselves, once, well: a short Taylor series
+    <Tex tex={String.raw`f_k(t)=\sum_m (-1)^m t^{2m}/(k+2m)!`} /> for small <Tex tex={String.raw`t`} />, and the closed forms with the
+    recursion above for large <Tex tex={String.raw`t`} />.
+  </p>
+
+  <h2 id="algebra">A small algebra</h2>
+  <p>
+    The second ingredient: every matrix in sight is a combination of <Tex tex={String.raw`\mathbf{I}`} />,
+    <Tex tex={String.raw`[\boldsymbol{\gamma}]_\times`} /> and <Tex tex={String.raw`[\boldsymbol{\gamma}]_\times^2`} />. Call such a matrix
+  </p>
+  <Tex block tex={String.raw`\mathbf{A}_{\boldsymbol\gamma}(\xi_0,\xi_1,\xi_2) = \xi_0\mathbf{I} + \xi_1[\boldsymbol\gamma]_\times + \xi_2[\boldsymbol\gamma]_\times^2 .`} />
+  <p>
+    Because <Tex tex={String.raw`[\boldsymbol\gamma]_\times^3 = -\theta^2[\boldsymbol\gamma]_\times`} />, these matrices are closed under
+    products, they commute, and the transpose just flips the middle sign:
+  </p>
+  <Tex block tex={String.raw`\begin{aligned}\mathbf{A}_{\boldsymbol\gamma}(\xi)\,\mathbf{A}_{\boldsymbol\gamma}(\eta) = \mathbf{A}_{\boldsymbol\gamma}\big(&\xi_0\eta_0,\\
+    &\xi_0\eta_1+\xi_1\eta_0-\theta^2(\xi_1\eta_2+\xi_2\eta_1),\\ &\xi_0\eta_2+\xi_1\eta_1+\xi_2\eta_0-\theta^2\xi_2\eta_2\big),\end{aligned}`} />
+  <Tex block tex={String.raw`\mathbf{A}_{\boldsymbol\gamma}(\xi_0,\xi_1,\xi_2)^{\mathsf T} = \mathbf{A}_{\boldsymbol\gamma}(\xi_0,-\xi_1,\xi_2).`} />
+  <p>In this language Rodrigues' formula and its companion matrix are one index shift apart:</p>
+  <Tex block tex={String.raw`\mathbf{R} = \mathbf{A}_{\boldsymbol\gamma}(1,f_1,f_2) = f_0\mathbf{I} + f_1[\boldsymbol\gamma]_\times + f_2\,\boldsymbol\gamma\boldsymbol\gamma^{\mathsf T},`} />
+  <Tex block tex={String.raw`\mathbf{G} = \mathbf{A}_{\boldsymbol\gamma}(1,f_2,f_3) = f_1\mathbf{I} + f_2[\boldsymbol\gamma]_\times + f_3\,\boldsymbol\gamma\boldsymbol\gamma^{\mathsf T}.`} />
+
+  <h2 id="first">The first derivative</h2>
+  <p>The key result: with <Tex tex={String.raw`\mathbf{g}_i`} /> the <Tex tex={String.raw`i`} />-th column of <Tex tex={String.raw`\mathbf{G}`} />,</p>
+  <Tex block tex={String.raw`\frac{\partial\mathbf{R}}{\partial\gamma_i} = [\mathbf{g}_i]_\times\,\mathbf{R},
+    \qquad \mathbf{g}_i = f_1\,\mathbf{e}_i + f_2\,\boldsymbol\gamma\times\mathbf{e}_i + f_3\,\gamma_i\,\boldsymbol\gamma .`} />
+  <p>
+    The proof is a calculation inside the algebra: differentiate <Tex tex={String.raw`\mathbf{A}_{\boldsymbol\gamma}(1,\phi_1,\phi_2)`} />,
+    multiply by <Tex tex={String.raw`\mathbf{R}^{\mathsf T} = \mathbf{A}_{\boldsymbol\gamma}(1,-f_1,f_2)`} />, and sort the result into
+    symmetric and skew-symmetric parts. For general <Tex tex={String.raw`\phi_1,\phi_2`} /> both parts survive. For the Rodrigues
+    choice <Tex tex={String.raw`(\phi_1,\phi_2)=(f_1,f_2)`} />, the symmetric part cancels exactly (a 3×3 determinant built from
+    the <Tex tex={String.raw`\phi`} />'s vanishes), and the skew part is
+    <Tex tex={String.raw`f_1[\mathbf{e}_i]_\times + f_2[\boldsymbol\gamma\times\mathbf{e}_i]_\times + f_3\gamma_i[\boldsymbol\gamma]_\times = [\mathbf{g}_i]_\times`} />.
+  </p>
+  <p>
+    Readers who know Lie groups will recognize <Tex tex={String.raw`\mathbf{G}`} /> as the left Jacobian of the rotation group, so the
+    formula agrees with the standard result; it also agrees, to rounding error, with Gallego and Yezzi's compact formula
+    <Tex tex={String.raw`\partial\mathbf{R}/\partial\gamma_i = \big(\gamma_i[\boldsymbol\gamma]_\times + [\boldsymbol\gamma\times(\mathbf{I}-\mathbf{R})\mathbf{e}_i]_\times\big)\mathbf{R}/\theta^2`} />.
+    The difference is numerical. Their formula divides by <Tex tex={String.raw`\theta^2`} /> and subtracts nearly equal matrices,
+    so it is undefined at zero and loses digits near it; they treat zero as a limit. Written with the
+    <Tex tex={String.raw`f_k`} />, nothing is divided, and at <Tex tex={String.raw`\boldsymbol\gamma=\mathbf{0}`} /> the formula simply
+    returns <Tex tex={String.raw`\mathbf{g}_i = \mathbf{e}_i`} />.
+  </p>
+
+  <h2 id="second">The second derivative</h2>
+  <p>Differentiating <Tex tex={String.raw`[\mathbf{g}_i]_\times\mathbf{R}`} /> once more gives the full Hessian of the rotation:</p>
+  <Tex block tex={String.raw`\frac{\partial^2\mathbf{R}}{\partial\gamma_i\,\partial\gamma_j} = \Big(\Big[\frac{\partial\mathbf{g}_i}{\partial\gamma_j}\Big]_\times + [\mathbf{g}_i]_\times[\mathbf{g}_j]_\times\Big)\mathbf{R},`} />
+  <Tex block tex={String.raw`\frac{\partial\mathbf{g}_i}{\partial\gamma_j} = \frac{f_1'}{\theta}\gamma_j\,\mathbf{e}_i - \frac{f_2'}{\theta}\gamma_j\,\mathbf{e}_i\times\boldsymbol\gamma
+    + \frac{f_3'}{\theta}\gamma_i\gamma_j\,\boldsymbol\gamma - f_2\,\mathbf{e}_i\times\mathbf{e}_j + f_3\,(\gamma_i\mathbf{e}_j + \delta_{ij}\boldsymbol\gamma).`} />
+  <p>
+    Every <Tex tex={String.raw`f_k'/\theta`} /> here is the division-free <Tex tex={String.raw`k f_{k+2}-f_{k+1}`} />, so the Hessian is as
+    safe as the gradient. The order of differentiation cannot matter, and my notes check that it doesn't through a neat identity,
+  </p>
+  <Tex block tex={String.raw`\frac{\partial\mathbf{g}_j}{\partial\gamma_i} - \frac{\partial\mathbf{g}_i}{\partial\gamma_j} = \mathbf{g}_i\times\mathbf{g}_j ,`} />
+  <p>
+    which makes the two orderings agree. At the origin everything collapses: <Tex tex={String.raw`\mathbf{g}_i=\mathbf{e}_i`} />,
+    <Tex tex={String.raw`\partial\mathbf{g}_i/\partial\gamma_j = -\tfrac12\,\mathbf{e}_i\times\mathbf{e}_j`} />, and the Hessian is
+    <Tex tex={String.raw`\tfrac12([\mathbf{e}_i]_\times[\mathbf{e}_j]_\times + [\mathbf{e}_j]_\times[\mathbf{e}_i]_\times)`} />, the second-order
+    term of the exponential.
+  </p>
+  <p>
+    One thing I hoped for and did not get: a factorization <Tex tex={String.raw`\partial\mathbf{G}/\partial\gamma_i = [\mathbf{a}_i]_\times\mathbf{A}_{\boldsymbol\gamma}(\xi)`} />
+    like the one for <Tex tex={String.raw`\mathbf{R}`} />. The same determinant test that vanishes for
+    <Tex tex={String.raw`(f_1,f_2)`} /> does not vanish for <Tex tex={String.raw`(f_2,f_3)`} />, so no such form exists, and the simplest
+    recipe for the Hessian is the one above: evaluate <Tex tex={String.raw`\mathbf{G}`} /> and its derivative, then multiply.
+  </p>
+
+  <h2 id="numbers">Why "no division" matters</h2>
+  <p>
+    The plot compares, for small angles, the relative error of the obvious formulas against the
+    <Tex tex={String.raw`f_k`} /> forms. Gray: <Tex tex={String.raw`f_3`} /> written as <Tex tex={String.raw`(t-\sin t)/t^3`} />. Gray dashed:
+    <Tex tex={String.raw`f_3'/t`} /> written as <Tex tex={String.raw`(f_2 - 3f_3)/t^2`} />, which loses digits even when
+    <Tex tex={String.raw`f_2`} /> and <Tex tex={String.raw`f_3`} /> are exact. Orange: Gallego and Yezzi's derivative. Colored:
+    <Tex tex={String.raw`f_3`} /> and <Tex tex={String.raw`3f_5-f_4`} /> from the series, which stay at rounding level everywhere.
+  </p>
+  <figure class="note-fig aa-demo">
+    <canvas id="aa-err" width="880" height="420" aria-label="Log-log plot of relative errors of naive and division-free formulas against the rotation angle."></canvas>
+    <div class="aa-controls" id="aa-toggles"></div>
+    <div class="aa-read" id="aa-read"></div>
+    <figcaption>Relative error against a long-series reference (for <Tex tex={String.raw`f_3'/t`} />, the series of
+      <Tex tex={String.raw`f_3'/t`} /> itself), for θ from 10<sup>−8</sup> to 1, rotation axis fixed. The Gallego–Yezzi curve is its
+      relative difference from <Tex tex={String.raw`[\mathbf{g}_3]_\times\mathbf{R}`} />. Log scales; errors below 10<sup>−17</sup> are
+      drawn at the bottom, failures and NaN at the top. Click the labels to show or hide curves.</figcaption>
+  </figure>
+
+  <h2 id="turn">Near a full turn</h2>
+  <p>
+    Zero is a removable problem; a full turn is a real one. <Tex tex={String.raw`\det\mathbf{G} = 2f_2(\theta) = 2(1-\cos\theta)/\theta^2`} />,
+    which falls from 1 at <Tex tex={String.raw`\theta=0`} /> to zero at <Tex tex={String.raw`\theta=2\pi`} />. There, moving
+    <Tex tex={String.raw`\boldsymbol\gamma`} /> sideways no longer rotates anything, and no formula can fix that. Romanyà-Serrasolsas,
+    Casafranca and Otaduy show the same collapse in the singular values of <Tex tex={String.raw`\partial\,\mathrm{vec}(\mathbf{R})/\partial\boldsymbol\gamma`} />,
+    and their answer is to avoid rotation-vector derivatives altogether: they differentiate in the Lie algebra, with
+    incremental rotations around the current one, and report that their formulation only needed first-order rotation
+    derivatives. The <Tex tex={String.raw`f_k`} /> forms are for the other situation, when the rotation vector itself is the
+    variable and you need exact gradients and Hessians with respect to it; then keep
+    <Tex tex={String.raw`\theta\le\pi`} /> by re-wrapping, or optimize a small increment around a stored rotation.
+  </p>
+  <figure class="note-fig aa-demo">
+    <canvas id="aa-frame" width="880" height="520" aria-label="A 3D coordinate frame rotated by a rotation vector, with arrows showing how the frame moves when one component of the vector changes."></canvas>
+    <div class="aa-controls">
+      <label>Angle θ <input type="range" id="aa-th" min="0" max="6.2832" step="0.01" value="1.2" /> <span id="aa-thv"></span></label>
+      <label>Axis azimuth <input type="range" id="aa-az" min="-3.1416" max="3.1416" step="0.01" value="0.6" /></label>
+      <label>Axis elevation <input type="range" id="aa-el" min="-1.5" max="1.5" step="0.01" value="0.5" /></label>
+      <label>Show ∂R/∂γ<sub>i</sub> for i = <select id="aa-i"><option value="0">x</option><option value="1">y</option><option value="2" selected>z</option></select></label>
+    </div>
+    <div class="aa-read" id="aa-read2"></div>
+    <figcaption>Faint: the reference frame. Solid: the rotated frame. Dashed: the axis, with <Tex tex={String.raw`\boldsymbol\gamma`} />
+      drawn as an arrow. Red arrows: how each axis tip moves per unit change of <Tex tex={String.raw`\gamma_i`} />, from
+      <Tex tex={String.raw`[\mathbf{g}_i]_\times\mathbf{R}`} />. Drag the picture to turn the camera; the angle slider works all the way down to zero.</figcaption>
+  </figure>
+  <p>
+    Slide the angle to zero: the arrows stay finite and become the cross products <Tex tex={String.raw`\mathbf{e}_i\times\mathbf{e}_k`} />.
+    Slide it toward <Tex tex={String.raw`2\pi`} /> with the axis perpendicular to <Tex tex={String.raw`\mathbf{e}_i`} />, and they vanish.
+  </p>
+
+  <h2 id="checklist">A short checklist</h2>
+  <ul>
+    <li><strong>Evaluate the f<sub>k</sub> once, carefully</strong> (series below about 1, closed forms and recursion above), and
+      build everything else from them.</li>
+    <li><strong>Never form f<sub>k</sub>′/θ by division.</strong> Use <Tex tex={String.raw`k f_{k+2}-f_{k+1}`} />.</li>
+    <li><strong>Gradient:</strong> <Tex tex={String.raw`[\mathbf{g}_i]_\times\mathbf{R}`} />. <strong>Hessian:</strong>
+      <Tex tex={String.raw`([\partial\mathbf{g}_i/\partial\gamma_j]_\times + [\mathbf{g}_i]_\times[\mathbf{g}_j]_\times)\mathbf{R}`} />.</li>
+    <li><strong>Test at γ = 0, at tiny γ, and near θ = 2π</strong>, not only at random vectors.</li>
+  </ul>
+
+  <h2 id="refs">References</h2>
+  <ul class="refs">
+    <li>G. Gallego and A. Yezzi. A compact formula for the derivative of a 3-D rotation in exponential coordinates.
+      <em>Journal of Mathematical Imaging and Vision</em> 51, 378–384, 2015. <a href="https://doi.org/10.1007/s10851-014-0528-x">doi:10.1007/s10851-014-0528-x</a></li>
+    <li>M. Romanyà-Serrasolsas, J. J. Casafranca and M. A. Otaduy. Painless Differentiable Rotation Dynamics.
+      <em>ACM Transactions on Graphics</em> 44(4), Article 157, 2025 (SIGGRAPH 2025). <a href="https://doi.org/10.1145/3730944">doi:10.1145/3730944</a></li>
+  </ul>
+</NoteLayout>
+
+<style>
+  .aa-demo canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; }
+  #aa-frame { touch-action: none; cursor: grab; }
+  .aa-controls { display: flex; flex-wrap: wrap; gap: .4em 1.2em; align-items: center; margin-top: .6em; font-size: .95em; }
+  .aa-controls input[type=range] { vertical-align: middle; }
+  .aa-controls select { font: inherit; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
+  .aa-controls button { font: inherit; font-size: .9em; padding: .2em .6em; cursor: pointer; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
+  .aa-controls button[aria-pressed=false] { opacity: .45; }
+  .aa-read { margin-top: .5em; font-size: .9em; }
+  .refs { font-size: .92em; }
+</style>
+
+<script>
+  import { fk, fkpt, fkNaive, R as Rot, dR, dR_GY, mv } from '../../scripts/rodrigues-fk.js';
+  const css = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#000';
+  const dark = () => matchMedia('(prefers-color-scheme: dark)').matches;
+  const teal = () => (dark() ? '#5cc6a8' : '#1f7a62'), orange = () => (dark() ? '#f0a848' : '#b25f00');
+
+  // ---------- error plot ----------
+  const ec = document.getElementById('aa-err') as HTMLCanvasElement, ex = ec.getContext('2d')!;
+  const EW = ec.width, EH = ec.height, L = 60, Rm = 16, T = 14, Bm = 40;
+  const X0 = -8, X1 = 0, Y0 = -17, Y1 = 0;
+  const gx = (lt: number) => L + ((lt - X0) / (X1 - X0)) * (EW - L - Rm), gy = (le: number) => T + ((Y1 - le) / (Y1 - Y0)) * (EH - T - Bm);
+  const lg = (e: number) => (isFinite(e) ? Math.max(Y0, Math.min(Y1, Math.log10(Math.max(e, 1e-300)))) : Y1);
+  // independent references from long series: f_k(t) = sum (-1)^m t^2m/(k+2m)!, f_k'(t)/t = sum_{m>=1} (-1)^m 2m t^(2m-2)/(k+2m)!
+  const fact = (n: number) => { let p = 1; for (let i = 2; i <= n; i++) p *= i; return p; };
+  const refF = (k: number, t: number) => { let s = 0; for (let m = 0; m < 20; m++) s += ((m & 1 ? -1 : 1) * t ** (2 * m)) / fact(k + 2 * m); return s; };
+  const refFpt = (k: number, t: number) => { let s = 0; for (let m = 1; m < 20; m++) s += ((m & 1 ? -1 : 1) * 2 * m * t ** (2 * m - 2)) / fact(k + 2 * m); return s; };
+  const fro = (A: number[]) => Math.sqrt(A.reduce((s, x) => s + x * x, 0));
+  const axis = [0.48, -0.6, 0.64];
+  type Curve = { label: string; col: () => string; dash: boolean; fn: (t: number) => number; on: boolean };
+  const curves: Curve[] = [
+    { label: 'f₃ = (t − sin t)/t³', col: () => css('--muted'), dash: false, on: true, fn: (t) => Math.abs(fkNaive(3, t) - refF(3, t)) / refF(3, t) },
+    { label: "f₃′/t = (f₂ − 3f₃)/t²", col: () => css('--muted'), dash: true, on: true, fn: (t) => Math.abs((fk(2, t) - 3 * fk(3, t)) / (t * t) - refFpt(3, t)) / Math.abs(refFpt(3, t)) },
+    { label: 'Gallego–Yezzi ∂R/∂γ', col: orange, dash: false, on: true, fn: (t) => { const g = axis.map((v) => v * t); return fro(dR_GY(g, 2).map((v, i) => v - dR(g, 2)[i])) / fro(dR(g, 2)); } },
+    { label: 'f₃ from the series', col: teal, dash: false, on: true, fn: (t) => Math.abs(fk(3, t) - refF(3, t)) / refF(3, t) },
+    { label: "f₃′/t = 3f₅ − f₄", col: () => css('--link'), dash: false, on: true, fn: (t) => Math.abs(fkpt(3, t) - refFpt(3, t)) / Math.abs(refFpt(3, t)) },
+  ];
+  const tg = document.getElementById('aa-toggles')!;
+  curves.forEach((c) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = c.label; b.setAttribute('aria-pressed', 'true');
+    b.addEventListener('click', () => { c.on = !c.on; b.setAttribute('aria-pressed', String(c.on)); drawErr(); }); tg.appendChild(b); });
+
+  function drawErr() {
+    const muted = css('--muted'), line = css('--line'), bg = css('--bg');
+    ex.fillStyle = bg; ex.fillRect(0, 0, EW, EH);
+    ex.strokeStyle = line; ex.lineWidth = 1; ex.fillStyle = muted; ex.font = '12px system-ui, sans-serif';
+    for (let d = X0; d <= X1; d++) { ex.beginPath(); ex.moveTo(gx(d), T); ex.lineTo(gx(d), EH - Bm); ex.stroke(); ex.fillText(`1e${d}`, gx(d) - 14, EH - Bm + 16); }
+    for (let d = Y0 + 1; d <= Y1; d += 4) { ex.beginPath(); ex.moveTo(L, gy(d)); ex.lineTo(EW - Rm, gy(d)); ex.stroke(); ex.fillText(`1e${d}`, 6, gy(d) + 4); }
+    ex.fillText('θ', EW - Rm - 10, EH - 6);
+    let worstSafe = 0;
+    for (const c of curves) {
+      if (!c.on) continue;
+      ex.strokeStyle = c.col(); ex.lineWidth = c.dash ? 1.8 : 2.4; ex.setLineDash(c.dash ? [6, 4] : []); ex.beginPath();
+      for (let j = 0; j <= 400; j++) { const lt = X0 + ((X1 - X0) * j) / 400, t = 10 ** lt, e = c.fn(t); const X = gx(lt), Yp = gy(lg(e)); j ? ex.lineTo(X, Yp) : ex.moveTo(X, Yp); }
+      ex.stroke(); ex.setLineDash([]);
+    }
+    for (let j = 0; j <= 400; j++) { const t = 10 ** (X0 + ((X1 - X0) * j) / 400); worstSafe = Math.max(worstSafe, curves[3].fn(t), curves[4].fn(t)); }
+    (document.getElementById('aa-read') as HTMLElement).textContent =
+      `Worst relative error of the division-free forms over the plotted range: ${worstSafe.toExponential(1)}. ` +
+      `The naive f₃′/t at θ = 1e-4: ${curves[1].fn(1e-4).toExponential(1)}.`;
+  }
+
+  // ---------- rotating frame ----------
+  const fcv = document.getElementById('aa-frame') as HTMLCanvasElement, fx = fcv.getContext('2d')!;
+  const FW = fcv.width, FH = fcv.height;
+  let camAz = -0.7, camEl = 0.35;
+  const th = document.getElementById('aa-th') as HTMLInputElement, az = document.getElementById('aa-az') as HTMLInputElement;
+  const el = document.getElementById('aa-el') as HTMLInputElement, isel = document.getElementById('aa-i') as HTMLSelectElement;
+  function proj(p: number[]) {
+    const ca = Math.cos(camAz), sa = Math.sin(camAz), ce = Math.cos(camEl), se = Math.sin(camEl);
+    const x = ca * p[0] - sa * p[1], y = sa * p[0] + ca * p[1];
+    const s = Math.min(FW, FH) * 0.37; return [FW / 2 + s * x, FH / 2 - s * (ce * p[2] - se * y)];
+  }
+  function seg(a: number[], b: number[], col: string, w: number, dash = false, head = false) {
+    const [x0, y0] = proj(a), [x1, y1] = proj(b);
+    fx.strokeStyle = col; fx.fillStyle = col; fx.lineWidth = w; fx.setLineDash(dash ? [6, 5] : []);
+    fx.beginPath(); fx.moveTo(x0, y0); fx.lineTo(x1, y1); fx.stroke(); fx.setLineDash([]);
+    if (head) { const an = Math.atan2(y1 - y0, x1 - x0), h = Math.min(10, Math.hypot(x1 - x0, y1 - y0) * 0.4); if (h < 2) return;
+      fx.beginPath(); fx.moveTo(x1, y1); fx.lineTo(x1 - h * Math.cos(an - 0.45), y1 - h * Math.sin(an - 0.45)); fx.lineTo(x1 - h * Math.cos(an + 0.45), y1 - h * Math.sin(an + 0.45)); fx.closePath(); fx.fill(); }
+  }
+  function drawFrame() {
+    const ink = css('--ink'), muted = css('--muted'), line = css('--line'), bg = css('--bg'), link = css('--link');
+    const t = +th.value, a = +az.value, e = +el.value, i = +isel.value;
+    (document.getElementById('aa-thv') as HTMLElement).textContent = `${t.toFixed(2)} (${((t * 180) / Math.PI).toFixed(0)}°)`;
+    const n = [Math.cos(e) * Math.cos(a), Math.cos(e) * Math.sin(a), Math.sin(e)], g = n.map((v) => v * t);
+    const Rm = Rot(g), D = dR(g, i), cols = [orange(), teal(), ink];
+    fx.fillStyle = bg; fx.fillRect(0, 0, FW, FH);
+    const o = [0, 0, 0];
+    for (let k = 0; k < 3; k++) { const ek = [0, 0, 0]; ek[k] = 1; seg(o, ek, line, 2); }
+    seg(n.map((v) => -v * 1.4), n.map((v) => v * 1.4), muted, 1.2, true);
+    seg(o, n.map((v) => (v * t) / (2 * Math.PI) * 1.4), muted, 3, false, true);
+    for (let k = 0; k < 3; k++) {
+      const ek = [0, 0, 0]; ek[k] = 1;
+      const tip = mv(Rm, ek), vel = mv(D, ek);
+      seg(o, tip, cols[k], 3.5, false, true);
+      seg(tip, tip.map((v, j) => v + 0.5 * vel[j]), link, 2.2, false, true);
+    }
+    fx.font = '13px system-ui, sans-serif'; fx.fillStyle = muted;
+    fx.fillText('x', ...(proj([1.08, 0, 0]) as [number, number])); fx.fillText('y', ...(proj([0, 1.08, 0]) as [number, number])); fx.fillText('z', ...(proj([0, 0, 1.08]) as [number, number]));
+    const alt = t > Math.PI ? ` · same rotation as angle ${(2 * Math.PI - t).toFixed(2)} about the opposite axis` : '';
+    (document.getElementById('aa-read2') as HTMLElement).textContent = `det G = 2 f₂(θ) = ${(2 * fk(2, t)).toFixed(4)}${alt}`;
+  }
+  [th, az, el].forEach((s) => s.addEventListener('input', drawFrame)); isel.addEventListener('change', drawFrame);
+  let drag: number[] | null = null;
+  fcv.addEventListener('pointerdown', (ev) => { drag = [ev.clientX, ev.clientY, camAz, camEl]; fcv.setPointerCapture(ev.pointerId); });
+  fcv.addEventListener('pointermove', (ev) => { if (!drag) return; camAz = drag[2] - (ev.clientX - drag[0]) * 0.01; camEl = Math.max(-1.4, Math.min(1.4, drag[3] + (ev.clientY - drag[1]) * 0.01)); drawFrame(); });
+  fcv.addEventListener('pointerup', () => (drag = null));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { drawErr(); drawFrame(); });
+  drawErr(); drawFrame();
+</script>

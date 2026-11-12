@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { notes } from '../../data/notes.js';
+import { series } from '../../data/series.js';
+const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+const groups = series
+  .map((s) => ({ ...s, items: s.order.map((k) => notes.find((n) => n.slug === k)).filter(Boolean) }))
+  .filter((g) => g.items.length);
+const inSeries = new Set(series.flatMap((s) => s.order));
+const loose = notes.filter((n) => !inSeries.has(n.slug));
+---
+<BaseLayout title="Notes — Huanyu Chen"
+  description="Short research notes by Huanyu Chen on simulation, mechanics and optimization: one question each, with figures and interactive demos, citable and versioned.">
+  <Fragment slot="head">
+    <link rel="alternate" type="application/rss+xml" title="Huanyu Chen — Notes" href="/notes/rss.xml" />
+  </Fragment>
+  <h1>Notes</h1>
+  <p>
+    Short research notes: one question each, answered with pictures and interactive demos rather than pages of text.
+    Many are small results that fell out of my papers and never had room there. They are grouped into series that can be
+    read in order, but each note stands on its own. Every note has a permanent address, a version number and a citation,
+    so you can cite it like a paper.
+  </p>
+  <p class="muted"><small><a href="/notes/rss.xml">RSS feed</a> · All notes are licensed under
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</small></p>
+
+  {groups.map((g) => (
+    <section class="series" id={g.id}>
+      <h2>{g.title}</h2>
+      <p class="muted">{g.blurb}</p>
+      <ol class="note-list">
+        {g.items.map((n: any) => (
+          <li>
+            <a href={`/notes/${n.slug}`}><strong>{n.title}</strong></a>
+            <span class="muted"> · {fmt(n.published)}{n.version > 1 && ` · v${n.version}`}</span>
+            <br /><span>{n.summary}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  ))}
+
+  {loose.length > 0 && (
+    <section class="series" id="other">
+      <h2>Other notes</h2>
+      <ul class="note-list">
+        {loose.map((n) => (
+          <li>
+            <a href={`/notes/${n.slug}`}><strong>{n.title}</strong></a>
+            <span class="muted"> · {fmt(n.published)}</span>
+            <br /><span>{n.summary}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .series { margin-top: 2.2em; }
+  .series > p { margin-top: -.3em; }
+  .note-list { padding-left: 1.3em; }
+  .note-list li { margin: 1.1em 0; }
+</style>

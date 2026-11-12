@@ -1,0 +1,12 @@
+---
+// Math rendered to HTML at build time with KaTeX (no client-side JavaScript).
+// <Tex>x^2</Tex> is inline; <Tex block>...</Tex> is a displayed equation.
+import katex from 'katex';
+interface Props { block?: boolean; tex?: string }
+const { block = false, tex } = Astro.props;
+const src = tex ?? (await Astro.slots.render('default'));
+const html = katex.renderToString(src.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'), {
+  displayMode: block, throwOnError: true, strict: 'ignore',
+});
+---
+{block ? <div class="tex-block" set:html={html} /> : <span set:html={html} />}

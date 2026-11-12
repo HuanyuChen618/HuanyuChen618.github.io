@@ -1,0 +1,93 @@
+---
+// Layout for research notes: title block, one-line takeaway, body, source line, and a citation box with BibTeX.
+// Citation metadata follows the Highwire (citation_*) tags that Google Scholar reads.
+import BaseLayout from './BaseLayout.astro';
+import Comments from '../components/Comments.astro';
+import 'katex/dist/katex.min.css';
+import { allNotes, AUTHOR, SITE, seriesNav } from '../data/notes.js';
+
+interface Props { slug: string; tldr: string; source?: string }
+const { slug, tldr, source } = Astro.props;
+const n = allNotes.find((x) => x.slug === slug);
+const nav = seriesNav(slug);
+if (!n) throw new Error(`No notes.js entry for ${slug}`);
+const url = `${SITE}/notes/${slug}/`;
+const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const year = n.published.slice(0, 4);
+const key = `chen${year}${slug.split('-')[0]}`;
+const bibtex = `@misc{${key},
+  author       = {${AUTHOR}},
+  title        = {${n.title}},
+  year         = {${year}},
+  howpublished = {\\url{${url}}},
+  note         = {Research note, version ${n.version}, ${fmt(n.updated)}}
+}`;
+const plain = `${AUTHOR}. "${n.title}." Research note, version ${n.version}, ${fmt(n.updated)}. ${url}`;
+---
+<BaseLayout title={`${n.title} — Huanyu Chen`} description={n.summary}>
+  <Fragment slot="head">
+    <meta name="citation_title" content={n.title} />
+    <meta name="citation_author" content={AUTHOR} />
+    <meta name="citation_publication_date" content={n.published.replaceAll('-', '/')} />
+    <meta name="citation_online_date" content={n.updated.replaceAll('-', '/')} />
+    <meta name="citation_public_url" content={url} />
+    <meta name="citation_language" content="en" />
+    <meta name="dc.rights" content="CC BY 4.0" />
+    <link rel="alternate" type="application/rss+xml" title="Huanyu Chen — Notes" href="/notes/rss.xml" />
+  </Fragment>
+  <article class="note">
+    <p class="muted note-crumb"><a href="/notes">← Notes</a>{nav && <> · <a href={`/notes#${nav.series.id}`}>{nav.series.title}</a>, part {nav.index} of {nav.count}</>}</p>
+    <h1>{n.title}</h1>
+    <p class="muted note-meta">
+      {AUTHOR} · {fmt(n.published)}{n.updated !== n.published && <> · updated {fmt(n.updated)}</>} · version {n.version}
+    </p>
+    <div class="callout note-tldr"><strong>In one sentence.</strong> {tldr}</div>
+    <p class="muted note-ai"><small>Based on my published papers and derivation notes. Drafting and interactive demos were
+      done with AI assistance; the content was checked against the papers and verified numerically.</small></p>
+    <slot />
+    {source && <p class="muted note-source"><small><strong>Where this comes from.</strong> {source}</small></p>}
+    {nav && (nav.prev || nav.next) && (
+      <nav class="note-series-nav" aria-label={`${nav.series.title} series`}>
+        <span>{nav.prev && <a href={`/notes/${nav.prev.slug}`}>← {nav.prev.title}</a>}</span>
+        <span class="next">{nav.next && <a href={`/notes/${nav.next.slug}`}>{nav.next.title} →</a>}</span>
+      </nav>
+    )}
+    <section class="note-cite" id="cite">
+      <h2>How to cite</h2>
+      <p>{plain}</p>
+      <div class="bib-wrap">
+        <pre class="bib"><code>{bibtex}</code></pre>
+        <button type="button" class="bib-copy" data-bib={bibtex}>Copy BibTeX</button>
+      </div>
+      <p class="muted"><small>This note is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>:
+        you may reuse it, figures included, with attribution. Corrections bump the version number; the address stays the same.</small></p>
+    </section>
+  </article>
+  <Comments />
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('.bib-copy').forEach((b) => {
+      b.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(b.dataset.bib || ''); b.textContent = 'Copied'; }
+        catch { b.textContent = 'Select and copy above'; }
+        setTimeout(() => (b.textContent = 'Copy BibTeX'), 1800);
+      });
+    });
+  </script>
+</BaseLayout>
+
+<style is:global>
+  .note h2 { margin-top: 2em; }
+  .note-meta { margin-top: -.4em; }
+  .note-tldr { margin: 1.2em 0 1.6em; }
+  .tex-block { overflow-x: auto; overflow-y: hidden; margin: 1em 0; position: relative; }
+  .note .katex-display { margin: 0; }
+  .note-cite { margin-top: 3em; border-top: 1px solid var(--line); }
+  .bib-wrap { position: relative; }
+  .bib { background: color-mix(in srgb, var(--ink) 5%, transparent); padding: .8em 1em; overflow-x: auto; font-size: .85em; border-radius: 4px; }
+  .bib-copy { position: absolute; top: .5em; right: .5em; font: inherit; font-size: .8em; padding: .25em .7em; cursor: pointer;
+    background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
+  .note-series-nav { display: flex; justify-content: space-between; gap: 1em; margin-top: 2.5em; padding-top: 1em; border-top: 1px solid var(--line); }
+  .note-series-nav .next { text-align: right; margin-left: auto; }
+  .note-fig { margin: 1.5em 0; }
+  .note-fig figcaption { color: var(--muted); font-size: .9em; margin-top: .4em; }
+</style>

@@ -1,0 +1,269 @@
+---
+import NoteLayout from '../../layouts/NoteLayout.astro';
+import Tex from '../../components/Tex.astro';
+---
+<NoteLayout slug="distortion-vs-material"
+  tldr="Distortion measures in geometry processing and hyperelastic energies in mechanics are the same kind of object, a rotation-invariant function of singular values, and can be read with the same tools (Lamé parameters at rest, a nonlinearity index beyond it), which shows exactly where they differ: the rest state, the missing volume stiffness, the symmetry between shrinking and stretching, and the barrier at zero."
+  source="This translation table grew out of my SCA 2026 paper, whose Table 1 lists geometry-processing energies (ARAP, symmetric ARAP, symmetric Dirichlet) next to the materials of mechanics and reads all of them through the same linear and weakly nonlinear lenses. Before that, my bachelor thesis was on bijective spherical parameterization, where distortion measures rule.">
+
+  <h2 id="same">The same kind of function</h2>
+  <p>
+    In geometry processing, a map (a parameterization, a deformation of a mesh) has a Jacobian
+    <Tex tex={String.raw`\mathbf{J}`} /> on every triangle, and a <em>distortion measure</em> scores how far it is from an
+    ideal. In mechanics, a deformation has a deformation gradient <Tex tex={String.raw`\mathbf{F}`} />, and a
+    <em>stored energy density</em> scores how much elastic energy it holds. Both are matrices of first derivatives, and
+    both scores must ignore rigid rotations. For isotropic measures that leaves a function of the singular values alone:
+  </p>
+  <Tex block tex={String.raw`\mathbf{J} = \mathbf{U}\,\operatorname{diag}(\sigma_1,\sigma_2)\,\mathbf{V}^{\mathsf T}
+    \quad\Longrightarrow\quad \psi(\mathbf{J}) = \hat\psi(\sigma_1, \sigma_2).`} />
+  <p>Here are five distortion measures and four materials, all in 2D:</p>
+  <table class="dm-table">
+    <tr><th>Distortion measure</th><th><Tex tex={String.raw`\hat\psi(\sigma_1,\sigma_2)`} /></th></tr>
+    <tr><td>Dirichlet</td><td><Tex tex={String.raw`\tfrac12(\sigma_1^2+\sigma_2^2)`} /></td></tr>
+    <tr><td>Symmetric Dirichlet</td><td><Tex tex={String.raw`\tfrac12\sum_i\big(\sigma_i^2+\sigma_i^{-2}\big)`} /></td></tr>
+    <tr><td>As-rigid-as-possible (ARAP)</td><td><Tex tex={String.raw`\sum_i(\sigma_i-1)^2`} /></td></tr>
+    <tr><td>Symmetric ARAP</td><td><Tex tex={String.raw`\tfrac12\sum_i\big((\sigma_i-1)^2+(1-\sigma_i^{-1})^2\big)`} /></td></tr>
+    <tr><td>MIPS (conformal)</td><td><Tex tex={String.raw`\sigma_1/\sigma_2+\sigma_2/\sigma_1`} /></td></tr>
+    <tr><th>Material</th><th></th></tr>
+    <tr><td>Neo-Hookean</td><td><Tex tex={String.raw`\tfrac{\mu}{2}(\sigma_1^2+\sigma_2^2-2)-\mu\log J+\tfrac{\lambda}{2}(J-1)^2`} /></td></tr>
+    <tr><td>St. Venant–Kirchhoff</td><td><Tex tex={String.raw`\tfrac{\mu}{4}\sum_i(\sigma_i^2-1)^2+\tfrac{\lambda}{8}(\sigma_1^2+\sigma_2^2-2)^2`} /></td></tr>
+    <tr><td>Linear Corotational</td><td><Tex tex={String.raw`\mu\sum_i(\sigma_i-1)^2+\tfrac{\lambda}{2}(\sigma_1+\sigma_2-2)^2`} /></td></tr>
+    <tr><td>Hencky</td><td><Tex tex={String.raw`\mu\sum_i\log^2\sigma_i+\tfrac{\lambda}{2}\log^2 J`} /></td></tr>
+  </table>
+  <p>
+    Here <Tex tex={String.raw`J=\sigma_1\sigma_2`} />. The normalizations of ARAP, symmetric ARAP and symmetric Dirichlet
+    follow Table 1 of my SCA 2026 paper (with Jernej Barbič), which lists them in 3D right next to Linear Corotational,
+    Neo-Hookean and the rest. Look at ARAP and Linear Corotational: ARAP is exactly the corotational energy with
+    <Tex tex={String.raw`\mu=1`} /> and no volume term. The two fields share more than formulas. They use the same tools:
+    an SVD per element, the same chain rule from singular values back to the matrix, and the same closed-form eigensystems
+    for the Hessian (see <a href="/notes/isotropic-gradient-hessian">the gradient and Hessian note</a>). A solver written
+    for one works for the other.
+  </p>
+
+  <h2 id="differences">Where they differ</h2>
+  <p>
+    The differences come from the job. A distortion measure is chosen so that optimizing it produces a good map: no
+    flipped triangles, no preference between the map and its inverse, often no preference for a scale. A material energy
+    is chosen to match how a real solid pushes back: it has units, it has been measured, and it has to agree with linear
+    elasticity for small deformations. Reading both with the same instruments makes the differences precise.
+  </p>
+  <p>
+    <strong>1. The rest state.</strong> A material holds no stress when undeformed, so
+    <Tex tex={String.raw`\partial\hat\psi/\partial\sigma_i = 0`} /> at <Tex tex={String.raw`\sigma_1=\sigma_2=1`} />. The
+    Dirichlet energy fails this: its minimum is at <Tex tex={String.raw`\sigma=0`} />, and left alone it would shrink
+    everything to a point. It only makes sense with the boundary held in place, as in harmonic and Tutte-style maps. The
+    other distortion measures are stress-free at the identity, though some sit at a nonzero constant there (2 for
+    symmetric Dirichlet and for MIPS), which changes nothing.
+  </p>
+  <p>
+    <strong>2. The small-strain stiffness, and the missing volume term.</strong> The SCA 2026 paper proves that the
+    second-order Taylor expansion of any isotropic energy about the rest shape, written in the principal stretches, is a
+    Linear Corotational material, and so it <em>defines</em> Lamé parameters for any energy by reading them off the
+    second derivatives there (its Theorem 1, Equations 5 and 6). In 2D:
+  </p>
+  <Tex block tex={String.raw`\lambda = \frac{\partial^2\hat\psi}{\partial\sigma_1\,\partial\sigma_2}\bigg|_{\mathbf{I}},
+    \qquad
+    \mu = \frac12\left(\frac{\partial^2\hat\psi}{\partial\sigma_1^2} - \frac{\partial^2\hat\psi}{\partial\sigma_1\,\partial\sigma_2}\right)\bigg|_{\mathbf{I}}.`} />
+  <p>
+    A material picks <Tex tex={String.raw`\mu`} /> and <Tex tex={String.raw`\lambda`} /> (or Young's modulus and Poisson's
+    ratio) from experiments. A distortion measure gets them by accident. ARAP and symmetric ARAP come out at
+    <Tex tex={String.raw`\mu=1`} /> and symmetric Dirichlet at <Tex tex={String.raw`\mu=2`} />, all three with
+    <Tex tex={String.raw`\lambda=0`} />: Poisson's ratio zero, no resistance to volume change beyond what shear provides.
+    The paper notes exactly this, and that it is why geometric energies are a poor fit for soft-tissue simulation as they
+    stand. MIPS comes out at <Tex tex={String.raw`\mu=2,\ \lambda=-2`} />, a 2D Poisson's ratio of
+    <Tex tex={String.raw`-1`} />, the edge of what is allowed.
+  </p>
+  <p>
+    The fix is the paper's "mix and match" (its Section 5). Many materials split into a part proportional to
+    <Tex tex={String.raw`\lambda`} /> and a part proportional to <Tex tex={String.raw`\mu`} />, and the
+    <Tex tex={String.raw`\lambda`} />-part of Neo-Hookean, essentially <Tex tex={String.raw`\tfrac{\lambda}{2}(J-1)^2`} />,
+    contributes volume stiffness and nothing else. Adding it to a geometric energy gives it any Poisson's ratio you want,
+    without changing its shear stiffness. The demo below has a switch for it.
+  </p>
+  <p>
+    <strong>3. Scale and inversion.</strong> MIPS depends only on the ratio <Tex tex={String.raw`\sigma_1/\sigma_2`} />, so it
+    does not resist uniform scaling at all. That is exactly right for a conformal map and impossible for a solid, whose
+    bulk stiffness <Tex tex={String.raw`\lambda+\mu`} /> (in 2D) must be positive. Symmetric Dirichlet, symmetric ARAP and
+    MIPS are also symmetric under <Tex tex={String.raw`\sigma\mapsto 1/\sigma`} />: shrinking by half costs as much as
+    stretching by two, because a map and its inverse should be judged alike. Most materials are lopsided, because
+    squeezing and pulling a real solid are different experiments. Hencky, built on <Tex tex={String.raw`\log\sigma`} />,
+    is the exception, and that turns out to matter.
+  </p>
+  <p>
+    <strong>4. The barrier at zero.</strong> Symmetric Dirichlet, symmetric ARAP and MIPS go to infinity as a singular value
+    goes to zero, so an optimizer with a careful line search can never flip a triangle: the map stays locally injective.
+    Among the materials, Neo-Hookean has a barrier too, through <Tex tex={String.raw`-\log J`} />, though it grows only
+    logarithmically, and so does Hencky. Linear Corotational and ARAP are finite at zero. St. Venant–Kirchhoff is finite at
+    zero, and it gives a fully mirrored element, <Tex tex={String.raw`(\sigma_1,\sigma_2)=(-1,1)`} /> with a signed SVD,
+    exactly the energy of the rest state: it cannot tell a mirror image from the original.
+  </p>
+
+  <h2 id="third-order">One order further: how they bend away from linear</h2>
+  <p>
+    Two energies with the same Lamé parameters agree for small deformations and differ at third order. The SCA 2026 paper
+    measures that difference with a single number, the Stretchability–Compressibility Index of Elastic Nonlinearity
+    (SCIEN). It projects an energy's third derivatives at rest onto the Seth–Hill family, which runs from Hencky (index 0)
+    through Linear Corotational (1) to St. Venant–Kirchhoff (2). An index above 1 means the material stiffens as it is
+    stretched and softens as it is compressed, like silicone; below 1, the opposite, like foam.
+  </p>
+  <p>
+    In the paper's Table 1, ARAP has index 1: to third order it is Linear Corotational without a volume term. Symmetric
+    ARAP and symmetric Dirichlet both have index 0, the Hencky value. That is not a coincidence. A stretch function with
+    <Tex tex={String.raw`g(\sigma)=g(1/\sigma)`} /> is an even function of <Tex tex={String.raw`\log\sigma`} />, and
+    differentiating <Tex tex={String.raw`g(e^x)`} /> three times at <Tex tex={String.raw`x=0`} /> forces
+  </p>
+  <Tex block tex={String.raw`g'''(1) = -3\,g''(1),`} />
+  <p>
+    which, for a sum <Tex tex={String.raw`\sum_i g(\sigma_i)`} /> with no cross terms, is exactly the third-order
+    behavior of Hencky. So the design choice that defines these distortion measures, treating a map and its inverse
+    alike, pins down their weak nonlinearity: used as materials, they are Hencky-like, softer in stretching and stiffer in
+    compression than Linear Corotational. The materials that share the symmetry, Hencky and the symmetric Seth–Hill
+    family, also have index 0 in the table.
+  </p>
+
+  <h2 id="demo">Try it</h2>
+  <p>
+    The plot shows each energy along a one-parameter slice of singular-value space, shifted so that every curve passes
+    through zero at the identity. <strong>Uniaxial</strong> stretches one direction,
+    <Tex tex={String.raw`(\sigma_1,\sigma_2)=(s,1)`} />; <strong>uniform</strong> scales both,
+    <Tex tex={String.raw`(s,s)`} />. With the <strong>log scale</strong> on, symmetry under
+    <Tex tex={String.raw`s\mapsto 1/s`} /> becomes mirror symmetry about <Tex tex={String.raw`s=1`} />.
+    <strong>Add volume term</strong> adds <Tex tex={String.raw`\tfrac12(J-1)^2`} /> to every distortion measure. The table is
+    computed from the same functions by finite differences. Materials use <Tex tex={String.raw`\mu=\lambda=1`} />.
+  </p>
+  <figure class="note-fig dm-demo">
+    <div class="dm-controls">
+      <button type="button" id="dm-uni" aria-pressed="true">Uniaxial (s, 1)</button>
+      <button type="button" id="dm-iso" aria-pressed="false">Uniform (s, s)</button>
+      <label><input type="checkbox" id="dm-log" checked /> log scale</label>
+      <label><input type="checkbox" id="dm-vol" /> add volume term to distortion measures</label>
+    </div>
+    <div class="dm-controls" id="dm-pick"></div>
+    <canvas id="dm-canvas" width="880" height="520" aria-label="Plot of distortion measures and material energies along a slice of singular values."></canvas>
+    <div class="dm-read" id="dm-read"></div>
+    <figcaption>Solid lines: distortion measures. Dashed lines: materials. Each curve is shifted by its value at the identity.</figcaption>
+  </figure>
+  <p>
+    Things to look for: on the uniform slice, MIPS is flat and ARAP is softer than Linear Corotational; add the volume
+    term and the two agree near <Tex tex={String.raw`s=1`} />, because ARAP now has the same <Tex tex={String.raw`\mu`} />
+    and <Tex tex={String.raw`\lambda`} /> (watch its Poisson's ratio in the table move from 0 to 1/3); on the log scale, symmetric Dirichlet, symmetric ARAP, MIPS and Hencky are mirror images
+    of themselves while the other materials are lopsided; near <Tex tex={String.raw`s=0`} />, the barrier curves shoot up
+    while St. Venant–Kirchhoff, ARAP and Linear Corotational stay finite; and Dirichlet keeps falling as
+    <Tex tex={String.raw`s`} /> shrinks, because it is not stress-free at the identity.
+  </p>
+
+  <h2 id="checklist">Borrowing across the fence</h2>
+  <ul>
+    <li><strong>Using a distortion measure as a material?</strong> Compute its implied <Tex tex={String.raw`\mu`} /> and
+      <Tex tex={String.raw`\lambda`} />. ARAP, symmetric ARAP and symmetric Dirichlet have <Tex tex={String.raw`\lambda=0`} />;
+      add a volume term such as <Tex tex={String.raw`\tfrac{\lambda}{2}(J-1)^2`} /> to get a real Poisson's ratio.</li>
+    <li><strong>Expect Hencky-like nonlinearity from symmetric measures.</strong> Inversion symmetry means index 0: soft in
+      stretching, stiff in compression, compared with Linear Corotational.</li>
+    <li><strong>Using a material as a distortion measure?</strong> Expect asymmetry between shrinking and stretching, and
+      check for a barrier if the map must stay injective. Neo-Hookean and Hencky have one; Linear Corotational and St.
+      Venant–Kirchhoff do not.</li>
+    <li><strong>Constants don't matter, derivatives do.</strong> A nonzero value at the identity is harmless; a nonzero
+      gradient there means the "rest" shape is not at rest.</li>
+    <li><strong>Reuse the machinery.</strong> Both families need the same singular-value derivatives, so one implementation
+      of the gradient and Hessian serves both.</li>
+  </ul>
+  <p class="muted"><small>References: H. Chen, J. Barbič, "Weak Nonlinearity and Linear Equalization for Isotropic
+    Hyperelastic Materials", ACM SIGGRAPH / Eurographics Symposium on Computer Animation (SCA) 2026 (Table 1, Theorem 1,
+    Sections 3.1, 4 and 5). Symmetric Dirichlet as used for parameterization: J. Smith and S. Schaefer, "Bijective
+    parameterization with free boundaries", ACM Transactions on Graphics 34(4) (SIGGRAPH 2015). ARAP: O. Sorkine and
+    M. Alexa, "As-rigid-as-possible surface modeling", Symposium on Geometry Processing 2007; for parameterization,
+    L. Liu et al., "A local/global approach to mesh parameterization", SGP 2008. Symmetric ARAP: A. Shtengel et al.,
+    "Geometric optimization via composite majorization", ACM Transactions on Graphics 36(4) (SIGGRAPH 2017). MIPS:
+    K. Hormann and G. Greiner, "MIPS: an efficient global parametrization method" (2000).</small></p>
+</NoteLayout>
+
+<style>
+  .dm-table { border-collapse: collapse; margin: 1em 0; font-size: .95em; }
+  .dm-table td, .dm-table th { padding: .25em 1em .25em 0; text-align: left; border-bottom: 1px solid var(--line); }
+  .dm-table th { padding-top: .8em; }
+  .dm-demo canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; margin-top: .6em; }
+  .dm-controls { display: flex; flex-wrap: wrap; gap: .4em 1.1em; align-items: center; margin-top: .5em; font-size: .95em; }
+  .dm-controls button { font: inherit; padding: .3em .8em; cursor: pointer; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
+  .dm-controls button[aria-pressed='true'] { border-color: var(--link); color: var(--link); }
+  .dm-read { margin-top: .6em; font-size: .88em; overflow-x: auto; }
+  .dm-read table { border-collapse: collapse; }
+  .dm-read td, .dm-read th { padding: .15em .7em .15em 0; text-align: left; white-space: nowrap; }
+</style>
+
+<script>
+  import { ENERGIES, SLICES, properties, withVolume } from '../../scripts/distortion-vs-material.js';
+  const cv = document.getElementById('dm-canvas') as HTMLCanvasElement;
+  const ctx = cv.getContext('2d')!;
+  const W = cv.width, H = cv.height;
+  const el = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const css = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#000';
+  const COLORS = ['#1f77b4', '#d62728', '#2ca02c', '#17becf', '#9467bd', '#e377c2', '#8c564b', '#ff7f0e', '#7f7f7f'];
+  let slice: 'uniaxial' | 'uniform' = 'uniaxial';
+  const on = ENERGIES.map((E) => E.id !== 'dirichlet' && E.id !== 'stvk');
+  const current = () => ENERGIES.map((E) => (el('dm-vol').checked ? withVolume(E) : E));
+
+  const pick = document.getElementById('dm-pick')!;
+  ENERGIES.forEach((E, i) => {
+    const lab = document.createElement('label');
+    lab.innerHTML = `<input type="checkbox" ${on[i] ? 'checked' : ''} /> <span style="display:inline-block;width:1.4em;height:0;border-top:3px ${E.kind === 'material' ? 'dashed' : 'solid'} ${COLORS[i]};vertical-align:middle;margin-right:.3em"></span>${E.name}`;
+    lab.querySelector('input')!.addEventListener('change', (e) => { on[i] = (e.target as HTMLInputElement).checked; draw(); });
+    pick.appendChild(lab);
+  });
+
+  function draw() {
+    const ink = css('--ink'), muted = css('--muted'), line = css('--line'), bg = css('--bg');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    const log = el('dm-log').checked;
+    const s0 = log ? 0.25 : 0.02, s1 = log ? 4 : 3;
+    const L = 52, R = 16, T = 16, B = H - 36;
+    const X = (s: number) => L + (log ? Math.log(s / s0) / Math.log(s1 / s0) : (s - s0) / (s1 - s0)) * (W - L - R);
+    const y0 = -0.8, y1 = 4;
+    const Y = (v: number) => B - ((v - y0) / (y1 - y0)) * (B - T);
+    ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.font = '13px system-ui, sans-serif'; ctx.fillStyle = muted;
+    ctx.beginPath(); ctx.moveTo(L, T); ctx.lineTo(L, B); ctx.lineTo(W - R, B); ctx.stroke();
+    ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(L, Y(0)); ctx.lineTo(W - R, Y(0)); ctx.moveTo(X(1), T); ctx.lineTo(X(1), B); ctx.stroke(); ctx.setLineDash([]);
+    for (const v of [0, 1, 2, 3, 4]) ctx.fillText(String(v), 30, Y(v) + 4);
+    ctx.textAlign = 'center';
+    for (const s of log ? [0.25, 0.5, 1, 2, 4] : [0.5, 1, 1.5, 2, 2.5, 3]) ctx.fillText(String(s), X(s), H - 14);
+    ctx.textAlign = 'left'; ctx.fillText('s', W - R - 10, B - 8);
+    const sl = SLICES[slice];
+    ctx.save(); ctx.beginPath(); ctx.rect(L, T, W - L - R, B - T); ctx.clip();
+    current().forEach((E, i) => {
+      if (!on[i]) return;
+      const p0 = E.f(1, 1);
+      ctx.strokeStyle = COLORS[i]; ctx.lineWidth = 2.5; ctx.setLineDash(E.kind === 'material' ? [7, 5] : []);
+      ctx.beginPath(); let pen = false;
+      for (let k = 0; k <= 600; k++) {
+        const s = log ? s0 * Math.pow(s1 / s0, k / 600) : s0 + ((s1 - s0) * k) / 600;
+        const [a, b] = sl(s), v = E.f(a, b) - p0;
+        if (!isFinite(v) || v > y1 + 1) { pen = false; continue; }
+        if (pen) ctx.lineTo(X(s), Y(v)); else { ctx.moveTo(X(s), Y(v)); pen = true; }
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    });
+    ctx.restore();
+    ctx.fillStyle = ink;
+    table();
+  }
+
+  function table() {
+    const yes = (b: boolean) => (b ? 'yes' : 'no');
+    const rows = current().map((E) => {
+      const P = properties(E);
+      const lin = P.stressFree ? `<td>${P.mu.toFixed(2)}</td><td>${P.lam.toFixed(2)}</td><td>${P.nu.toFixed(2)}</td>` : '<td colspan="3">— (not at rest)</td>';
+      return `<tr><td>${E.name}</td><td>${yes(P.stressFree)}</td>${lin}<td>${yes(P.sym)}</td><td>${yes(P.scaleFree)}</td><td>${yes(P.barrier)}</td></tr>`;
+    }).join('');
+    (document.getElementById('dm-read') as HTMLElement).innerHTML =
+      `<table><tr><th></th><th>stress-free at I</th><th>μ</th><th>λ</th><th>ν (2D)</th><th>symmetric s ↔ 1/s</th><th>ignores scale</th><th>barrier at 0</th></tr>${rows}</table>`;
+  }
+
+  function setSlice(s: 'uniaxial' | 'uniform') {
+    slice = s; el('dm-uni').setAttribute('aria-pressed', String(s === 'uniaxial')); el('dm-iso').setAttribute('aria-pressed', String(s === 'uniform')); draw();
+  }
+  el('dm-uni').addEventListener('click', () => setSlice('uniaxial'));
+  el('dm-iso').addEventListener('click', () => setSlice('uniform'));
+  el('dm-log').addEventListener('change', draw);
+  el('dm-vol').addEventListener('change', draw);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+  draw();
+</script>
