@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
+const P = 'https://media.huanyuchen.com/misc/red-panda/';
+---
+<BaseLayout title="The Red Panda from Canberra — Huanyu Chen"
+  description="A toy red panda from a zoo shop in Australia, 2023–2026: dinner in Canberra with the tag still on, iced drinks by Lake Burley Griffin, brunch in Sydney, a nap with Dana, a visit to the San Diego Zoo, a 3D scan, and a place on our bed next to the new hedgehog.">
+  <p class="muted"><a href="/misc">← Misc</a> · 2023 – 2026</p>
+  <h1>The Red Panda from Canberra</h1>
+  <p class="muted trip-sub">A souvenir that came home from Australia and stayed.</p>
+
+  <div class="callout trip-stats">
+    <strong>3 years · December 2023 – now</strong><br />
+    a zoo shop in Australia · a dinner with the tag still on · two iced drinks by the lake · brunch in Sydney · a nap
+    with Dana · a visit to the San Diego Zoo · one 3D scan · a place on the bed, next to the new hedgehog
+  </div>
+
+  <p>
+    The <a href="/misc/roadtrip-2024">road trip hedgehog</a> has a story, and so does the red panda, who has been
+    with us longer. He is a plush red panda, rust-red on top and black underneath, with a white face and a ringed
+    tail. He came from a zoo shop in Australia, on the <a href="/misc/siggraph-asia-2023">SIGGRAPH Asia trip</a>,
+    and he has turned up in our photos ever since.
+  </p>
+
+  <h2 id="canberra">Canberra, December 2023</h2>
+  <p>
+    We don't remember which zoo shop it was, but the photos point to Canberra. On December 15, 2023, we spent the
+    afternoon at the <strong>National Zoo &amp; Aquarium</strong> (some of its animals are in
+    <a href="/misc/zoos">Zoo Days</a>), and the first photo of him was taken at 5:09 pm, in the car, still in
+    the zoo's car park.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'car.webp'} alt="A plush red panda held up on a lap in the passenger seat of a car." loading="lazy" /><figcaption>The first photo, 5:09 pm, December 15, 2023.</figcaption></figure>
+  <p>
+    He came to dinner that night with the shop tag still hanging from his ear, and he spent the night in the hotel
+    bed.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'dinner-tag.webp'} alt="The plush red panda standing on a white restaurant table with an orange Wild Republic Cuddlekins tag on his ear, beside plates of food." loading="lazy" /><figcaption>Dinner, tag and all, 8:36 pm.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'hotel-bed.webp'} alt="The red panda tucked into white hotel sheets under an arm." loading="lazy" /><figcaption>Bedtime, 10:59 pm.</figcaption></figure>
+  </div>
+  <p>
+    The next morning he sat at a table by <strong>Lake Burley Griffin</strong>, between two iced drinks, and then
+    stayed for brunch.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'lake-drinks.webp'} alt="The red panda on a café table next to a pink strawberry drink and an iced coffee, with Lake Burley Griffin and a bridge behind under a blue sky." loading="lazy" /><figcaption>By the lake, 10:59 am, December 16.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'lake-brunch.webp'} alt="The red panda at the edge of a table set with two brunch plates and two drinks, the lake behind." loading="lazy" /><figcaption>Brunch, 11:02 am.</figcaption></figure>
+  </div>
+  <p>
+    On December 17, back in Sydney, he got a seat at brunch too, and a close-up.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'sydney-brunch.webp'} alt="A close-up of the red panda's face in the foreground, with a salmon salad and a squid-ink pasta on the table behind." loading="lazy" /><figcaption>Brunch in Sydney, 10:23 am, December 17.</figcaption></figure>
+
+  <h2 id="dana">Visiting Dana, October 2024</h2>
+  <p>
+    At the start of 2024, our cats went to live with friends (<a href="/misc/cats">Dana and Nina</a>). In October we
+    went to visit and brought the red panda along. Dana took him into her bed.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'with-dana.webp'} alt="The red panda lying in a fluffy gray donut bed with Dana, a gray tabby cat, curled up beside him and looking at the camera." loading="lazy" /><figcaption>With Dana, October 19, 2024.</figcaption></figure>
+
+  <h2 id="san-diego">The San Diego Zoo, October 2024</h2>
+  <p>
+    Twelve days later, on Halloween, he came to the <strong>San Diego Zoo</strong> and was held up against the
+    zoo's greenery, as if visiting relatives. That was also the day the hedgehog stayed behind
+    at the zoo for good (<a href="/misc/san-diego">the San Diego post</a> has the story).
+  </p>
+  <figure class="trip-fig"><img src={P + 'zoo.webp'} alt="The red panda held up in front of dense green trees at the zoo, his ringed tail hanging down." loading="lazy" /><figcaption>Visiting relatives, October 31, 2024.</figcaption></figure>
+  <p>
+    A month later, at half past one in the morning on November 29, he became the subject of a 3D scan on my phone.
+    The app saved him as "Red Panda Doll", fur and all.
+  </p>
+  <figure class="trip-fig narrow-fig"><img src={P + 'scan.webp'} alt="A 3D-scanned model of the plush red panda seen from behind, showing his rust-colored back and ringed tail, on a plain gray background." loading="lazy" /><figcaption>The 3D scan, November 29, 2024.</figcaption></figure>
+
+  <h2 id="now">Now</h2>
+  <p>
+    These days he lives on our bed. The old hedgehog never came back from San Diego, so a new one came from Amazon,
+    and since then the two of them share the bed.
+  </p>
+  <div class="trip-pair">
+    <figure class="trip-fig"><img src={P + 'bed-hedgehog.webp'} alt="The red panda and a small brown plush hedgehog side by side in the middle of a made bed with gray pillows." loading="lazy" /><figcaption>With the new hedgehog, May 2026.</figcaption></figure>
+    <figure class="trip-fig"><img src={P + 'bed.webp'} alt="The red panda stretched out across a pillow on a bed with pale green sheets." loading="lazy" /><figcaption>On the pillow, June 2026.</figcaption></figure>
+  </div>
+
+  <p class="muted"><small>Photo locations have been removed from the published images, and the price on the shop tag
+    has been painted out.</small></p>
+  <Comments />
+</BaseLayout>
