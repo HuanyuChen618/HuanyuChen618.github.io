@@ -12,10 +12,10 @@ export const series = [
   {
     id: 'isotropic-materials',
     title: 'Isotropic Materials',
-    blurb: 'What an isotropic elastic energy is, the three ways to write one down, how the familiar materials compare, and what keeps them well behaved.',
+    blurb: 'What an isotropic elastic energy is, the three ways to write one down, how the familiar materials compare, and how a material differs from a distortion measure.',
     order: ['three-ways-to-write-a-material', 'isotropic-gradient-hessian', 'removable-singularities', 'stretch-hessian-singularities',
-      'material-zoo', 'polyconvexity', 'distortion-vs-material'],
+      'material-zoo', 'distortion-vs-material'],
     optional: ['isotropic-gradient-hessian', 'removable-singularities', 'stretch-hessian-singularities'],
-    reps: ['polyconvexity', 'material-zoo', 'three-ways-to-write-a-material'],
+    reps: ['material-zoo', 'three-ways-to-write-a-material', 'distortion-vs-material'],
   },
 ];
