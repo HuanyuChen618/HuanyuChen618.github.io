@@ -52,7 +52,7 @@ const person = {
     <Footer />
     <script is:inline>
       // Privacy-safe visit counter: at most one hit per browser, per page, per day. The server keeps only
-      // aggregate city/page/day totals (no IP, no user agent, no per-visit record). See /visitors.
+      // aggregate city/page/day/referring-domain totals (no IP, no user agent, no per-visit record). See /visitors.
       (function () {
         var host = location.hostname;
         if (host === 'localhost' || host === '127.0.0.1' || host === '[::1]') return;
@@ -60,10 +60,17 @@ const person = {
         var day = new Date().toISOString().slice(0, 10);
         var key = 'visit:' + path;
         try { if (localStorage.getItem(key) === day) return; } catch (e) {}
+        // Where the visit came from: a ?ref= tag on the link, else only the referring site's domain (never its full URL).
+        var ref = '';
+        try {
+          var tag = new URLSearchParams(location.search).get('ref');
+          if (tag && /^[A-Za-z0-9._-]{1,40}$/.test(tag)) ref = 'ref:' + tag.toLowerCase();
+          else if (document.referrer) ref = new URL(document.referrer).hostname;
+        } catch (e) {}
         try {
           fetch('https://stats.huanyuchen.com/hit', {
             method: 'POST', keepalive: true, mode: 'cors', credentials: 'omit',
-            headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ path: path })
+            headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ path: path, ref: ref })
           }).then(function (r) { if (r.ok) { try { localStorage.setItem(key, day); } catch (e) {} } }).catch(function () {});
         } catch (e) {}
       })();

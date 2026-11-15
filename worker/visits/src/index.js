@@ -1,6 +1,7 @@
 // Privacy-safe visitor counter for huanyuchen.com.
 // Stores only aggregate counters: per city (from Cloudflare's IP geolocation, rounded to 0.1 deg),
-// per page path, per day, and a grand total. No IP address, user agent, cookie or per-visit row is stored.
+// per page path, per day, per referring site (domain only) and a grand total. No IP address, user agent, cookie,
+// full referrer URL or per-visit row is stored. Referrer counts are private: /stats does not return them.
 
 const ALLOWED_ORIGINS = new Set(['https://huanyuchen.com', 'http://localhost:4321']);
 const BOT_RE = /bot|crawl|spider|preview|headless|slurp|facebookexternalhit|lighthouse/i;
@@ -31,6 +32,16 @@ function cleanPath(p) {
   return p;
 }
 
+// Where a visit came from: the referring site's domain only, or a ?ref= tag from a link (e.g. ?ref=cv),
+// or 'direct' when the browser sent neither. Visits from inside the site (page to page) return null.
+function cleanRef(r) {
+  if (r === null || r === undefined || r === '') return 'direct';
+  if (typeof r !== 'string') return 'direct';
+  r = r.toLowerCase().slice(0, 80).replace(/^www\./, '');
+  if (r === 'huanyuchen.com' || r.endsWith('.huanyuchen.com') || r === 'huanyuchen618.github.io') return null;
+  return /^[a-z0-9][a-z0-9.\-_:]{0,79}$/.test(r) ? r : 'other';
+}
+
 const str = (v, n = 80) => (typeof v === 'string' && v ? v.slice(0, n) : '');
 const round1 = (v) => {
   const x = parseFloat(v);
@@ -56,6 +67,13 @@ async function hit(request, env) {
     env.DB.prepare('INSERT INTO daily (day, visits) VALUES (?1, 1) ON CONFLICT(day) DO UPDATE SET visits = visits + 1').bind(day),
     env.DB.prepare('INSERT INTO paths (path, visits) VALUES (?1, 1) ON CONFLICT(path) DO UPDATE SET visits = visits + 1').bind(path),
   ];
+  const ref = cleanRef(body.ref);
+  if (ref !== null) {
+    stmts.push(
+      env.DB.prepare('INSERT INTO referrers (source, path, visits) VALUES (?1, ?2, 1) ON CONFLICT(source, path) DO UPDATE SET visits = visits + 1')
+        .bind(ref, path)
+    );
+  }
   if (lat !== null && lon !== null) {
     stmts.push(
       env.DB.prepare(

@@ -2,5 +2,6 @@
 DELETE FROM cities;
 DELETE FROM paths;
 DELETE FROM daily;
+DELETE FROM referrers;
 UPDATE meta SET value = '0' WHERE key = 'total';
 UPDATE meta SET value = '2026-11-09' WHERE key = 'since';

@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS cities (
 );
 CREATE TABLE IF NOT EXISTS paths (path TEXT PRIMARY KEY, visits INTEGER NOT NULL DEFAULT 0);
 CREATE TABLE IF NOT EXISTS daily (day TEXT PRIMARY KEY, visits INTEGER NOT NULL DEFAULT 0);
+-- Arrivals from outside the site: referring domain (or ?ref= tag, or 'direct') and the page landed on. Private.
+CREATE TABLE IF NOT EXISTS referrers (source TEXT NOT NULL, path TEXT NOT NULL, visits INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (source, path));
 CREATE TABLE IF NOT EXISTS meta  (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 INSERT OR IGNORE INTO meta (key, value) VALUES ('total', '0');
 INSERT OR IGNORE INTO meta (key, value) VALUES ('since', '2026-11-09');
